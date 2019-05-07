@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="white">#FFFF</color>
+    <color name="peachpuff">#FFD8BE</color>
+    <color name="papayawhip">#FFEEDD</color>
+    <color name="ghostwhite">#F8F7FF</color>
+    <color name="periwinkle">#B8B8FF</color>
+    <color name="mediumslate">#8C77FF</color>
+
+
+    <color name="colorBackgroundAlter">#FAB162</color>
+    <color name="colorTextAlter">#191919</color>
+
+    <color name="colorBackground">#FB9985</color>
+    <color name="colorText">#48484A</color>
+
+
+    <color name="colorPrimary">#FAB162</color>
+    <color name="colorPrimaryDark">#FAB162</color>
+    <color name="colorAccent">#D81B60</color>
+</resources>
