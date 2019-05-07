@@ -9,9 +9,9 @@
     <color name="mediumslate">#8C77FF</color>
 
 
-    <color name="colorBackgroundAlter">#FAB162</color>
+    <color name="colorBackgroundAlterP">#FAB162</color>
+    <color name="colorBackgroundAlter">#F8C58E</color>
     <color name="colorTextAlter">#191919</color>
-
     <color name="colorBackground">#FB9985</color>
     <color name="colorText">#48484A</color>
 
