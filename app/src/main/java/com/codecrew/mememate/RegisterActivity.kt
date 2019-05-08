@@ -12,6 +12,7 @@ import com.codecrew.mememate.database.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_register.*
+import java.net.Authenticator
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -29,38 +30,74 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
         db = FirebaseFirestore.getInstance()
         handler.postDelayed(runnable, 1500)
+        if(FirebaseAuth.getInstance().currentUser != null){
+            Log.d("USER", "${FirebaseAuth.getInstance().currentUser?.displayName} ${FirebaseAuth.getInstance().currentUser?.email} ")
+            startApp()
+        }
     }
 
     fun bSubmitClick(view: View) {
-        if (bSubmit.tag == "register") {
+
+        tvError.text = ""
+        val email = etEmail.text.toString()
+        val password = etPassword.text.toString()
+        if (bSubmit.tag == "signup") {
             val userName = etUsername.text.toString()
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
-            createUser(email, password, userName)
+            val passwordCheck = etPasswordConfirm.text.toString()
+
+            if(passwordCheck == password){
+                createUser(email, password, userName)
+            } else {
+                tvError.text = "Those passwords didn't match."
+            }
         } else {
-            startApp()
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
+                startApp()
+            }.addOnFailureListener{
+               tvError.text = "Invalid login or password."
+            }
         }
     }
 
 
     private fun createUser(email: String, password: String, userName: String) {
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                // If empty login in db here is the problem
-                val uid = FirebaseAuth.getInstance().uid ?: ""
-                val newUser = UserModel(uid, email, userName)
+        //(SG) Check if username is taken
+        db.document("Users/$userName").get().addOnSuccessListener {
 
-                db.collection("Users").document(newUser.uid).set(newUser).addOnSuccessListener { void: Void? ->
-                    Log.d("SAVE", "SUCCESS")
-                }.addOnFailureListener { exception: java.lang.Exception ->
-                    Log.d("SAVE", "ERROR")
+            val user = it.toObject(UserModel::class.java)
+
+            if (user == null) {
+
+                //(SG) Checking if email is taken
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val uid = FirebaseAuth.getInstance().uid ?: ""
+                            val newUser = UserModel(uid, email, userName)
+
+                            // (SG) Creating a new user in database
+                            db.collection("Users").document(newUser.userName).set(newUser)
+                                .addOnSuccessListener { void: Void? ->
+                                    // Loading circle
+                                    startApp()
+                                }.addOnFailureListener { exception: java.lang.Exception ->
+                                    tvError.text = exception.message + "."
+                                }
+                        }
+                    }.addOnFailureListener {
+                    if (it.message?.length!! > 70) {
+                        tvError.text = it.message!!.takeLastWhile { character -> character != '[' }.take(41) + "."
+                    } else {
+                        tvError.text = it.message
+                    }
                 }
+            } else {
+                tvError.text = "This username is taken."
             }
-        }.addOnFailureListener {
-            Log.d("LOGIN", "FAIL")
         }
     }
+
 
     private fun startApp() {
         val intent = Intent(this, MainActivity::class.java)
@@ -68,14 +105,15 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun tvChangeClick(view: View) {
-        if (bSubmit.tag == "register") {
+        if (bSubmit.tag == "signup") {
             setLoginPanel()
         } else {
-            setRegisterPanel()
+            setSignUpPanel()
         }
     }
 
     private fun setLoginPanel() {
+        tvError.text = ""
         TransitionManager.beginDelayedTransition(lRoot)
         etUsername.visibility = View.GONE
         etPasswordConfirm.visibility = View.GONE
@@ -84,13 +122,14 @@ class RegisterActivity : AppCompatActivity() {
         bSubmit.tag = "login"
     }
 
-    private fun setRegisterPanel() {
+    private fun setSignUpPanel() {
+        tvError.text = ""
         TransitionManager.beginDelayedTransition(lRoot)
         etUsername.visibility = View.VISIBLE
         etPasswordConfirm.visibility = View.VISIBLE
         tvChange.text = "Already have an account?"
-        bSubmit.text = "REGISTER"
-        bSubmit.tag = "register"
+        bSubmit.text = "SIGN UP"
+        bSubmit.tag = "signup"
     }
 
 }

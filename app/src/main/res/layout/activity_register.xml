@@ -66,8 +66,8 @@
         android:layout_weight="0.5"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone">
-
+        android:visibility="gone"
+    >
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
@@ -124,15 +124,24 @@
             android:inputType="textPassword"
             android:paddingLeft="10dp" />
 
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:textAlignment="center"
+            android:textColor="#AA1B1B"
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/bSubmit"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
+            android:layout_marginVertical="10dp"
             android:background="@drawable/button_round"
             android:onClick="bSubmitClick"
-            android:tag="register"
-            android:text="REGISTER" />
+            android:tag="signup"
+            android:text="SIGN UP" />
 
         <TextView
             android:id="@+id/tvChange"
@@ -142,5 +151,6 @@
             android:text="Already have an account?"
             android:textColor="@color/ghostwhite"
             android:textStyle="bold" />
+
     </LinearLayout>
 </LinearLayout>
