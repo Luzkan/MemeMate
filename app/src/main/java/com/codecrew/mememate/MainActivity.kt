@@ -213,7 +213,16 @@ class MainActivity : AppCompatActivity(), CardStackListener {
         for(Meme in memeDatabase!!.getMeme().getMemeListRatingSorted()){
             memeList.add(MemeInfo(name = memeDatabase!!.getMeme().getMemeItem(Meme.tId).name, description = memeDatabase!!.getMeme().getMemeItem(Meme.tId).description, url = memeDatabase!!.getMeme().getMemeItem(Meme.tId).url))
         }
-        // Probably needs smth like notifyMemeAdapter() here
+        reload()
+    }
+
+    private fun reload() {
+        val old = adapter.getSpots()
+        val new = createSpots()
+        val callback = MemeDiffCallback(old, new)
+        val result = DiffUtil.calculateDiff(callback)
+        adapter.setSpots(new)
+        result.dispatchUpdatesTo(adapter)
     }
 
     // (MJ) Temporary dialog box to input memes into database with name & url

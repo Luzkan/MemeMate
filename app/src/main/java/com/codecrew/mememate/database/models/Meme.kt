@@ -8,9 +8,11 @@ import android.arch.persistence.room.PrimaryKey
 class Meme(
     @PrimaryKey(autoGenerate = true)
     var tId: Int = 0,
-    @ColumnInfo(name = "meme_url")
+    @ColumnInfo(name = "meme_name")
     var name:String = "",
     @ColumnInfo(name = "meme_description")
     var description:String = "",
+    @ColumnInfo(name = "meme_url")
+    var url: String = "",
     @ColumnInfo(name = "meme_rating")
-    var url: String = "")
+    var rating: Double = 50.0)

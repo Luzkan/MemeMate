@@ -3,8 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ___________________________________
 
+## [0.2.1] - 2019-05-08 - Marcel Jerzyk
+### Added
+- Added Reload function for Meme Adapter
+### Fixed
+- Corrected columns for Meme in MemeDB
+
 ## [0.2.0a] - 2019-05-08 - Marcel Jerzyk
-### Addded
+### Added
 - TodoTasks file for easy project managment and clarity of work progress w/o interruptions
 
 ### Fixed

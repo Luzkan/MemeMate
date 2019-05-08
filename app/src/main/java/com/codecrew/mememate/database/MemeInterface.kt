@@ -9,6 +9,7 @@ interface MemeInterface{
     @Query("SELECT*FROM meme ORDER BY tId ASC")
     fun getMemeList(): List<Meme>
 
+    // (MJ) For Top Memes maybe?
     @Query("SELECT*FROM meme ORDER BY meme_rating DESC")
     fun getMemeListRatingSorted(): List<Meme>
 
