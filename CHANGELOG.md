@@ -1,10 +1,16 @@
 #Changelog
 All notable changes to this project will be documented in this file.
 
-### [Bugs found]
-- None
+___________________________________
 
-## [0.2.0] - 2019-05-09 - Marcel Jerzyk
+## [0.2.0a] - 2019-05-08 - Marcel Jerzyk
+### Addded
+- TodoTasks file for easy project managment and clarity of work progress w/o interruptions
+
+### Fixed
+- CHANGELOG.md formatting and dates 
+
+## [0.2.0] - 2019-05-08 - Marcel Jerzyk
 ### Added
 - Room Database implementation
 	- Meme, Interface, ListDatabase classes
@@ -16,7 +22,7 @@ All notable changes to this project will be documented in this file.
 - Plugin: kotlin-kapt
 - Comments in places where they've not been
 
-## [0.1.0] - 2019-05-08 - Marcel Jerzyk
+## [0.1.0] - 2019-05-07 - Marcel Jerzyk
 ### Description:
 Small but big step towards functioning app: swiping.
 
@@ -32,14 +38,14 @@ Small but big step towards functioning app: swiping.
 ### Changed
 - Colors and UI looks
 
-## [0.0.2] - 2019-05-08 - Marcel Jerzyk
+## [0.0.2] - 2019-05-07 - Marcel Jerzyk
 ### Description:
 Project is now successfully running.
 
 ### Added
 - Readme
 
-## [0.0.1] - 2019-05-08 - Marcel Jerzyk
+## [0.0.1] - 2019-05-07 - Marcel Jerzyk
 ### Description:
 Project is now successfully running. We have determined the looks of the app and preliminary work schedule.
 
