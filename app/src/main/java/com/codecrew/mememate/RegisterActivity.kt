@@ -84,7 +84,6 @@ class RegisterActivity : AppCompatActivity() {
                 val user = FirebaseAuth.getInstance().currentUser
                 startApp()
             } else {
-
                 Log.d("XDD","$resultCode")
             }
         }
@@ -94,7 +93,7 @@ class RegisterActivity : AppCompatActivity() {
 //        (KS) Animated loading button
         bSubmit.startAnimation()
 
-        tvError.text = ""
+        resetError()
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
         if (bSubmit.tag == "signup") {
@@ -104,17 +103,30 @@ class RegisterActivity : AppCompatActivity() {
             if(passwordCheck == password){
                 createUser(email, password, userName)
             } else {
-                tvError.text = "Those passwords didn't match."
-                setSubmitButton(R.drawable.cross)
+                setError("Those passwords didn't match.")
+//                tvError.text = "Those passwords didn't match."
+//                setSubmitButton(R.drawable.cross)
             }
         } else {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
                 startApp()
             }.addOnFailureListener{
-                tvError.text = "Invalid login or password."
-                setSubmitButton(R.drawable.cross)
+                setError("Invalid login or password.")
+//                tvError.text = "Invalid login or password."
+//                setSubmitButton(R.drawable.cross)
             }
         }
+    }
+
+    private fun setError(error: String) {
+        tvError.visibility = View.VISIBLE
+        tvError.text = error
+        setSubmitButton(R.drawable.cross)
+    }
+
+    private fun resetError() {
+        tvError.text = ""
+        tvError.visibility = View.GONE
     }
 
     //(KS) set image after loading on button
@@ -174,6 +186,7 @@ class RegisterActivity : AppCompatActivity() {
 
     //(KS) Changing mode login/sign up on textView click
     fun tvChangeClick(view: View) {
+        tvError.visibility = View.GONE
         if (bSubmit.tag == "signup") {
             setLoginPanel()
         } else {

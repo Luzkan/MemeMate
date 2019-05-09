@@ -40,8 +40,7 @@
         android:layout_weight="0.5"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <EditText
             android:id="@+id/etEmail"
@@ -103,9 +102,10 @@
             android:id="@+id/tvError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"
+            android:layout_marginVertical="8dp"
             android:textAlignment="center"
             android:textColor="#AA1B1B"
+            android:visibility="gone"
             android:textStyle="bold" />
 
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
@@ -121,21 +121,56 @@
             app:spinning_bar_color="#000"
             app:spinning_bar_width="5dp" />
 
-        <Button
-            android:id="@+id/fbButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/facebook_login"
             android:onClick="showSignOptions"
-            android:text="faceokButton" />
+            android:layout_marginVertical="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            app:fb_radius="20dp"
+            app:fb_iconPosition="left"
+            app:fb_fontIconSize="20sp"
+            app:fb_iconPaddingRight="10dp"
+            app:fb_textSize="16sp"
+            app:fb_text="Facebook Connect"
+            app:fb_textColor="#ffffff"
+            app:fb_defaultColor="#39579B"
+            app:fb_focusColor="#6183d2"
+            app:fb_fontIconResource="&#xf230;"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <!--<Button-->
+            <!--android:id="@+id/fbButton"-->
+            <!--android:layout_width="150dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/button_round"-->
+            <!--android:onClick="showSignOptions"-->
+            <!--android:drawableStart="@drawable/com_facebook_button_icon"-->
+            <!---->
+            <!--android:paddingLeft="20dp"-->
+            <!--android:text="SIGN UP WITH FACEBOOK"-->
+            <!--android:textStyle="bold" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/fbButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:onClick="showSignOptions"-->
+            <!--android:text="faceokButton" />-->
 
         <TextView
             android:id="@+id/tvChange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:onClick="tvChangeClick"
             android:text="Already have an account?"
             android:textColor="@color/ghostwhite"
             android:textStyle="bold" />
 
     </LinearLayout>
+
 </LinearLayout>
