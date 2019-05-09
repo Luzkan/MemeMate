@@ -18,14 +18,11 @@ import kotlinx.android.synthetic.main.activity_register.*
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-
-//todo zablokować przycisk jak pola są puste
-
-//todo po zalogowaniu czyścić pola
-
-//todo obsłużyć blanka
+import android.widget.EditText
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -55,6 +52,7 @@ class RegisterActivity : AppCompatActivity() {
 
     lateinit var db: FirebaseFirestore
 
+    // (SG) List of account types we can sign in
     val providers = arrayListOf(
             AuthUI.IdpConfig.FacebookBuilder().build()
     )
@@ -63,6 +61,8 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         db = FirebaseFirestore.getInstance()
+        //(SG) Dynamic enabling submit button
+        checkBlank(true)
 
         //(KS) Splash screen
         handler.postDelayed(runnableSplash, 1500)
@@ -72,10 +72,12 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    // (SG) Allows us to open activity to sign in with facebook
     fun showSignOptions(view: View){
         startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(R.style.AppTheme).build(),FB_REQUEST_CODE)
     }
 
+    // (SG) Logs user with facebook
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == FB_REQUEST_CODE){
@@ -90,12 +92,13 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun bSubmitClick(view: View) {
-//        (KS) Animated loading button
+    //(KS) Animated loading button
         bSubmit.startAnimation()
 
         resetError()
         val email = etEmail.text.toString()
         val password = etPassword.text.toString()
+
         if (bSubmit.tag == "signup") {
             val userName = etUsername.text.toString()
             val passwordCheck = etPasswordConfirm.text.toString()
@@ -104,16 +107,12 @@ class RegisterActivity : AppCompatActivity() {
                 createUser(email, password, userName)
             } else {
                 setError("Those passwords didn't match.")
-//                tvError.text = "Those passwords didn't match."
-//                setSubmitButton(R.drawable.cross)
             }
         } else {
             FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
                 startApp()
             }.addOnFailureListener{
                 setError("Invalid login or password.")
-//                tvError.text = "Invalid login or password."
-//                setSubmitButton(R.drawable.cross)
             }
         }
     }
@@ -127,6 +126,40 @@ class RegisterActivity : AppCompatActivity() {
     private fun resetError() {
         tvError.text = ""
         tvError.visibility = View.GONE
+    }
+
+    // (SG) Dynamic all editText check
+    private fun checkBlank(register : Boolean) {
+
+        if(register){
+            checkIfEmpty(etEmail,true)
+            checkIfEmpty(etPassword,true)
+            checkIfEmpty(etPasswordConfirm,true)
+            checkIfEmpty(etUsername,true)
+        } else {
+            checkIfEmpty(etEmail,false)
+            checkIfEmpty(etPassword,false)
+        }
+    }
+
+    // (SG) Dynamic single editText check
+    private fun checkIfEmpty(editable : EditText, register : Boolean){
+
+        editable.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+            }
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                editable.tag = p0!!.isNotEmpty()
+                if(register){
+                    bSubmit.isEnabled = etEmail.tag.toString() == "true" && etPassword.tag.toString() == "true" && etUsername.tag.toString() == "true" && etPasswordConfirm.tag.toString() == "true"
+                } else {
+                    bSubmit.isEnabled = etEmail.tag.toString() == "true" && etPassword.tag.toString() == "true"
+                }
+
+            }
+        })
     }
 
     //(KS) set image after loading on button
@@ -158,22 +191,18 @@ class RegisterActivity : AppCompatActivity() {
                                 .addOnSuccessListener { void: Void? ->
                                     startApp()
                                 }.addOnFailureListener { exception: java.lang.Exception ->
-                                    tvError.text = exception.message + "."
-                                    setSubmitButton(R.drawable.cross)
+                                    setError(exception.message + ".")
                                 }
                         }
                     }.addOnFailureListener {
                         if (it.message?.length!! > 70) {
-                            tvError.text = it.message!!.takeLastWhile { character -> character != '[' }.take(41) + "."
-                            setSubmitButton(R.drawable.cross)
+                            setError(it.message!!.takeLastWhile { character -> character != '[' }.take(41) + ".")
                         } else {
-                            tvError.text = it.message
-                            setSubmitButton(R.drawable.cross)
+                            setError(it.message.toString())
                         }
                     }
             } else {
-                tvError.text = "This username is taken."
-                setSubmitButton(R.drawable.cross)
+                setError("This username is taken.")
             }
         }
     }
@@ -204,6 +233,8 @@ class RegisterActivity : AppCompatActivity() {
         tvChange.text = "New user? Sign up here!"
         bSubmit.text = "LOG IN"
         bSubmit.tag = "login"
+        //(SG) Dynamic enabling submit button
+        checkBlank(false)
     }
 
     //(KS) Setting text on textView and button
@@ -216,6 +247,8 @@ class RegisterActivity : AppCompatActivity() {
         tvChange.text = "Already have an account?"
         bSubmit.text = "SIGN UP"
         bSubmit.tag = "signup"
+        //(SG) Dynamic enabling submit button
+        checkBlank(true)
     }
 
     //(KS) Hiding keyboard when click outside the EditText

@@ -54,7 +54,8 @@
             android:ems="10"
             android:hint="Email"
             android:inputType="textPersonName"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:tag="false" />
 
         <EditText
             android:id="@+id/etUsername"
@@ -68,7 +69,8 @@
             android:ems="10"
             android:hint="Username"
             android:inputType="textPersonName"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:tag="false" />
 
         <EditText
             android:id="@+id/etPassword"
@@ -82,7 +84,8 @@
             android:ems="10"
             android:hint="Password"
             android:inputType="textPassword"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:tag="false"/>
 
         <EditText
             android:id="@+id/etPasswordConfirm"
@@ -96,7 +99,8 @@
             android:ems="10"
             android:hint="Confirm password"
             android:inputType="textPassword"
-            android:paddingLeft="10dp" />
+            android:paddingLeft="10dp"
+            android:tag="false"/>
 
         <TextView
             android:id="@+id/tvError"
@@ -114,6 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:background="@drawable/button_round"
+            android:enabled="false"
             android:onClick="bSubmitClick"
             android:tag="signup"
             android:text="SIGN UP"
