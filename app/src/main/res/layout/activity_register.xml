@@ -67,7 +67,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="gone"
-    >
+        >
         <EditText
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
@@ -142,6 +142,13 @@
             android:onClick="bSubmitClick"
             android:tag="signup"
             android:text="SIGN UP" />
+
+        <Button
+            android:id="@+id/fbButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="showSignOptions"
+            android:text="faceokButton" />
 
         <TextView
             android:id="@+id/tvChange"

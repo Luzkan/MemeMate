@@ -1,5 +1,6 @@
 package com.codecrew.mememate
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -9,6 +10,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.codecrew.mememate.database.UserModel
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_register.*
@@ -17,6 +20,7 @@ import java.net.Authenticator
 class RegisterActivity : AppCompatActivity() {
 
     private val handler = Handler()
+    private val FB_REQUEST_CODE : Int = 997
 
     private val runnable = {
         TransitionManager.beginDelayedTransition(lRoot)
@@ -24,6 +28,10 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     lateinit var db: FirebaseFirestore
+
+    val providers = arrayListOf(
+            AuthUI.IdpConfig.FacebookBuilder().build()
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +41,24 @@ class RegisterActivity : AppCompatActivity() {
         if(FirebaseAuth.getInstance().currentUser != null){
             Log.d("USER", "${FirebaseAuth.getInstance().currentUser?.displayName} ${FirebaseAuth.getInstance().currentUser?.email} ")
             startApp()
+        }
+    }
+
+    fun showSignOptions(view: View){
+        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(R.style.AppTheme).build(),FB_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == FB_REQUEST_CODE){
+            val response = IdpResponse.fromResultIntent(data)
+            if(resultCode == Activity.RESULT_OK){
+                val user = FirebaseAuth.getInstance().currentUser
+                startApp()
+            } else {
+
+                Log.d("XDD","$resultCode")
+            }
         }
     }
 
