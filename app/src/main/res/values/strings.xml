@@ -21,4 +21,16 @@
     <string name="replace_first_spot">Replace first spot</string>
     <string name="swap_first_for_last">Swap first for last</string>
     <string name="title_activity_main2_activitydff">Main2Activitydff</string>
+
+    <!-- Demo memes -->
+    <string-array name="memes">
+        <item>https://i.redd.it/esj4i04bcsw21.png</item>
+        <item>https://i.redd.it/28tx1dduxtw21.jpg</item>
+        <item>https://i.redd.it/ysxhq7uagzw21.jpg</item>
+        <item>https://i.redd.it/r8vhqjw3dzw21.jpg</item>
+        <item>https://i.redd.it/aciwa0bkvxw21.png</item>
+        <item>https://i.redd.it/994oe7mk7zw21.jpg</item>
+        <item>https://i.redd.it/zcmhjg1zgxw21.jpg</item>
+        <item>https://i.redd.it/529mjgxyexw21.jpg</item>
+    </string-array>
 </resources>

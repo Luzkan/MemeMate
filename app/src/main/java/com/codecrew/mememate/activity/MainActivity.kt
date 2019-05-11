@@ -1,5 +1,6 @@
-package com.codecrew.mememate
+package com.codecrew.mememate.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
@@ -18,6 +19,11 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.EditText
+import com.codecrew.mememate.MemeDiffCallback
+import com.codecrew.mememate.MemeInfo
+import com.codecrew.mememate.MemeStackAdapter
+import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.profile.ProfileActivity
 import com.codecrew.mememate.database.MemeListDatabase
 import com.codecrew.mememate.database.models.Meme
 import com.yuyakaido.android.cardstackview.*
@@ -58,6 +64,7 @@ class MainActivity : AppCompatActivity(), CardStackListener {
             }
             R.id.navigation_profile -> {
                 textMessage.setText(R.string.profile)
+                startActivity(Intent(this, ProfileActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -79,6 +86,13 @@ class MainActivity : AppCompatActivity(), CardStackListener {
         setupCardStackView()
         setupButton()
     }
+
+
+    fun openProfileActivity() {
+        val intent = Intent(this, ProfileActivity::class.java)
+        startActivity(intent)
+    }
+
 
     /* SWIPE */
     // (MJ) Everything below is for meme browsing & swiping
@@ -192,16 +206,58 @@ class MainActivity : AppCompatActivity(), CardStackListener {
 
     // (MJ) Designed for easy db implementation
     private fun createSpots(): List<MemeInfo> {
-        val meme = ArrayList<MemeInfo>()
-        meme.add(MemeInfo(name = "Kamil Guwniks", description = "Notre Dame", url = "https://preview.redd.it/c4onlm6uqss21.jpg?width=960&crop=smart&auto=webp&s=d49bd6c7317ae3c1453c3d5ea7c938c782278acd"))
-        meme.add(MemeInfo(name = "Natalka Pralka", description = "Dolar Shave Club", url = "https://i.redd.it/28tx1dduxtw21.jpg"))
-        meme.add(MemeInfo(name = "Karol Wielki", description = "Skateboard", url = "https://preview.redd.it/wrm1muwqztw21.jpg?width=960&crop=smart&auto=webp&s=7542fe87acb3b61dbcd5f9d9498349b89dfd566b"))
-        meme.add(MemeInfo(name = "Jan Kowalski", description = "Rosja", url = "https://preview.redd.it/pynfxhv4itw21.jpg?width=960&crop=smart&auto=webp&s=3b846767d1ebf6b7e9e5c8d4ee2e10dc9f1617c6"))
-        meme.add(MemeInfo(name = "Natalka Pralka", description = "4chan", url = "https://i.redd.it/esj4i04bcsw21.png"))
-        meme.add(MemeInfo(name = "Piotr Pietro", description = "Hot Weels", url = "https://preview.redd.it/5ikldesz1tw21.jpg?width=960&crop=smart&auto=webp&s=cf904ad656f6b88957be3b287fa4fdc7a5c01f23"))
-        meme.add(MemeInfo(name = "Piotr Skowyrski", description = "Hot Weels", url = "https://preview.redd.it/b86lwcgf2tw21.jpg?width=640&crop=smart&auto=webp&s=f8a7beaa2b04140beabdecd39f7cee94e320b5f5"))
+        val memes = ArrayList<MemeInfo>()
+        memes.add(
+            MemeInfo(
+                name = "Kamil Guwniks",
+                description = "Notre Dame",
+                url = "https://preview.redd.it/c4onlm6uqss21.jpg?width=960&crop=smart&auto=webp&s=d49bd6c7317ae3c1453c3d5ea7c938c782278acd"
+            )
+        )
+        memes.add(
+            MemeInfo(
+                name = "Natalka Pralka",
+                description = "Dolar Shave Club",
+                url = "https://i.redd.it/28tx1dduxtw21.jpg"
+            )
+        )
+        memes.add(
+            MemeInfo(
+                name = "Karol Wielki",
+                description = "Skateboard",
+                url = "https://preview.redd.it/wrm1muwqztw21.jpg?width=960&crop=smart&auto=webp&s=7542fe87acb3b61dbcd5f9d9498349b89dfd566b"
+            )
+        )
+        memes.add(
+            MemeInfo(
+                name = "Jan Kowalski",
+                description = "Rosja",
+                url = "https://preview.redd.it/pynfxhv4itw21.jpg?width=960&crop=smart&auto=webp&s=3b846767d1ebf6b7e9e5c8d4ee2e10dc9f1617c6"
+            )
+        )
+        memes.add(
+            MemeInfo(
+                name = "Natalka Pralka",
+                description = "4chan",
+                url = "https://i.redd.it/esj4i04bcsw21.png"
+            )
+        )
+        memes.add(
+            MemeInfo(
+                name = "Piotr Pietro",
+                description = "Hot Weels",
+                url = "https://preview.redd.it/5ikldesz1tw21.jpg?width=960&crop=smart&auto=webp&s=cf904ad656f6b88957be3b287fa4fdc7a5c01f23"
+            )
+        )
+        memes.add(
+            MemeInfo(
+                name = "Piotr Skowyrski",
+                description = "Hot Weels",
+                url = "https://preview.redd.it/b86lwcgf2tw21.jpg?width=640&crop=smart&auto=webp&s=f8a7beaa2b04140beabdecd39f7cee94e320b5f5"
+            )
+        )
 
-        return meme
+        return memes
     }
     /* SWIPE */
 
@@ -211,7 +267,13 @@ class MainActivity : AppCompatActivity(), CardStackListener {
 
         memeList.clear()
         for(Meme in memeDatabase!!.getMeme().getMemeListRatingSorted()){
-            memeList.add(MemeInfo(name = memeDatabase!!.getMeme().getMemeItem(Meme.tId).name, description = memeDatabase!!.getMeme().getMemeItem(Meme.tId).description, url = memeDatabase!!.getMeme().getMemeItem(Meme.tId).url))
+            memeList.add(
+                MemeInfo(
+                    name = memeDatabase!!.getMeme().getMemeItem(Meme.tId).name,
+                    description = memeDatabase!!.getMeme().getMemeItem(Meme.tId).description,
+                    url = memeDatabase!!.getMeme().getMemeItem(Meme.tId).url
+                )
+            )
         }
         reload()
     }
