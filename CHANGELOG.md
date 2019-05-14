@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ___________________________________
+## [] - 2019-05-14 - Szymon Głąb & Karol Szymończyk
+### Added
+ - Added sign in panel
+ - Added sign up panel
 
 ## [0.2.1] - 2019-05-08 - Marcel Jerzyk
 ### Added
