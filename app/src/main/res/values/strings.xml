@@ -21,4 +21,9 @@
     <string name="replace_first_spot">Replace first spot</string>
     <string name="swap_first_for_last">Swap first for last</string>
     <string name="title_activity_main2_activitydff">Main2Activitydff</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id">2672329152795068</string>
+    <string name="fb_login_protocol_scheme">fb2672329152795068</string>
+
 </resources>

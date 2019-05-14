@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "425479227369",
+    "firebase_url": "https://mememate-4cdbc.firebaseio.com",
+    "project_id": "mememate-4cdbc",
+    "storage_bucket": "mememate-4cdbc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425479227369:android:811fc58f8c9507d7",
+        "android_client_info": {
+          "package_name": "com.luzkan.mememate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425479227369-f71qm8m5obiq3i22lm4rkai4f99lsv1h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.luzkan.mememate",
+            "certificate_hash": "6c76c4d23a3dc1c27bff18272384701e0db3d89c"
+          }
+        },
+        {
+          "client_id": "425479227369-5o9qd7c2cv4dfrr0q1e4dm45ignfhuqe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASNA7a19vBhmGtLRluxnWyUlcSBkJUW0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425479227369-5o9qd7c2cv4dfrr0q1e4dm45ignfhuqe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

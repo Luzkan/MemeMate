@@ -44,11 +44,32 @@ dependencies {
     // Lifecycle
     implementation "android.arch.lifecycle:extensions:1.1.1"
     kapt "android.arch.lifecycle:compiler:1.1.1"
+
+    // Firebase - connection
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+
+    // Firebase - authentication
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+
+    //Firebase - firestore
+    implementation 'com.google.firebase:firebase-firestore:17.1.1'
+
+    // Firebase - facebook authentication
+    implementation 'com.facebook.android:facebook-android-sdk:4.41.0'
+
     // Room
     implementation "android.arch.persistence.room:runtime:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
+
+    // Loading button
+    implementation 'br.com.simplepass:loading-button-android:1.14.0'
+
+    // Facebook button
+    implementation 'com.github.medyo:fancybuttons:1.9.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
+apply plugin: 'com.google.gms.google-services'
