@@ -1,5 +1,6 @@
 package com.codecrew.mememate
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity(), CardStackListener {
             }
             R.id.navigation_add -> {
                 textMessage.setText(R.string.add)
-                temporarySimpleMemeAddition()
+                addMeme()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
@@ -223,6 +224,12 @@ class MainActivity : AppCompatActivity(), CardStackListener {
         val result = DiffUtil.calculateDiff(callback)
         adapter.setSpots(new)
         result.dispatchUpdatesTo(adapter)
+    }
+
+    //(PK)Activity for adding new memes
+    private fun addMeme(){
+        val intent = Intent(this, MemeAdding::class.java)
+        startActivity(intent)
     }
 
     // (MJ) Temporary dialog box to input memes into database with name & url
