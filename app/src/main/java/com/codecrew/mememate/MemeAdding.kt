@@ -9,8 +9,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.firebase.ui.auth.AuthUI
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -30,11 +33,14 @@ class MemeAdding : AppCompatActivity() {
     lateinit var memeUrl : String
     lateinit var uri : Uri
 
+    lateinit var user : FirebaseUser
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_meme_adding)
         database = FirebaseFirestore.getInstance()
         storage  = FirebaseStorage.getInstance()
+        user = FirebaseAuth.getInstance().currentUser!!
         val firestore = FirebaseFirestore.getInstance()
         val settings = FirebaseFirestoreSettings.Builder()
             .setTimestampsInSnapshotsEnabled(true)
@@ -88,12 +94,12 @@ class MemeAdding : AppCompatActivity() {
                 val meme = HashMap<String, Any>()
                 meme["url"] = memeUrl
                 meme["title"] = name.text.toString()
-                meme["seenBy"] = arrayListOf("ten co dodał")
-                //meme["userId"] = FirebaseAuth
+                meme["seenBy"] = arrayListOf(user.uid)
+                meme["userId"] = user.uid
                 database.collection("Memes").add(meme)
                     .addOnSuccessListener {
                         Log.i("dziala???", "chyba nie")
-                        database.collection("Users").document("Ginusia").update("addedMemes",FieldValue.arrayUnion("nowyMem") )
+                        database.collection("Users").document(user.displayName.toString()).update("addedMemes",FieldValue.arrayUnion(it.id) )
                         finish()
                     }
                 }
