@@ -54,6 +54,9 @@ dependencies {
     //Firebase - firestore
     implementation 'com.google.firebase:firebase-firestore:17.1.1'
 
+    //Firebase - storage
+    implementation 'com.google.firebase:firebase-storage:16.0.5'
+
     // Firebase - facebook authentication
     implementation 'com.facebook.android:facebook-android-sdk:4.41.0'
 
