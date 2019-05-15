@@ -104,8 +104,7 @@ class MainActivity : AppCompatActivity(), CardStackListener {
 
     override fun onCardSwiped(direction: Direction) {
 
-
-        val currentMeme = adapter.getSpots()[adapter.getPosition()]
+        val currentMeme = adapter.getSpots()[manager.topPosition]
 
         if(direction == Direction.Right){
             currentMeme.rate++
