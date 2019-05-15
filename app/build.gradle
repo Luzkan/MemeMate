@@ -33,6 +33,9 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
+    // ViewPager Transformers
+    implementation 'com.eftimoff:android-viewpager-transformers:1.0.1@aar'
+
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 

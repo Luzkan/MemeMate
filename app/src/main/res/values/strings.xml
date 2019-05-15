@@ -33,4 +33,7 @@
         <item>https://i.redd.it/zcmhjg1zgxw21.jpg</item>
         <item>https://i.redd.it/529mjgxyexw21.jpg</item>
     </string-array>
+    <string name="title_activity_full_meme">FullMemeActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

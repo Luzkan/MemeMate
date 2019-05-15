@@ -3,12 +3,11 @@ package com.codecrew.mememate.activity.profile
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.widget.GridLayout
-import android.widget.ImageView
 import com.codecrew.mememate.MemeInfo
 import com.codecrew.mememate.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_profile.*
+import kotlin.random.Random
 
 private const val SPAN_COUNT = 3
 
@@ -24,24 +23,33 @@ class ProfileActivity : AppCompatActivity(), GalleryMemeClickListener {
 
         // Set up the adapter.
         galleryAdapter = GalleryAdapter(memesList)
+        galleryAdapter.listener = this
 
         // Set up ReclyclerView.
         recyclerView.layoutManager = GridLayoutManager(this, SPAN_COUNT)
         recyclerView.adapter = galleryAdapter
-
+        
         // Load memes
         loadDemoMemes()
     }
 
     override fun onGalleryMemeClickListener(position: Int) {
         currentPosition = position
+
+        val bundle = Bundle()
+        bundle.putSerializable("images", memesList)
+        bundle.putInt("position", position)
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val galleryFragment = GalleryFullscreenFragment()
+        galleryFragment.arguments = bundle
+        galleryFragment.show(fragmentTransaction, "gallery")
     }
 
     // For demonstration purpose only, we will get the memes for every user from the database.
     private fun loadDemoMemes() {
         val memes = resources.getStringArray(R.array.memes)
 
-        val mainMeme = MemeInfo(url = memes[0], description = "", name = "")
+        val mainMeme = MemeInfo(url = memes[Random.nextInt(memes.size)], description = "", name = "")
         Picasso.get()
             .load(mainMeme.url)
             .into(main_meme)
