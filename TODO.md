@@ -35,9 +35,6 @@ ___________________________________
 		
 - **Upload Images to smth**
 - **Users DB**
-- **Login / Register**
-	- Check if user is logged in
-	- *Register / login with facebook?*
 - Matching
 	- Upon right swipe (like on Tinder). Interesting feature could be that in options user can select after how many like he would like to be matched. For example: if someone liked 3 or more memes he is ready to match with someone (and the match will happen if he will meet liked memes requirement of the other user)
 - Memes Algorithm
@@ -65,3 +62,4 @@ ___________________________________
 - Colors & Icons
 - Meme Browsing
 - Memes DB
+- Login and sign up (also with Facebook)
