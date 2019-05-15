@@ -20,7 +20,6 @@
     <string name="remove_spot_from_last">Remove spot from last</string>
     <string name="replace_first_spot">Replace first spot</string>
     <string name="swap_first_for_last">Swap first for last</string>
-    <string name="title_activity_main2_activitydff">Main2Activitydff</string>
 
     <!-- Demo memes -->
     <string-array name="memes">
