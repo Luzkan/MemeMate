@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.View
-import com.codecrew.mememate.database.UserModel
+import com.codecrew.mememate.database.models.UserModel
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth

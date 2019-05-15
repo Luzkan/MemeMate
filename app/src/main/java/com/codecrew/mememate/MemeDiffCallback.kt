@@ -1,8 +1,9 @@
 package com.codecrew.mememate
 
 import android.support.v7.util.DiffUtil
+import com.codecrew.mememate.database.models.MemeModel
 
-class MemeDiffCallback(private val old: List<MemeInfo>, private val new: List<MemeInfo>) : DiffUtil.Callback() {
+class MemeDiffCallback(private val old: List<MemeModel>, private val new: List<MemeModel>) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return old.size

@@ -46,7 +46,7 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:1.1.1"
 
     // Firebase - connection
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+//    implementation 'com.google.firebase:firebase-core:16.0.9'
 
     // Firebase - authentication
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
@@ -57,9 +57,9 @@ dependencies {
     // Firebase - facebook authentication
     implementation 'com.facebook.android:facebook-android-sdk:4.41.0'
 
-    // Room
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    kapt "android.arch.persistence.room:compiler:1.1.1"
+//    // Room
+//    implementation "android.arch.persistence.room:runtime:1.1.1"
+//    kapt "android.arch.persistence.room:compiler:1.1.1"
 
     // Loading button
     implementation 'br.com.simplepass:loading-button-android:1.14.0'
