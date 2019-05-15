@@ -25,6 +25,8 @@ import kotlin.collections.ArrayList
 
 //TODO set browsing meme as default card after login
 
+//TODO potrzebuje dostać aktualnie wyświetlanego mema
+
 class MainActivity : AppCompatActivity(), CardStackListener {
 
 
@@ -99,25 +101,33 @@ class MainActivity : AppCompatActivity(), CardStackListener {
     }
 
     override fun onCardSwiped(direction: Direction) {
-        // (SG) how to get current displayed meme?
-        // Here we update the rate of current meme, seenBy array and liked memes of the user
+
+
         val currentMeme = adapter.getSpots()[adapter.getPosition()]
+
         if(direction == Direction.Right){
             currentMeme.rate++
         } else {
             currentMeme.rate--
         }
+        updateMemeInfo(currentMeme)
+
+        Log.d("CardStackView", "onCardSwiped: p = ${manager.topPosition}, d = $direction")
+        if (manager.topPosition == adapter.itemCount - 5) {
+            paginate()
+        }
+    }
+
+    // (SG) Function to update the rate of current meme, seenBy array and liked memes of the user
+    private fun updateMemeInfo(currentMeme: MemeModel) {
+
         currentMeme.seenBy.add(currentUser!!.uid)
 
         val newMemeParameters = mutableMapOf<String,Any>()
         newMemeParameters["rate"] = currentMeme.rate
         newMemeParameters["seenBy"] =currentMeme.seenBy
         memeDatabase!!.document("/Memes/${currentMeme.dbId}").update(newMemeParameters)
-        memeDatabase!!.document("Users/${currentUser.uid}").update("lickedMeme",FieldValue.arrayUnion(currentMeme.url))
-        Log.d("CardStackView", "onCardSwiped: p = ${manager.topPosition}, d = $direction")
-        if (manager.topPosition == adapter.itemCount - 5) {
-            paginate()
-        }
+        memeDatabase!!.document("/Users/${currentUser.uid}").update("lickedMemes",FieldValue.arrayUnion(currentMeme.url))
     }
 
     override fun onCardAppeared(view: View, position: Int) {
@@ -215,29 +225,28 @@ class MainActivity : AppCompatActivity(), CardStackListener {
 
     // (MJ) Designed for easy db implementation
     private fun createSpots(): List<MemeModel> {
-        var arrayTemp = ArrayList<String>()
 
-        memeList.add(
-            MemeModel(20,"sVKUhMugmXKKB5UX4MyP","https://preview.redd.it/b86lwcgf2tw21.jpg?width=640&crop=smart&auto=webp&s=f8a7beaa2b04140beabdecd39f7cee94e320b5f5","XD",20,arrayTemp))
+        var memeArray = ArrayList<MemeModel>()
+
         memeList.forEach{
-            Log.d("MEMESEK", it.toString())
+            memeArray.add(it)
         }
-        return memeList
+        return memeArray
     }
     /* SWIPE */
 
     /* DATABASE FUNCTIONS */
     // (MJ) Load Memes from Database Function
     private fun loadMemes() {
-//        memeList.clear()
+        memeList.clear()
         // (SG) Downloading only memes that user haven't seen yet
-        memeDatabase!!.collection("Memes").whereArrayContains("seenBy", currentUser!!.uid).get().addOnSuccessListener {
+        memeDatabase!!.collection("Memes").get().addOnSuccessListener {
             // (SG) Casting downloaded memes into objects
             for(meme  in it){
-                Log.d("newMemes","Downloaded meme")
                 val newMeme = MemeModel(dbId =meme.id ,url =meme["url"].toString(),location = meme["location"].toString(),rate =  meme["rate"].toString().toInt(), seenBy =  meme["seenBy"] as ArrayList<String>)
-                Log.d("newMemes",newMeme.toString())
-                memeList.add(newMeme)
+                if(!newMeme.seenBy.contains(currentUser!!.uid)) {
+                    memeList.add(newMeme)
+                }
             }
             reload()
         }.addOnFailureListener {

@@ -17,14 +17,10 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList()) : Recyc
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        Log.d("newMemes","${spots.size}")
         return ViewHolder(inflater.inflate(R.layout.item_spot, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        Log.d("newMemes","ADAPETER DODAJE!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
         // (SG) position of currently displayed meme
         currentPosition = position
         val spot = spots[position]
@@ -34,7 +30,7 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList()) : Recyc
             .load(spot.url)
             .into(holder.image)
         holder.itemView.setOnClickListener { v ->
-            Toast.makeText(v.context, "???ADAPETER???", Toast.LENGTH_SHORT).show()
+            Toast.makeText(v.context, currentPosition.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 

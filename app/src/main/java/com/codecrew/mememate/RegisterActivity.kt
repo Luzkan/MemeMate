@@ -184,10 +184,10 @@ class RegisterActivity : AppCompatActivity() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val uid = FirebaseAuth.getInstance().uid ?: ""
-                            val newUser = UserModel(uid, email, userName)
+                            val newUser = UserModel(uid, email, userName, ArrayList())
 
                             // (SG) Creating a new user in database
-                            db.collection("Users").document(newUser.userName).set(newUser)
+                            db.collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(newUser)
                                 .addOnSuccessListener { void: Void? ->
                                     startApp()
                                 }.addOnFailureListener { exception: java.lang.Exception ->
