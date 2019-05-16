@@ -1,4 +1,4 @@
-package com.codecrew.mememate
+package com.codecrew.mememate.activity.login
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -23,6 +23,8 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import com.codecrew.mememate.MainActivity
+import com.codecrew.mememate.R
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -47,7 +49,10 @@ class RegisterActivity : AppCompatActivity() {
     private val runnableStartApp = {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        overridePendingTransition(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
+        overridePendingTransition(
+            R.anim.abc_grow_fade_in_from_bottom,
+            R.anim.abc_shrink_fade_out_from_bottom
+        )
     }
 
     lateinit var db: FirebaseFirestore
@@ -74,7 +79,9 @@ class RegisterActivity : AppCompatActivity() {
 
     // (SG) Allows us to open activity to sign in with facebook
     fun showSignOptions(view: View){
-        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(R.style.AppTheme).build(),FB_REQUEST_CODE)
+        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(
+            R.style.AppTheme
+        ).build(),FB_REQUEST_CODE)
     }
 
     // (SG) Logs user with facebook

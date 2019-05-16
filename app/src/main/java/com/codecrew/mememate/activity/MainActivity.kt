@@ -1,14 +1,12 @@
 package com.codecrew.mememate
 
+//import com.codecrew.mememate.database.MemeListDatabase
+//import com.codecrew.mememate.database.models.Meme
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.AppCompatActivity
-import android.widget.TextView
-import com.yuyakaido.android.cardstackview.CardStackLayoutManager
-import com.yuyakaido.android.cardstackview.CardStackListener
-import com.yuyakaido.android.cardstackview.CardStackView
 import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.DefaultItemAnimator
 import android.util.Log
@@ -17,12 +15,14 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.TextView
+import com.codecrew.mememate.activity.profile.ProfileActivity
+import com.codecrew.mememate.activity.top.TopActivity
 import com.codecrew.mememate.database.models.MemeModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yuyakaido.android.cardstackview.*
-import kotlin.collections.ArrayList
 
 //TODO set browsing meme as default card after login
 
@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity(), CardStackListener {
         when (item.itemId) {
             R.id.navigation_top -> {
                 textMessage.setText(R.string.top)
+                startActivity(Intent(this, TopActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_matches -> {
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity(), CardStackListener {
             }
             R.id.navigation_profile -> {
                 textMessage.setText(R.string.profile)
+                startActivity(Intent(this, ProfileActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -91,6 +93,13 @@ class MainActivity : AppCompatActivity(), CardStackListener {
         setupCardStackView()
         setupButton()
     }
+
+
+    fun openProfileActivity() {
+        val intent = Intent(this, ProfileActivity::class.java)
+        startActivity(intent)
+    }
+
 
     /* SWIPE */
     // (MJ) Everything below is for meme browsing & swiping

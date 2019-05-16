@@ -26,4 +26,19 @@
     <string name="facebook_application_id">2672329152795068</string>
     <string name="fb_login_protocol_scheme">fb2672329152795068</string>
 
+
+    <!-- Demo memes -->
+    <string-array name="memes">
+        <item>https://i.redd.it/esj4i04bcsw21.png</item>
+        <item>https://i.redd.it/28tx1dduxtw21.jpg</item>
+        <item>https://i.redd.it/ysxhq7uagzw21.jpg</item>
+        <item>https://i.redd.it/r8vhqjw3dzw21.jpg</item>
+        <item>https://i.redd.it/aciwa0bkvxw21.png</item>
+        <item>https://i.redd.it/994oe7mk7zw21.jpg</item>
+        <item>https://i.redd.it/zcmhjg1zgxw21.jpg</item>
+        <item>https://i.redd.it/529mjgxyexw21.jpg</item>
+    </string-array>
+    <string name="title_activity_full_meme">FullMemeActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

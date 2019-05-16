@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/papayawhip"
-        tools:context=".MainActivity"
+        tools:context=".activity.MainActivity"
         android:layout_marginBottom="56dp">
 
         <LinearLayout
@@ -82,7 +82,7 @@
                     android:layout_height="match_parent"
                     android:layout_above="@+id/button_container"
                     android:clipToPadding="false"
-                    android:padding="4dp"></com.yuyakaido.android.cardstackview.CardStackView>
+                    android:padding="4dp" />
 
 
             </RelativeLayout>
