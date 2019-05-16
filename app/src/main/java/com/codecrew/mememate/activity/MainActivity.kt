@@ -24,6 +24,7 @@ import com.codecrew.mememate.MemeInfo
 import com.codecrew.mememate.MemeStackAdapter
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.profile.ProfileActivity
+import com.codecrew.mememate.activity.top.TopActivity
 import com.codecrew.mememate.database.MemeListDatabase
 import com.codecrew.mememate.database.models.Meme
 import com.yuyakaido.android.cardstackview.*
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity(), CardStackListener {
         when (item.itemId) {
             R.id.navigation_top -> {
                 textMessage.setText(R.string.top)
+                startActivity(Intent(this, TopActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_matches -> {
