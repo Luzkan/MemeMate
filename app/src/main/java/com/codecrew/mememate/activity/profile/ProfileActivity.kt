@@ -31,25 +31,33 @@ class ProfileActivity : AppCompatActivity(), GalleryMemeClickListener {
         
         // Load memes
         loadDemoMemes()
+
+        // Main meme
+        main_meme.setOnClickListener{mainMemeListener()}
     }
 
     override fun onGalleryMemeClickListener(position: Int) {
         currentPosition = position
 
+        Picasso.get()
+            .load(memesList[currentPosition].url)
+            .into(main_meme)
+    }
+
+    private fun mainMemeListener() {
         val bundle = Bundle()
         bundle.putSerializable("images", memesList)
-        bundle.putInt("position", position)
+        bundle.putInt("position", currentPosition)
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val galleryFragment = GalleryFullscreenFragment()
         galleryFragment.arguments = bundle
         galleryFragment.show(fragmentTransaction, "gallery")
     }
-
     // For demonstration purpose only, we will get the memes for every user from the database.
     private fun loadDemoMemes() {
         val memes = resources.getStringArray(R.array.memes)
 
-        val mainMeme = MemeInfo(url = memes[Random.nextInt(memes.size)], description = "", name = "")
+        val mainMeme = MemeInfo(url = memes[currentPosition], description = "", name = "")
         Picasso.get()
             .load(mainMeme.url)
             .into(main_meme)
