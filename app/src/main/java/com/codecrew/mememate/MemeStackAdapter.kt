@@ -1,7 +1,6 @@
 package com.codecrew.mememate
 
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +12,12 @@ import com.codecrew.mememate.database.models.MemeModel
 
 class MemeStackAdapter(private var spots: List<MemeModel> = emptyList()) : RecyclerView.Adapter<MemeStackAdapter.ViewHolder>() {
 
-    var currentPosition = 0
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(inflater.inflate(R.layout.item_spot, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // (SG) position of currently displayed meme
-        currentPosition = position
         val spot = spots[position]
         holder.name.text = "${spot.id}"
         holder.city.text = spot.location
@@ -30,7 +25,7 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList()) : Recyc
             .load(spot.url)
             .into(holder.image)
         holder.itemView.setOnClickListener { v ->
-            Toast.makeText(v.context, currentPosition.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(v.context, "ADAPTER", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -44,10 +39,6 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList()) : Recyc
 
     fun getSpots(): List<MemeModel> {
         return spots
-    }
-
-    fun getPosition() : Int {
-        return currentPosition
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
