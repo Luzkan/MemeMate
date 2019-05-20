@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clipChildren="false">
+
+        <RelativeLayout
+            android:id="@+id/button_container"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:clipChildren="false"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/skip_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/rewind_button"
+                android:layout_toLeftOf="@+id/rewind_button"
+                android:src="@drawable/skip_red_24dp"
+                app:backgroundTint="@color/peachpuff"
+                app:fabSize="auto"
+                app:rippleColor="#22ED7563" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/rewind_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="32dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginRight="32dp"
+                android:src="@drawable/rewind_blue_24dp"
+                app:backgroundTint="@color/peachpuff"
+                app:fabSize="mini"
+                app:rippleColor="#225BC9FA" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/like_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/rewind_button"
+                android:layout_toRightOf="@+id/rewind_button"
+                android:src="@drawable/like_green_24dp"
+                app:backgroundTint="@color/peachpuff"
+                app:fabSize="auto"
+                app:rippleColor="#226FE2B3" />
+
+        </RelativeLayout>
+
+        <com.yuyakaido.android.cardstackview.CardStackView
+            android:id="@+id/card_stack_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/button_container"
+            android:clipToPadding="false"
+            android:padding="4dp" />
+    </RelativeLayout>
