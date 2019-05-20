@@ -93,7 +93,7 @@ class RegisterActivity : AppCompatActivity() {
                 val user = FirebaseAuth.getInstance().currentUser
                 startApp()
             } else {
-                Log.d("XDD","$resultCode")
+
             }
         }
     }

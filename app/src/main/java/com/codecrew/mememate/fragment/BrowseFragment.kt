@@ -174,7 +174,6 @@ class BrowseFragment : Fragment(), CardStackListener {
 
     private fun setupButton() {
         skipButton.setOnClickListener {
-            Log.d("MEMESKI", "CLICKED")
             val setting = SwipeAnimationSetting.Builder()
                 .setDirection(Direction.Left)
                 .setDuration(Duration.Normal.duration)
@@ -185,7 +184,6 @@ class BrowseFragment : Fragment(), CardStackListener {
         }
 
         rewindButton.setOnClickListener {
-            Log.d("MEMESKI", "CLICKED")
             val setting = RewindAnimationSetting.Builder()
                 .setDirection(Direction.Bottom)
                 .setDuration(Duration.Normal.duration)
@@ -196,7 +194,6 @@ class BrowseFragment : Fragment(), CardStackListener {
         }
 
         likeButton.setOnClickListener {
-            Log.d("MEMESKI", "CLICKED")
             val setting = SwipeAnimationSetting.Builder()
                 .setDirection(Direction.Right)
                 .setDuration(Duration.Normal.duration)
@@ -243,9 +240,7 @@ class BrowseFragment : Fragment(), CardStackListener {
 
         var memeArray = ArrayList<MemeModel>()
 
-        Log.d("MEMESKI", "TWORZĘ SPOTY")
         memeList.forEach{
-            Log.d("MEMESKI", "SPOT")
             memeArray.add(it)
         }
         return memeArray
@@ -255,22 +250,15 @@ class BrowseFragment : Fragment(), CardStackListener {
     /* DATABASE FUNCTIONS */
     // (MJ) Load Memes from Database Function
     private fun loadMemes() {
-        Log.d("MEMESKI", "POBIERAM MEMESKA 1")
         memeList.clear()
         // (SG) Downloading only memes that user haven't seen yet
         memeDatabase!!.collection("Memes").get().addOnSuccessListener {
-            Log.d("MEMESKI", "POBIERAM MEMESKA 2 ")
             // (SG) Casting downloaded memes into objects
             for(meme  in it){
-                Log.d("MEMESKI", "POBIERAM MEMESKA 3 ")
                 val newMeme = MemeModel(dbId =meme.id ,url =meme["url"].toString(),location = meme["location"].toString(),rate =  meme["rate"].toString().toInt(), seenBy =  meme["seenBy"] as ArrayList<String>)
                 if(!newMeme.seenBy.contains(currentUser!!.uid)) {
                     memeList.add(newMeme)
-                    Log.d("MEMESKI", "POBIERAM MEMESKA")
                 }
-            }
-            memeList.forEach{
-                Log.d("MEMESKI", it.toString())
             }
 
             reload()
