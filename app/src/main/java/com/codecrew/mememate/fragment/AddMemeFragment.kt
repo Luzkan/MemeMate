@@ -52,10 +52,14 @@ class AddMemeFragment : Fragment() {
         database = FirebaseFirestore.getInstance()
         storage  = FirebaseStorage.getInstance()
         user = FirebaseAuth.getInstance().currentUser!!
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        if (!(activity as MainActivity).isValid) {
+            bPickClick()
+        }
+
         // (SG) Find widgets
         val v = inflater.inflate(R.layout.fragment_meme_adding, container, false)
         confirmButton = v.findViewById(R.id.confirmButton) as Button
