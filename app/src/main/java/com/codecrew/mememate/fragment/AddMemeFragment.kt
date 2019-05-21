@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.MainActivity
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -22,7 +24,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_meme_adding.*
+import kotlinx.android.synthetic.main.fragment_meme_adding.view.*
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -31,13 +35,15 @@ class AddMemeFragment : Fragment() {
     private lateinit var database : FirebaseFirestore
     private lateinit var storage : FirebaseStorage
 
+    private lateinit var pic : ImageView
+
     private lateinit var memeUrl : String
     private lateinit var uri : Uri
 
     private lateinit var user : FirebaseUser
 
     private lateinit var confirmButton : Button
-    private lateinit var searchButton : Button
+    private lateinit var pickButton : Button
 
     private lateinit var name : TextView
 
@@ -53,23 +59,29 @@ class AddMemeFragment : Fragment() {
         // (SG) Find widgets
         val v = inflater.inflate(R.layout.fragment_meme_adding, container, false)
         confirmButton = v.findViewById(R.id.confirmButton) as Button
-        searchButton = v.findViewById(R.id.searchButton) as Button
+        pickButton = v.findViewById(R.id.pickButton) as Button
         name = v.findViewById(R.id.name) as TextView
+        pic = v.findViewById(R.id.memeImage) as ImageView
+
+        Glide.with(this).load((activity as MainActivity).pic).into(pic)
 
         setButtons()
         return v
     }
 
-
     private fun setButtons(){
-        confirmButton.isEnabled = false
+//        confirmButton.isEnabled = false
+        confirmButton.isEnabled = (activity as MainActivity).isValid
 
-        searchButton.setOnClickListener{
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.setType("image/*")
-            intent.setAction(Intent.ACTION_GET_CONTENT)
-            startActivityForResult(Intent.createChooser(intent, "select picture"), 2233 )
-        }
+//        searchButton.setOnClickListener{
+//            val intent = Intent(Intent.ACTION_GET_CONTENT)
+//            intent.type = "image/*"
+//            intent.action = Intent.ACTION_GET_CONTENT
+//            startActivityForResult(Intent.createChooser(intent, "select picture"), 2233 )
+//        }
+
+        pickButton.setOnClickListener{bPickClick()}
+
         confirmButton.setOnClickListener{
             if(name.text.isEmpty()){
                 Toast.makeText(this.context, "Name your meme", Toast.LENGTH_SHORT).show()
@@ -99,10 +111,18 @@ class AddMemeFragment : Fragment() {
                         .addOnSuccessListener {
                             database.collection("Users").document(user.uid).update("addedMemes", FieldValue.arrayUnion(it.id) )
                         }
-                    //todo ADD redirect to profile
+                    (activity as MainActivity).nav_view.selectedItemId = R.id.navigation_profile
+                    (activity as MainActivity).displayProfile()
                 }
             }
         }
+    }
+
+    private fun bPickClick() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "select picture"), 2233 )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -110,6 +130,8 @@ class AddMemeFragment : Fragment() {
         try{
             if(resultCode== Activity.RESULT_OK && requestCode == 2233){
                 uri = data!!.data
+                (activity as MainActivity).pic = uri
+                (activity as MainActivity).isValid = true
                 Glide.with(this).load(uri).into(memeImage)
                 memeImage.visibility = View.VISIBLE
                 confirmButton.isEnabled = true
@@ -118,4 +140,5 @@ class AddMemeFragment : Fragment() {
             Log.e("blad", e.message)
         }
     }
+
 }
