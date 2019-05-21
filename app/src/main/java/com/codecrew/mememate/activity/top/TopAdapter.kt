@@ -37,8 +37,13 @@ class TopAdapter(private val memes: List<MemeModel>) : RecyclerView.Adapter<TopV
         }
 
         val index = (position+1).toString() + "."
-        holder.index.text = index
 
+        val currentMeme = memes[position]
+
+        holder.index.text = index
+        holder.rate.text = currentMeme.rate.toString()
+        holder.location.text = currentMeme.location
+        holder.username.text = currentMeme.addedBy
         holder.itemView.setOnClickListener {
             listener?.onGalleryMemeClickListener(holder.adapterPosition)
         }

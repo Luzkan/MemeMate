@@ -31,7 +31,7 @@ class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
         recyclerViewTop.adapter = topAdapter
 
 //        // Load memes
-        loadDemoMemes()
+//        loadDemoMemes()
     }
 
     override fun onGalleryMemeClickListener(position: Int) {
@@ -47,12 +47,12 @@ class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
     }
 
     // For demonstration purpose only, we will get the memes for every user from the database.
-    private fun loadDemoMemes() {
-        val memes = resources.getStringArray(R.array.memes)
-
-        for (meme in memes.drop(1)) {
-            memesList.add(MemeModel(url = meme, location = "", rate = 0, dbId = "test", seenBy = ArrayList()))
-        }
-        topAdapter.notifyDataSetChanged()
-    }
+//    private fun loadDemoMemes() {
+//        val memes = resources.getStringArray(R.array.memes)
+//
+//        for (meme in memes.drop(1)) {
+//            memesList.add(MemeModel(url = meme, location = "", rate = 0, dbId = "test", seenBy = ArrayList(), addedBy = ))
+//        }
+//        topAdapter.notifyDataSetChanged()
+//    }
 }

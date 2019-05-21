@@ -23,8 +23,10 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.codecrew.mememate.MainActivity
+import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.R
+import com.google.firebase.auth.UserProfileChangeRequest
+
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -59,7 +61,7 @@ class RegisterActivity : AppCompatActivity() {
 
     // (SG) List of account types we can sign in
     val providers = arrayListOf(
-            AuthUI.IdpConfig.FacebookBuilder().build()
+        AuthUI.IdpConfig.FacebookBuilder().build()
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,7 +101,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun bSubmitClick(view: View) {
-    //(KS) Animated loading button
+        //(KS) Animated loading button
         bSubmit.startAnimation()
 
         resetError()
@@ -189,9 +191,13 @@ class RegisterActivity : AppCompatActivity() {
                 //(SG) Checking if email is taken
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
+
+
+                        FirebaseAuth.getInstance().currentUser!!.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(userName).build())
+
                         if (task.isSuccessful) {
                             val uid = FirebaseAuth.getInstance().uid ?: ""
-                            val newUser = UserModel(uid, email, userName, ArrayList())
+                            val newUser = UserModel(uid, email, userName, ArrayList(), ArrayList())
 
                             // (SG) Creating a new user in database
                             db.collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(newUser)
@@ -268,3 +274,4 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 }
+

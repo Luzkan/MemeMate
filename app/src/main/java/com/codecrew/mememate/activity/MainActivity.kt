@@ -1,29 +1,23 @@
-package com.codecrew.mememate
+package com.codecrew.mememate.activity
 
-//import com.codecrew.mememate.database.MemeListDatabase
-//import com.codecrew.mememate.database.models.Meme
-import android.content.Intent
+
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import com.codecrew.mememate.activity.profile.ProfileActivity
-import com.codecrew.mememate.activity.top.TopActivity
+import com.codecrew.mememate.R
 import com.codecrew.mememate.fragment.AddMemeFragment
 import com.codecrew.mememate.fragment.BrowseFragment
 import com.codecrew.mememate.fragment.ProfileFragment
 import com.codecrew.mememate.fragment.TopFragment
 
-//TODO set browsing meme as default card after login
 
 class MainActivity : AppCompatActivity(){
 
 
     // (SG) Fragment manager
     private val fragmentManager: FragmentManager = supportFragmentManager
-
-
 
     private lateinit var textMessage: TextView
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -57,8 +51,6 @@ class MainActivity : AppCompatActivity(){
     }
 
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -66,8 +58,9 @@ class MainActivity : AppCompatActivity(){
 
         textMessage = findViewById(R.id.message)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        displayBrowsing()
+        navView.selectedItemId = R.id.navigation_main
     }
-
 
 //    override fun onBackPressed() {
 //        if (drawerLayout.isDrawerOpen(Gravity.START)) {
@@ -78,20 +71,8 @@ class MainActivity : AppCompatActivity(){
 //    }
 
 
-    fun openProfileActivity() {
-        val intent = Intent(this, ProfileActivity::class.java)
-        startActivity(intent)
-    }
-
-
-    //(PK)Activity for adding new memes
-    private fun addMeme(){
-        val intent = Intent(this, MemeAdding::class.java)
-        startActivity(intent)
-    }
-
     /* FRAGMENTS */
-    fun displayTop(){
+    private fun displayTop(){
         val transaction = fragmentManager.beginTransaction()
         val fragment = TopFragment()
         transaction.replace(R.id.fragment_holder, fragment)
@@ -99,7 +80,7 @@ class MainActivity : AppCompatActivity(){
         transaction.commit()
     }
 
-    fun displayBrowsing(){
+    private fun displayBrowsing(){
         val transaction = fragmentManager.beginTransaction()
         val fragment = BrowseFragment()
         transaction.replace(R.id.fragment_holder, fragment)

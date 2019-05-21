@@ -1,21 +1,17 @@
 package com.codecrew.mememate.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.DefaultItemAnimator
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.Button
 import android.widget.TextView
 import com.codecrew.mememate.MemeDiffCallback
 import com.codecrew.mememate.MemeStackAdapter
@@ -25,21 +21,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yuyakaido.android.cardstackview.*
-import kotlinx.android.synthetic.main.fragment_browse.*
-
 
 
 class BrowseFragment : Fragment(), CardStackListener {
 
     // (SG) Current user
-    private val currentUser  = FirebaseAuth.getInstance().currentUser
+    private val currentUser = FirebaseAuth.getInstance().currentUser
 
 
     //(SG) Layout elements
-    private lateinit var cardStackView : CardStackView
-    private lateinit var skipButton : FloatingActionButton
-    private lateinit var rewindButton : FloatingActionButton
-    private lateinit var likeButton : FloatingActionButton
+    private lateinit var cardStackView: CardStackView
+    private lateinit var skipButton: FloatingActionButton
+    private lateinit var rewindButton: FloatingActionButton
+    private lateinit var likeButton: FloatingActionButton
 
     // (MJ) Swipe related late inits
     private val drawerLayout by lazy { R.id.drawer_layout }
@@ -49,17 +43,13 @@ class BrowseFragment : Fragment(), CardStackListener {
 
 
     // (MJ) Database late init
-    private var memeDatabase : FirebaseFirestore? = null
+    private var memeDatabase: FirebaseFirestore? = null
     private val memeList = ArrayList<MemeModel>()
 
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         // (SG) Firebase init
-        memeDatabase =  FirebaseFirestore.getInstance()
+        memeDatabase = FirebaseFirestore.getInstance()
 
         // (SG) Downloading memes
         loadMemes()
@@ -81,37 +71,6 @@ class BrowseFragment : Fragment(), CardStackListener {
         return v
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
 
 
     /* SWIPE */
@@ -120,7 +79,7 @@ class BrowseFragment : Fragment(), CardStackListener {
 
         val currentMeme = adapter.getSpots()[manager.topPosition]
 
-        if(direction == Direction.Right){
+        if (direction == Direction.Right) {
             currentMeme.rate++
         } else {
             currentMeme.rate--
@@ -138,11 +97,12 @@ class BrowseFragment : Fragment(), CardStackListener {
 
         currentMeme.seenBy.add(currentUser!!.uid)
 
-        val newMemeParameters = mutableMapOf<String,Any>()
+        val newMemeParameters = mutableMapOf<String, Any>()
         newMemeParameters["rate"] = currentMeme.rate
-        newMemeParameters["seenBy"] =currentMeme.seenBy
+        newMemeParameters["seenBy"] = currentMeme.seenBy
         memeDatabase!!.document("/Memes/${currentMeme.dbId}").update(newMemeParameters)
-        memeDatabase!!.document("/Users/${currentUser.uid}").update("lickedMemes", FieldValue.arrayUnion(currentMeme.url))
+        memeDatabase!!.document("/Users/${currentUser.uid}")
+            .update("lickedMemes", FieldValue.arrayUnion(currentMeme.url))
     }
 
     override fun onCardAppeared(view: View, position: Int) {
@@ -238,9 +198,9 @@ class BrowseFragment : Fragment(), CardStackListener {
     // (MJ) Designed for easy db implementation
     private fun createSpots(): List<MemeModel> {
 
-        var memeArray = ArrayList<MemeModel>()
+        val memeArray = ArrayList<MemeModel>()
 
-        memeList.forEach{
+        memeList.forEach {
             memeArray.add(it)
         }
         return memeArray
@@ -254,11 +214,18 @@ class BrowseFragment : Fragment(), CardStackListener {
         // (SG) Downloading only memes that user haven't seen yet
         memeDatabase!!.collection("Memes").get().addOnSuccessListener {
             // (SG) Casting downloaded memes into objects
-            for(meme  in it){
-                val newMeme = MemeModel(dbId =meme.id ,url =meme["url"].toString(),location = meme["location"].toString(),rate =  meme["rate"].toString().toInt(), seenBy =  meme["seenBy"] as ArrayList<String>)
-                if(!newMeme.seenBy.contains(currentUser!!.uid)) {
-                    memeList.add(newMeme)
-                }
+            for (meme in it) {
+                val newMeme = MemeModel(
+                    dbId = meme.id,
+                    url = meme["url"].toString(),
+                    location = meme["location"].toString(),
+                    rate = meme["rate"].toString().toInt(),
+                    seenBy = meme["seenBy"] as ArrayList<String>,
+                    addedBy = meme["addedBy"].toString()
+                )
+                        if (!newMeme.seenBy.contains(currentUser!!.uid)) {
+                            memeList.add(newMeme)
+                        }
             }
 
             reload()

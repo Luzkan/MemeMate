@@ -1,6 +1,5 @@
 package com.codecrew.mememate.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -12,27 +11,30 @@ import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
 import com.codecrew.mememate.activity.top.TopAdapter
 import com.codecrew.mememate.database.models.MemeModel
+import com.google.firebase.firestore.FirebaseFirestore
 
 class TopFragment : Fragment(), GalleryMemeClickListener {
 
-    lateinit var recyclerViewTop : RecyclerView
+    private lateinit var recyclerViewTop: RecyclerView
+
+    // (SG) Database
+    lateinit var database: FirebaseFirestore
 
     private var memesList = ArrayList<MemeModel>()
     private lateinit var topAdapter: TopAdapter
     private var currentPosition: Int = 0
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        database = FirebaseFirestore.getInstance()
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         // (SG) Find the recycler view
         val v = inflater.inflate(R.layout.fragment_top, container, false)
         recyclerViewTop = v.findViewById(R.id.recyclerViewTop) as RecyclerView
+
         // (SG) Create Adapter
         topAdapter = TopAdapter(memesList)
         topAdapter.listener = this
@@ -44,39 +46,6 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
         recyclerViewTop.adapter = topAdapter
         return v
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
-
 
     override fun onGalleryMemeClickListener(position: Int) {
 //        currentPosition = position
@@ -91,13 +60,21 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
     }
 
     private fun loadDemoMemes() {
-        val memes = resources.getStringArray(R.array.memes)
-
-        for (meme in memes.drop(1)) {
-            memesList.add(MemeModel(url = meme, location = "", rate = 0, dbId = "test", seenBy = ArrayList()))
+        database.collection("Memes").orderBy("rate").limit(10).get().addOnSuccessListener { memeCollection ->
+            for (meme in memeCollection) {
+                memesList.add(
+                    MemeModel(
+                        url = meme["url"].toString(),
+                        location = meme["location"].toString(),
+                        rate = meme["rate"].toString().toInt(),
+                        seenBy = meme["seenBy"] as ArrayList<String>,
+                        dbId = meme.id,
+                        addedBy = meme["addedBy"].toString()
+                    )
+                )
+            }
+            memesList.reverse()
+            topAdapter.notifyDataSetChanged()
         }
-        topAdapter.notifyDataSetChanged()
     }
-
-
 }

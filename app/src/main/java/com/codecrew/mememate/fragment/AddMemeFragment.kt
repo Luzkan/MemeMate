@@ -1,7 +1,6 @@
 package com.codecrew.mememate.fragment
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -29,22 +28,18 @@ import kotlin.collections.HashMap
 
 class AddMemeFragment : Fragment() {
 
-    lateinit var database : FirebaseFirestore
-    lateinit var storage : FirebaseStorage
+    private lateinit var database : FirebaseFirestore
+    private lateinit var storage : FirebaseStorage
 
-    lateinit var memeUrl : String
-    lateinit var uri : Uri
+    private lateinit var memeUrl : String
+    private lateinit var uri : Uri
 
-    lateinit var user : FirebaseUser
+    private lateinit var user : FirebaseUser
 
-    lateinit var confirmButton : Button
-    lateinit var searchButton : Button
+    private lateinit var confirmButton : Button
+    private lateinit var searchButton : Button
 
-    lateinit var name : TextView
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
+    private lateinit var name : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,40 +60,8 @@ class AddMemeFragment : Fragment() {
         return v
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-    }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-    }
-
-
-    fun setButtons(){
+    private fun setButtons(){
         confirmButton.isEnabled = false
 
         searchButton.setOnClickListener{
@@ -131,10 +94,12 @@ class AddMemeFragment : Fragment() {
                     meme["userId"] = user.uid
                     meme["rate"] = 0
                     meme["location"] = "location.downloaded.from.phone"
+                    meme["addedBy"] = user.displayName.toString()
                     database.collection("Memes").add(meme)
                         .addOnSuccessListener {
                             database.collection("Users").document(user.uid).update("addedMemes", FieldValue.arrayUnion(it.id) )
                         }
+                    //todo ADD redirect to profile
                 }
             }
         }
