@@ -62,14 +62,9 @@ class MainActivity : AppCompatActivity(){
         navView.selectedItemId = R.id.navigation_main
     }
 
-//    override fun onBackPressed() {
-//        if (drawerLayout.isDrawerOpen(Gravity.START)) {
-//            drawerLayout.closeDrawers()
-//        } else {
-//            super.onBackPressed()
-//        }
-//    }
-
+    override fun onBackPressed() {
+        this.moveTaskToBack(true)
+    }
 
     /* FRAGMENTS */
     private fun displayTop(){
