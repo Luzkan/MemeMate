@@ -15,37 +15,20 @@ ___________________________________
 ## Current TodoTasks:
 
 ### Build-on:
-- **Switch to Firebase from Room**
-	- Create Google acc and switch from Room to Firebase
 
-- **Navbar buttons responsivnes**
-	- Switching between views by click on the navbar or by swiping on empty space left/right (like trough fragments)
-	- Task kind-ish linked with all the UI tasks
 
 ### Improve:
 - Make image fit on the screen (no weird cropping)
 	- Could be done by forcing crop feature upon meme addition
-
-### Creation:
-- **Add Memes Through Gallery**
-	- Add Memes UI
-		- After chosing image from gallery
-		- Very Short Description
-		- *Crop feature*
+- Add meme UI
 		
-- **Upload Images to smth**
 - **Users DB**
 - Matching
 	- Upon right swipe (like on Tinder). Interesting feature could be that in options user can select after how many like he would like to be matched. For example: if someone liked 3 or more memes he is ready to match with someone (and the match will happen if he will meet liked memes requirement of the other user)
 - Memes Algorithm
 	- Neat idea: The more a meme gets high% of dislikes the lesser chance of it showing up for other users 
 	- Show memes only in desired radius from user location
-- Best Memes Algorithm
-	- Maybe a similiar one to reddit frontpage or pepper occasions and [-1], [+1] corresponds to swipe left/right
-- Best Memes UI
-	- Best Memes ListView
 - User Profile UI
-	- Featuring: Name / Acc Description / Meme List
 	- Options Button
 		- Meme Like for Match
 		- Change search distance
@@ -63,3 +46,7 @@ ___________________________________
 - Meme Browsing
 - Memes DB
 - Login and sign up (also with Facebook)
+- Connected to firebase
+- Profile UI
+- Basic add meme UI
+- Data on profile and in top is downloaded from Firebase
