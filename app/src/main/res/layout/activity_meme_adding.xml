@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/searchButton"
+        android:id="@+id/pickButton"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         android:inputType="textPersonName"
         android:textColorHighlight="@color/colorPrimary"
         android:textColorLink="@color/colorPrimaryDark"
-        app:layout_constraintEnd_toStartOf="@+id/searchButton"
+        app:layout_constraintEnd_toStartOf="@+id/pickButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline" />

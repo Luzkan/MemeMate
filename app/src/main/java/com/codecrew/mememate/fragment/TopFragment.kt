@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
 import com.codecrew.mememate.activity.top.TopAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.acitivity_top.*
 
 class TopFragment : Fragment(), GalleryMemeClickListener {
 
@@ -44,6 +47,7 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
         // Set up ReclyclerView.
         recyclerViewTop.layoutManager = LinearLayoutManager(this.context)
         recyclerViewTop.adapter = topAdapter
+
         return v
     }
 
