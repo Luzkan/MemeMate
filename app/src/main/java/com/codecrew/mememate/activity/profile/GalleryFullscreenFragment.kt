@@ -8,13 +8,8 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
-import com.eftimoff.viewpagertransformers.CubeInTransformer
-import com.eftimoff.viewpagertransformers.ParallaxPageTransformer
-import com.eftimoff.viewpagertransformers.RotateUpTransformer
 import com.eftimoff.viewpagertransformers.ZoomOutSlideTransformer
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.image_fullscreen.view.*

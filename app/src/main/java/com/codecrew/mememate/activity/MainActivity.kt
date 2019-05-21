@@ -13,7 +13,7 @@ import com.codecrew.mememate.fragment.ProfileFragment
 import com.codecrew.mememate.fragment.TopFragment
 
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
 
     // (SG) Fragment manager
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     /* FRAGMENTS */
-    private fun displayTop(){
+    private fun displayTop() {
         val transaction = fragmentManager.beginTransaction()
         val fragment = TopFragment()
         transaction.replace(R.id.fragment_holder, fragment)
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(){
         transaction.commit()
     }
 
-    private fun displayBrowsing(){
+    private fun displayBrowsing() {
         val transaction = fragmentManager.beginTransaction()
         val fragment = BrowseFragment()
         transaction.replace(R.id.fragment_holder, fragment)

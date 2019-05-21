@@ -10,7 +10,8 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.codecrew.mememate.database.models.MemeModel
 
-class MemeStackAdapter(private var spots: List<MemeModel> = emptyList()) : RecyclerView.Adapter<MemeStackAdapter.ViewHolder>() {
+class MemeStackAdapter(private var spots: List<MemeModel> = emptyList()) :
+    RecyclerView.Adapter<MemeStackAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

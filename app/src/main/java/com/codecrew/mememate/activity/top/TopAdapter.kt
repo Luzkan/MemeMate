@@ -1,6 +1,5 @@
 package com.codecrew.mememate.activity.top
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -36,7 +35,7 @@ class TopAdapter(private val memes: List<MemeModel>) : RecyclerView.Adapter<TopV
                 .into(holder.memeImageView)
         }
 
-        val index = (position+1).toString() + "."
+        val index = (position + 1).toString() + "."
 
         val currentMeme = memes[position]
 

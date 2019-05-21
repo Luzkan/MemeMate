@@ -2,36 +2,37 @@ package com.codecrew.mememate.activity.login
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
 import android.transition.TransitionManager
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.UserModel
+import com.facebook.login.widget.LoginButton
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_register.*
-import android.content.Context
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import com.codecrew.mememate.activity.MainActivity
-import com.codecrew.mememate.R
-import com.google.firebase.auth.UserProfileChangeRequest
 
 
 class RegisterActivity : AppCompatActivity() {
 
     private val handler = Handler()
-    private val FB_REQUEST_CODE : Int = 997
+    private val FB_REQUEST_CODE: Int = 997
 
     //(KS) Animation after splash screen
     private val runnableSplash = {
@@ -71,27 +72,35 @@ class RegisterActivity : AppCompatActivity() {
         //(SG) Dynamic enabling submit button
         checkBlank(true)
 
+        // (PR) Facebook login fix (facebook_login changed to LoginButton (see activity_register.xml))
+        facebook_login.setReadPermissions("email", "public_profile", "user_friends");
+
         //(KS) Splash screen
         handler.postDelayed(runnableSplash, 1500)
-        if(FirebaseAuth.getInstance().currentUser != null){
-            Log.d("USER", "${FirebaseAuth.getInstance().currentUser?.displayName} ${FirebaseAuth.getInstance().currentUser?.email} ")
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            Log.d(
+                "USER",
+                "${FirebaseAuth.getInstance().currentUser?.displayName} ${FirebaseAuth.getInstance().currentUser?.email} "
+            )
             runnableStartApp()
         }
     }
 
     // (SG) Allows us to open activity to sign in with facebook
-    fun showSignOptions(view: View){
-        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(
-            R.style.AppTheme
-        ).build(),FB_REQUEST_CODE)
+    fun showSignOptions(view: View) {
+        startActivityForResult(
+            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(
+                R.style.AppTheme
+            ).build(), FB_REQUEST_CODE
+        )
     }
 
     // (SG) Logs user with facebook
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == FB_REQUEST_CODE){
+        if (requestCode == FB_REQUEST_CODE) {
             val response = IdpResponse.fromResultIntent(data)
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 val user = FirebaseAuth.getInstance().currentUser
                 startApp()
             } else {
@@ -112,15 +121,15 @@ class RegisterActivity : AppCompatActivity() {
             val userName = etUsername.text.toString()
             val passwordCheck = etPasswordConfirm.text.toString()
 
-            if(passwordCheck == password){
+            if (passwordCheck == password) {
                 createUser(email, password, userName)
             } else {
                 setError("Those passwords didn't match.")
             }
         } else {
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener {
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnSuccessListener {
                 startApp()
-            }.addOnFailureListener{
+            }.addOnFailureListener {
                 setError("Invalid login or password.")
             }
         }
@@ -138,31 +147,34 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     // (SG) Dynamic all editText check
-    private fun checkBlank(register : Boolean) {
+    private fun checkBlank(register: Boolean) {
 
-        if(register){
-            checkIfEmpty(etEmail,true)
-            checkIfEmpty(etPassword,true)
-            checkIfEmpty(etPasswordConfirm,true)
-            checkIfEmpty(etUsername,true)
+        if (register) {
+            checkIfEmpty(etEmail, true)
+            checkIfEmpty(etPassword, true)
+            checkIfEmpty(etPasswordConfirm, true)
+            checkIfEmpty(etUsername, true)
         } else {
-            checkIfEmpty(etEmail,false)
-            checkIfEmpty(etPassword,false)
+            checkIfEmpty(etEmail, false)
+            checkIfEmpty(etPassword, false)
         }
     }
 
     // (SG) Dynamic single editText check
-    private fun checkIfEmpty(editable : EditText, register : Boolean){
+    private fun checkIfEmpty(editable: EditText, register: Boolean) {
 
         editable.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
             }
+
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
+
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 editable.tag = p0!!.isNotEmpty()
-                if(register){
-                    bSubmit.isEnabled = etEmail.tag.toString() == "true" && etPassword.tag.toString() == "true" && etUsername.tag.toString() == "true" && etPasswordConfirm.tag.toString() == "true"
+                if (register) {
+                    bSubmit.isEnabled =
+                        etEmail.tag.toString() == "true" && etPassword.tag.toString() == "true" && etUsername.tag.toString() == "true" && etPasswordConfirm.tag.toString() == "true"
                 } else {
                     bSubmit.isEnabled = etEmail.tag.toString() == "true" && etPassword.tag.toString() == "true"
                 }
@@ -193,7 +205,11 @@ class RegisterActivity : AppCompatActivity() {
                     .addOnCompleteListener { task ->
 
 
-                        FirebaseAuth.getInstance().currentUser!!.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(userName).build())
+                        FirebaseAuth.getInstance().currentUser!!.updateProfile(
+                            UserProfileChangeRequest.Builder().setDisplayName(
+                                userName
+                            ).build()
+                        )
 
                         if (task.isSuccessful) {
                             val uid = FirebaseAuth.getInstance().uid ?: ""

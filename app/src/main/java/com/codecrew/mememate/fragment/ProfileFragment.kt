@@ -36,8 +36,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
     private lateinit var user: FirebaseUser
 
     //(SG) User data fields
-    private lateinit var location : TextView
-    private lateinit var username : TextView
+    private lateinit var location: TextView
+    private lateinit var username: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

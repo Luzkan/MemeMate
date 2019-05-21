@@ -44,6 +44,7 @@ dependencies {
 
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.google.firebase:firebase-auth:16.0.5'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     // Swipe
@@ -54,7 +55,7 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:1.1.1"
 
     // Firebase - connection
-//    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
 
     // Firebase - authentication
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'

@@ -72,7 +72,6 @@ class BrowseFragment : Fragment(), CardStackListener {
     }
 
 
-
     /* SWIPE */
     // (MJ) Everything below is for meme browsing & swiping
     override fun onCardSwiped(direction: Direction) {
@@ -223,9 +222,9 @@ class BrowseFragment : Fragment(), CardStackListener {
                     seenBy = meme["seenBy"] as ArrayList<String>,
                     addedBy = meme["addedBy"].toString()
                 )
-                        if (!newMeme.seenBy.contains(currentUser!!.uid)) {
-                            memeList.add(newMeme)
-                        }
+                if (!newMeme.seenBy.contains(currentUser!!.uid)) {
+                    memeList.add(newMeme)
+                }
             }
 
             reload()
