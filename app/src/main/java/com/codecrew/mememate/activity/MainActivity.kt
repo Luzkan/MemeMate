@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.fragment.AddMemeFragment
@@ -53,23 +52,33 @@ class MainActivity : AppCompatActivity() {
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_top -> {
-                displayTop()
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 1) {
+                    displayTop()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             R.id.navigation_matches -> {
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 2) {
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             R.id.navigation_main -> {
-                displayBrowsing()
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 3) {
+                    displayBrowsing()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             R.id.navigation_add -> {
-                displayAddMeme()
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 4) {
+                    displayAddMeme()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             R.id.navigation_profile -> {
-                displayProfile()
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 5) {
+                    displayProfile()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
         }
         false

@@ -4,53 +4,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/papayawhip"
     tools:context="com.codecrew.mememate.activity.SettingsActivity">
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_settings_black_40dp"
+        android:drawablePadding="5dp"
+        android:padding="5dp"
+        android:text="SETTINGS"
+        android:textColor="@color/colorTextAlter"
+        android:textSize="40sp"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="394dp"
-        android:layout_height="680dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:padding="15dp">
+            android:orientation="vertical">
 
             <Button
-                android:id="@+id/email_change_button"
-                android:layout_width="wrap_content"
+                android:id="@+id/button4"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/papayawhip"
+                android:drawableStart="@drawable/ic_email_24dp"
+                android:drawablePadding="10dp"
                 android:onClick="changeEmail"
-                android:text="@string/change_your_email"
-                android:enabled="false"/>
+                android:paddingStart="20dp"
+                android:text="Change your email"
+                android:textAlignment="viewStart"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/peachpuff" />
 
             <Button
-                android:id="@+id/password_reset_button"
-                android:layout_width="wrap_content"
+                android:id="@+id/button5"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/papayawhip"
+                android:drawableStart="@drawable/ic_lock_24dp"
+                android:drawablePadding="10dp"
                 android:onClick="passwordReset"
-                android:text="@string/reset_password" />
+                android:paddingStart="20dp"
+                android:text="Reset password"
+                android:textAlignment="viewStart"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/peachpuff" />
 
             <Button
-                android:id="@+id/logout_button"
-                android:layout_width="wrap_content"
+                android:id="@+id/button6"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="logout"
-                android:text="@string/log_out" />
-
-            <Button
-                android:id="@+id/delete_account_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:background="@color/papayawhip"
+                android:drawableStart="@drawable/ic_delete_forever_24dp"
+                android:drawablePadding="10dp"
                 android:onClick="deleteUser"
-                android:text="@string/delete_your_account" />
+                android:paddingStart="20dp"
+                android:text="Delete your account"
+                android:textAlignment="viewStart"
+                android:textSize="15sp" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/peachpuff" />
+
+            <Button
+                android:id="@+id/button7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/papayawhip"
+                android:drawableStart="@drawable/ic_power_24dp"
+                android:drawablePadding="10dp"
+                android:onClick="logout"
+                android:paddingStart="20dp"
+                android:text="Log out"
+                android:textAlignment="viewStart"
+                android:textSize="15sp" />
+
         </LinearLayout>
     </ScrollView>
 
