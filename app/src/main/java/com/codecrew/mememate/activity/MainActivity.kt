@@ -25,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 //todo przybiliżanie mema
 //todo nie wchodzi w camera roll tylko w jakieś zdjęcia google XD
-//todo inny zminimalizowany obrazek niż powiększony XD
 
 
 class MainActivity : AppCompatActivity() {
@@ -51,30 +50,24 @@ class MainActivity : AppCompatActivity() {
     //(SG) Current user
     private lateinit var currentUser: FirebaseUser
 
-    private lateinit var textMessage: TextView
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_top -> {
-                textMessage.setText(R.string.top)
                 displayTop()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_matches -> {
-                textMessage.setText(R.string.matches)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_main -> {
-                textMessage.setText(R.string.memes)
                 displayBrowsing()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_add -> {
-                textMessage.setText(R.string.add)
                 displayAddMeme()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_profile -> {
-                textMessage.setText(R.string.profile)
                 displayProfile()
                 return@OnNavigationItemSelectedListener true
             }
@@ -91,7 +84,6 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         currentUser = FirebaseAuth.getInstance().currentUser!!
-        textMessage = findViewById(R.id.message)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         displayBrowsing()
         navView.selectedItemId = R.id.navigation_main

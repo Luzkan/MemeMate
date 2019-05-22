@@ -57,14 +57,9 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         if ((activity as MainActivity).globalUserMemes == null) {
             memesList = ArrayList()
             loadMemes()
-            (activity as MainActivity).globalUserMemes = memesList
         } else {
             memesList = (activity as MainActivity).globalUserMemes!!
         }
-
-        // Set up the adapter.
-        galleryAdapter = GalleryAdapter(memesList)
-        galleryAdapter.listener = this
 
     }
 
@@ -78,6 +73,10 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
         settingsButton = v.findViewById(R.id.settings_button)
         settingsButton.setOnClickListener { openSettingsActivity() }
+        // Set up the adapter.
+        galleryAdapter = GalleryAdapter(memesList)
+        galleryAdapter.listener = this
+
         // Set up RecyclerView.
         recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
         recyclerView.adapter = galleryAdapter
@@ -87,6 +86,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
         // Main meme
         mainMeme.setOnClickListener { mainMemeListener() }
+
 
         // (SG) must be here because the imageView wont be initialized earlier
         if (memesList.size == 0) {
@@ -106,7 +106,6 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
     override fun onGalleryMemeClickListener(position: Int) {
         currentPosition = position
-
         Picasso.get()
             .load(memesList[currentPosition].url)
             .into(mainMeme)
@@ -162,7 +161,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
                 }
                 memesList.addAll(userMemes)
 
-                if (userMemes.size == 0) {
+                if (memesList.size == 0) {
                     displayDefaultProfile()
                     //todo wyświetl powiadomienie, np takie jak na ig w miejscu gdzie normalnie znajdują się zdjęcia
 
@@ -176,6 +175,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
                     galleryAdapter.notifyDataSetChanged()
                 }
             }
+            (activity as MainActivity).globalUserMemes = memesList
         }
     }
 

@@ -2,6 +2,7 @@ package com.codecrew.mememate.activity.profile
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.codecrew.mememate.R
@@ -28,6 +29,7 @@ class GalleryAdapter(private val memes: List<MemeModel>) : RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: MemeViewHolder, position: Int) {
         if (position < itemCount) {
+
             val meme = memes[position]
             Picasso.get()
                 .load(meme.url)
