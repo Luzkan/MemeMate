@@ -7,11 +7,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.MainActivity
+import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
 import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
 import com.codecrew.mememate.activity.top.TopAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.acitivity_top.*
 
 class TopFragment : Fragment(), GalleryMemeClickListener {
 
@@ -26,6 +30,14 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         database = FirebaseFirestore.getInstance()
+
+        if((activity as MainActivity).globalTopMemes == null){
+            memesList = ArrayList()
+            (activity as MainActivity).globalTopMemes = memesList
+        } else {
+            memesList = (activity as MainActivity).globalTopMemes!!
+        }
+
         super.onCreate(savedInstanceState)
     }
 
@@ -39,30 +51,33 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
         topAdapter = TopAdapter(memesList)
         topAdapter.listener = this
 
-        loadDemoMemes()
+        loadMemes()
 
         // Set up ReclyclerView.
         recyclerViewTop.layoutManager = LinearLayoutManager(this.context)
         recyclerViewTop.adapter = topAdapter
+
+        loadMemes()
         return v
     }
 
     override fun onGalleryMemeClickListener(position: Int) {
-//        currentPosition = position
-//
-//        val bundle = Bundle()
-//        bundle.putSerializable("images", memesList)
-//        bundle.putInt("position", position)
-//        val fragmentTransaction = supportFragmentManager.beginTransaction()
-//        val galleryFragment = GalleryFullscreenFragment()
-//        galleryFragment.arguments = bundle
-//        galleryFragment.show(fragmentTransaction, "top")
+        currentPosition = position
+
+        val bundle = Bundle()
+        bundle.putSerializable("images", memesList)
+        bundle.putInt("position", position)
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+        val galleryFragment = GalleryFullscreenFragment()
+        galleryFragment.arguments = bundle
+        galleryFragment.show(fragmentTransaction, "top")
     }
 
-    private fun loadDemoMemes() {
-        database.collection("Memes").orderBy("rate").limit(10).get().addOnSuccessListener { memeCollection ->
+    private fun loadMemes() {
+        database.collection("Memes").orderBy("rate").get().addOnSuccessListener { memeCollection ->
+            var tempMemeList = ArrayList<MemeModel>()
             for (meme in memeCollection) {
-                memesList.add(
+                tempMemeList.add(
                     MemeModel(
                         url = meme["url"].toString(),
                         location = meme["location"].toString(),
@@ -73,7 +88,9 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
                     )
                 )
             }
-            memesList.reverse()
+            tempMemeList.reverse()
+            memesList.clear()
+            memesList.addAll(tempMemeList)
             topAdapter.notifyDataSetChanged()
         }
     }

@@ -30,7 +30,6 @@ class MemeAdding : AppCompatActivity() {
 
     lateinit var memeUrl: String
     lateinit var uri: Uri
-
     lateinit var user: FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +37,6 @@ class MemeAdding : AppCompatActivity() {
         setContentView(R.layout.activity_meme_adding)
         database = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
-
         user = FirebaseAuth.getInstance().currentUser!!
 
         confirmButton.isEnabled = false
