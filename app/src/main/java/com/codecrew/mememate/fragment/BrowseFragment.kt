@@ -110,12 +110,15 @@ class BrowseFragment : Fragment(), CardStackListener {
 
         currentMeme.seenBy.add(currentUser!!.uid)
 
+        // Force refresh of liked memes in the profile
+        (activity as MainActivity).globalLikedMemes = null
+
         val newMemeParameters = mutableMapOf<String, Any>()
         newMemeParameters["rate"] = currentMeme.rate
         newMemeParameters["seenBy"] = currentMeme.seenBy
         memeDatabase!!.document("/Memes/${currentMeme.dbId}").update(newMemeParameters)
         memeDatabase!!.document("/Users/${currentUser.uid}")
-            .update("lickedMemes", FieldValue.arrayUnion(currentMeme.url))
+            .update("likedMemes", FieldValue.arrayUnion(currentMeme.dbId))
     }
 
     override fun onCardAppeared(view: View, position: Int) {

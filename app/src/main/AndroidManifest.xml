@@ -14,7 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.SettingsActivity"></activity>
+        <activity android:name=".activity.SettingsActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT">
+
+                </category>
+            </intent-filter>
+        </activity>
         <!-- <activity -->
         <!-- android:name=".activity.profile.FullMemeActivity" -->
         <!-- android:label="@string/title_activity_full_meme" -->

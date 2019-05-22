@@ -12,6 +12,7 @@ import com.codecrew.mememate.activity.login.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
@@ -101,6 +102,8 @@ class SettingsActivity : AppCompatActivity() {
     private fun deleteUserFromDB(user: FirebaseUser) {
         val db = FirebaseFirestore.getInstance()
         val userID = user.uid
+        val storage = FirebaseStorage.getInstance()
+        val memesRef = storage.reference.child("memes")
 
         // deleting memes
         db.collection("Memes")
@@ -108,6 +111,8 @@ class SettingsActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { memes ->
                 for (meme in memes) {
+                    Log.d("USER_DELETE" ,"meme: $meme")
+                    memesRef.child("$meme.jpg") // deleting from storage
                     meme.reference.delete()
                 }
             }

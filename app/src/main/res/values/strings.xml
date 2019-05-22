@@ -56,4 +56,6 @@
     <string name="ok">Yes</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="switch_view_button">Switch view button</string>
+    <string name="settings_button">Settings button</string>
 </resources>

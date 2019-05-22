@@ -3,6 +3,7 @@ package com.codecrew.mememate.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.activity.SettingsActivity
@@ -29,20 +29,25 @@ private const val SPAN_COUNT = 3
 
 class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
-    private lateinit var memesList: ArrayList<MemeModel>
-    private lateinit var galleryAdapter: GalleryAdapter
+    private lateinit var likedMemesList: ArrayList<MemeModel>
+    private lateinit var userMemesList: ArrayList<MemeModel>
     private var currentPosition: Int = 0
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var mainMeme: RoundedImageView
 
     private lateinit var settingsButton: ImageButton
+    private lateinit var viewSwitchButton: ImageButton
+
+    private var viewType = ViewType.ADDED
+    private lateinit var userMemesAdapter: GalleryAdapter
+    private lateinit var likedMemesAdapter: GalleryAdapter
 
     // (SG) Database
     private lateinit var database: FirebaseFirestore
     private lateinit var user: FirebaseUser
 
-    //(SG) User data fields
+    // (SG) User data fields
     private lateinit var location: TextView
     private lateinit var username: TextView
 
@@ -53,12 +58,20 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         database = FirebaseFirestore.getInstance()
         user = FirebaseAuth.getInstance().currentUser!!
 
-        //(SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
+        // (SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
         if ((activity as MainActivity).globalUserMemes == null) {
-            memesList = ArrayList()
-            loadMemes()
+            userMemesList = ArrayList()
+            loadUserMemes()
         } else {
-            memesList = (activity as MainActivity).globalUserMemes!!
+            userMemesList = (activity as MainActivity).globalUserMemes!!
+        }
+
+        // (PR) Same as above but for likedMemes
+        if ((activity as MainActivity).globalLikedMemes == null) {
+            likedMemesList = ArrayList()
+            loadLikedMemes()
+        } else {
+            likedMemesList = (activity as MainActivity).globalLikedMemes!!
         }
 
     }
@@ -71,16 +84,21 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         username = v.findViewById(R.id.item_name)
         location = v.findViewById(R.id.item_city)
 
+        // (PR) Settings button
         settingsButton = v.findViewById(R.id.settings_button)
         settingsButton.setOnClickListener { openSettingsActivity() }
 
-        // Set up the adapter.
-        galleryAdapter = GalleryAdapter(memesList)
-        galleryAdapter.listener = this
+        // (PR) Switch view button
+        viewSwitchButton = v.findViewById(R.id.switch_view_button)
+        viewSwitchButton.setOnClickListener { switchView() }
 
-        // Set up RecyclerView.
+        // (PR) Adapters
+        userMemesAdapter = GalleryAdapter(userMemesList).also { it.listener = this }
+        likedMemesAdapter = GalleryAdapter(likedMemesList).also { it.listener = this }
+
+        // (PR) Set up RecyclerView.
         recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
-        recyclerView.adapter = galleryAdapter
+        recyclerView.adapter = userMemesAdapter
 
         // (SG) Set up user data
         username.text = user.displayName
@@ -90,7 +108,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
 
         // (SG) must be here because the imageView wont be initialized earlier
-        if (memesList.size == 0) {
+        if (userMemesList.size == 0) {
             displayDefaultProfile()
         } else {
             displayLastMeme(currentPosition)
@@ -99,22 +117,43 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         return v
     }
 
+    // (PR) Switching view type.
+    private fun switchView() {
+        when (viewType) {
+            ViewType.ADDED -> {
+                viewType = ViewType.LIKED
+                viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.liked_icon))
+                recyclerView.adapter = likedMemesAdapter
+            }
+            ViewType.LIKED -> {
+                viewType = ViewType.ADDED
+                viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.added_icon))
+                recyclerView.adapter = userMemesAdapter
+            }
+        }
+    }
+
     private fun openSettingsActivity() {
         // TODO: settings
         val intent = Intent(context, SettingsActivity::class.java)
         startActivity(intent)
     }
 
-    override fun onGalleryMemeClickListener(position: Int) {
+    override fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
         Picasso.get()
-            .load(memesList[currentPosition].url)
+            .load(memes[currentPosition].url)
             .into(mainMeme)
     }
 
     private fun mainMemeListener() {
         val bundle = Bundle()
-        bundle.putSerializable("images", memesList)
+        bundle.putSerializable("images",
+            when(viewType) {
+                ViewType.ADDED -> userMemesList
+                ViewType.LIKED -> likedMemesList
+            }
+        )
         bundle.putInt("position", currentPosition)
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         val galleryFragment = GalleryFullscreenFragment()
@@ -123,20 +162,18 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
     }
 
     override fun onDestroy() {
-        (activity as MainActivity).globalUserMemes = memesList
+        (activity as MainActivity).globalUserMemes = userMemesList
         super.onDestroy()
     }
 
-    // For demonstration purpose only, we will get the memes for every user from the database.
-    private fun loadMemes() {
-
+    private fun loadUserMemes() {
         database.document("Users/${user.uid}").get().addOnSuccessListener {
             // (SG) Casting downloaded memes into objects
             val userModel = UserModel(
                 uid = it["uid"].toString(),
                 email = it["email"].toString(),
                 userName = it["username"].toString(),
-                lickedMemes = it["lickedMemems"] as ArrayList<String>?,
+                likedMemes = it["likedMemes"] as ArrayList<String>?,
                 addedMemes = it["addedMemes"] as ArrayList<String>?
             )
 
@@ -160,24 +197,59 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
                         }
                     }
                 }
-                memesList.addAll(userMemes)
+                userMemesList.addAll(userMemes)
 
-                if (memesList.size == 0) {
+                if (userMemesList.size == 0) {
                     displayDefaultProfile()
                     //todo wyświetl powiadomienie, np takie jak na ig w miejscu gdzie normalnie znajdują się zdjęcia
 
                 } else {
                     displayLastMeme(currentPosition)
-                    location.text = if (!memesList[currentPosition].location.startsWith("location.downloaded")) {
-                        memesList[currentPosition].location
+                    location.text = if (!userMemesList[currentPosition].location.startsWith("location.downloaded")) {
+                        userMemesList[currentPosition].location
                     } else {
                         "User location."
                     }
-                    galleryAdapter.notifyDataSetChanged()
+                    userMemesAdapter.notifyDataSetChanged()
+                }
+                (activity as MainActivity).globalUserMemes = userMemesList
+            }
+        }
+    }
+
+    private fun loadLikedMemes() {
+        database.document("Users/${user.uid}")
+            .get()
+            .addOnSuccessListener {
+                // (SG) Casting downloaded memes into objects
+                val userModel = UserModel(
+                    uid = it["uid"].toString(),
+                    email = it["email"].toString(),
+                    userName = it["username"].toString(),
+                    likedMemes = it["likedMemes"] as ArrayList<String>?,
+                    addedMemes = it["addedMemes"] as ArrayList<String>?
+                )
+
+                val likedMemes = ArrayList<MemeModel>()
+                userModel.likedMemes!!.forEach { likedMeme ->
+                    database.document("Memes/$likedMeme")
+                        .get()
+                        .addOnSuccessListener { meme ->
+                            likedMemesList.add(
+                                MemeModel(
+                                    url = meme["url"].toString(),
+                                    location = meme["location"].toString(),
+                                    rate = meme["rate"].toString().toInt(),
+                                    seenBy = meme["seenBy"] as ArrayList<String>,
+                                    dbId = meme.toString(),
+                                    addedBy = meme["addedBy"].toString()
+                                )
+                            )
+                            likedMemesAdapter.notifyDataSetChanged()
+                            (activity as MainActivity).globalLikedMemes = likedMemesList
+                        }
                 }
             }
-            (activity as MainActivity).globalUserMemes = memesList
-        }
     }
 
     private fun displayDefaultProfile() {
@@ -190,7 +262,12 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
     private fun displayLastMeme(currentPosition: Int) {
         Picasso.get()
-            .load(memesList[currentPosition].url)
+            .load(userMemesList[currentPosition].url)
             .into(mainMeme)
+    }
+
+    private enum class ViewType {
+        ADDED,
+        LIKED
     }
 }

@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
     // (SG) Memes added by user
     var globalUserMemes: ArrayList<MemeModel>? = null
 
+    // (PR) Memes liked by user
+    var globalLikedMemes: ArrayList<MemeModel>? = null
+
     // (SG) Top meme List
     var globalTopMemes: ArrayList<MemeModel>? = null
 
