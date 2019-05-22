@@ -26,6 +26,8 @@
     <string name="facebook_application_id">2672329152795068</string>
     <string name="fb_login_protocol_scheme">fb2672329152795068</string>
 
+    <!--Default meme-->
+<string name="default_meme">https://i.redd.it/529mjgxyexw21.jpg</string>
 
     <!-- Demo memes -->
     <string-array name="memes">

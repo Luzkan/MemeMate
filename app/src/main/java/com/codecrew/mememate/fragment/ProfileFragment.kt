@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.activity.profile.GalleryAdapter
+import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
 import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
@@ -23,7 +26,7 @@ private const val SPAN_COUNT = 3
 
 class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
-    private var memesList = ArrayList<MemeModel>()
+    private lateinit var memesList : ArrayList<MemeModel>
     private lateinit var galleryAdapter: GalleryAdapter
     private var currentPosition: Int = 0
 
@@ -46,12 +49,18 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         database = FirebaseFirestore.getInstance()
         user = FirebaseAuth.getInstance().currentUser!!
 
+        //(SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
+        if((activity as MainActivity).globalUserMemes == null) {
+            memesList = ArrayList()
+            loadMemes()
+            (activity as MainActivity).globalUserMemes = memesList
+        } else {
+            memesList = (activity as MainActivity).globalUserMemes!!
+        }
+
         // Set up the adapter.
         galleryAdapter = GalleryAdapter(memesList)
         galleryAdapter.listener = this
-
-        // Main meme
-//        main_meme.setOnClickListener{mainMemeListener()}
 
     }
 
@@ -67,11 +76,19 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
         recyclerView.adapter = galleryAdapter
 
-        // Load memes
-        loadMemes()
-
         // (SG) Set up user data
         username.text = user.displayName
+
+        // Main meme
+        mainMeme.setOnClickListener{mainMemeListener()}
+
+
+        // (SG) must be here because the imageView wont be initialized earlier
+        if(memesList.size ==0){
+            displayDefaultProfile()
+        } else {
+            displayLastMeme(currentPosition)
+        }
 
         return v
     }
@@ -84,15 +101,20 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
             .into(mainMeme)
     }
 
-    //    private fun mainMemeListener() {
-//        val bundle = Bundle()
-//        bundle.putSerializable("images", memesList)
-//        bundle.putInt("position", currentPosition)
-//        val fragmentTransaction = supportFragmentManager.beginTransaction()
-//        val galleryFragment = GalleryFullscreenFragment()
-//        galleryFragment.arguments = bundle
-//        galleryFragment.show(fragmentTransaction, "gallery")
-//    }
+        private fun mainMemeListener() {
+        val bundle = Bundle()
+        bundle.putSerializable("images", memesList)
+        bundle.putInt("position", currentPosition)
+        val fragmentTransaction = fragmentManager!!.beginTransaction()
+        val galleryFragment = GalleryFullscreenFragment()
+        galleryFragment.arguments = bundle
+        galleryFragment.show(fragmentTransaction, "gallery")
+    }
+
+    override fun onDestroy() {
+        (activity as MainActivity).globalUserMemes = memesList
+        super.onDestroy()
+    }
 
     // For demonstration purpose only, we will get the memes for every user from the database.
     private fun loadMemes() {
@@ -130,18 +152,34 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
                 memesList.addAll(userMemes)
 
                 if (userMemes.size == 0) {
-                    //todo wyświetl powiadomienie, np takie jak na ig
+                    displayDefaultProfile()
+                    //todo wyświetl powiadomienie, np takie jak na ig w miejscu gdzie normalnie znajdują się zdjęcia
 
                 } else {
-                    val currentMeme = memesList[currentPosition]
-                    Picasso.get()
-                        .load(currentMeme.url)
-                        .into(mainMeme)
+                    displayLastMeme(currentPosition)
+//                    val currentMeme = memesList[currentPosition]
+//                    Picasso.get()
+//                        .load(currentMeme.url)
+//                        .into(mainMeme)
 
-                    location.text = currentMeme.location
+                    location.text = memesList[currentPosition].location
                     galleryAdapter.notifyDataSetChanged()
                 }
             }
         }
+    }
+
+    private fun displayDefaultProfile() {
+        Picasso.get()
+            .load(getString(R.string.default_meme))
+            .into(mainMeme)
+
+        location.text = "Add new meme :("
+    }
+
+    private fun displayLastMeme(currentPosition : Int) {
+        Picasso.get()
+            .load(memesList[currentPosition].url)
+            .into(mainMeme)
     }
 }

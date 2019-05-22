@@ -19,7 +19,7 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList()) : Recyc
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val spot = spots[position]
-        holder.name.text = "${spot.id}"
+        holder.name.text = spot.addedBy
         holder.city.text = spot.location
         Glide.with(holder.image)
             .load(spot.url)
