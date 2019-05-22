@@ -69,7 +69,7 @@ class BrowseFragment : Fragment(), CardStackListener {
         cardStackView = v.findViewById(R.id.card_stack_view) as CardStackView
         likeButton = v.findViewById(R.id.like_button) as FloatingActionButton
         skipButton = v.findViewById(R.id.skip_button) as FloatingActionButton
-        rewindButton = v.findViewById(R.id.rewind_button) as FloatingActionButton
+//        rewindButton = v.findViewById(R.id.rewind_button) as FloatingActionButton
 
         // (MJ) MemeModel Swipe
         setupCardStackView()
@@ -158,15 +158,15 @@ class BrowseFragment : Fragment(), CardStackListener {
             cardStackView.swipe()
         }
 
-        rewindButton.setOnClickListener {
-            val setting = RewindAnimationSetting.Builder()
-                .setDirection(Direction.Bottom)
-                .setDuration(Duration.Normal.duration)
-                .setInterpolator(DecelerateInterpolator())
-                .build()
-            manager.setRewindAnimationSetting(setting)
-            cardStackView.rewind()
-        }
+//        rewindButton.setOnClickListener {
+//            val setting = RewindAnimationSetting.Builder()
+//                .setDirection(Direction.Bottom)
+//                .setDuration(Duration.Normal.duration)
+//                .setInterpolator(DecelerateInterpolator())
+//                .build()
+//            manager.setRewindAnimationSetting(setting)
+//            cardStackView.rewind()
+//        }
 
         likeButton.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
