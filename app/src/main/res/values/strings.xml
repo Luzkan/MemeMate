@@ -52,4 +52,8 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="change_your_email">Change your email</string>
     <string name="reset_password">Reset password</string>
+    <string name="delete_your_account">Delete your account</string>
+    <string name="ok">Yes</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>
