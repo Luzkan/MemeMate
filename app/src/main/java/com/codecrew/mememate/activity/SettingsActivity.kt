@@ -1,7 +1,6 @@
 package com.codecrew.mememate.activity
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -11,6 +10,8 @@ import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.login.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
@@ -55,18 +56,20 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    // (PR) Deleting user
     fun deleteUser(view: View) {
         delete_account_button.isEnabled = false
 
         val alertDialog = this.let { settingsActivity ->
             val builder = AlertDialog.Builder(settingsActivity)
             builder.apply {
-                setPositiveButton(R.string.yes) { dialog, id ->
+                setPositiveButton(R.string.yes) { _, _ ->
                     // User clicked Yes button
                     val user = FirebaseAuth.getInstance().currentUser
                     user?.delete()
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
+                                deleteUserFromDB(user)
                                 Log.d("SETTINGS", "User account deleted.")
                                 Toast.makeText(this.context, "User account deleted.", Toast.LENGTH_SHORT).show()
                                 Intent(this.context, RegisterActivity::class.java).also {
@@ -80,21 +83,41 @@ class SettingsActivity : AppCompatActivity() {
                             }
                         }
                 }
-                setNegativeButton(R.string.no) { dialog, id ->
+                setNegativeButton(R.string.no) { _, _ ->
                     // User cancelled the dialog
                     delete_account_button.isEnabled = true
                 }
             }
-            // Set other dialog properties
             builder.setMessage("Are you sure? This operation cannot be rewind!")
             builder.setTitle("Delete my account")
 
             // Create the AlertDialog
             builder.create()
         }
-
         alertDialog.show()
-
     }
 
+    // (PR) Deleting user and memes added by the user.
+    private fun deleteUserFromDB(user: FirebaseUser) {
+        val db = FirebaseFirestore.getInstance()
+        val userID = user.uid
+
+        // deleting memes
+        db.collection("Memes")
+            .whereEqualTo("userId", userID)
+            .get()
+            .addOnSuccessListener { memes ->
+                for (meme in memes) {
+                    meme.reference.delete()
+                }
+            }
+
+        // deleting user
+        db.collection("Users").document(userID)
+            .delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "User deleted from Users collection.", Toast.LENGTH_SHORT).show()
+                Log.d("SETTINGS", "User deleted from Users collection.")
+            }
+    }
 }
