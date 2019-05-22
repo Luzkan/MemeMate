@@ -49,12 +49,12 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="5dp"
             android:background="@drawable/edit_text_round"
-            android:drawableLeft="@drawable/ic_email_24dp"
+            android:drawableStart="@drawable/ic_email_24dp"
             android:drawablePadding="8dp"
             android:ems="10"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:tag="false" />
 
         <EditText
@@ -64,12 +64,12 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="5dp"
             android:background="@drawable/edit_text_round"
-            android:drawableLeft="@drawable/ic_person_24dp"
+            android:drawableStart="@drawable/ic_person_24dp"
             android:drawablePadding="8dp"
             android:ems="10"
-            android:hint="Username"
+            android:hint="@string/username"
             android:inputType="textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:tag="false" />
 
         <EditText
@@ -79,12 +79,12 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="5dp"
             android:background="@drawable/edit_text_round"
-            android:drawableLeft="@drawable/ic_lock_24dp"
+            android:drawableStart="@drawable/ic_lock_24dp"
             android:drawablePadding="8dp"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:tag="false" />
 
         <EditText
@@ -173,7 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:onClick="tvChangeClick"
-            android:text="Already have an account?"
+            android:text="@string/already_have_an_account"
             android:textColor="@color/ghostwhite"
             android:textStyle="bold" />
 

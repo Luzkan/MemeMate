@@ -21,6 +21,7 @@ class SettingsActivity : AppCompatActivity() {
         Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
         Intent(this, RegisterActivity::class.java).also {
             it.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            it.putExtra("logout", true)
             startActivity(it)
             FirebaseAuth.getInstance().signOut()
         }

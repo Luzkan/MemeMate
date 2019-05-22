@@ -46,4 +46,8 @@
     <string name="profile_name">Profile_Name</string>
     <string name="profile_location">Profile_Location</string>
     <string name="log_out">Log out</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="already_have_an_account">Already have an account?</string>
 </resources>

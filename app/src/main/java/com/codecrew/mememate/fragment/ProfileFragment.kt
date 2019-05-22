@@ -73,6 +73,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
         settingsButton = v.findViewById(R.id.settings_button)
         settingsButton.setOnClickListener { openSettingsActivity() }
+
         // Set up the adapter.
         galleryAdapter = GalleryAdapter(memesList)
         galleryAdapter.listener = this

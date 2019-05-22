@@ -71,6 +71,11 @@ class RegisterActivity : AppCompatActivity() {
         //(SG) Dynamic enabling submit button
         checkBlank(true)
 
+        // (PR) After log out.
+        if (intent.getBooleanExtra("logout", false)) {
+            setLoginPanel()
+        }
+
         // (PR) Facebook login fix (facebook_login changed to LoginButton (see activity_register.xml))
         facebook_login.setReadPermissions("email", "public_profile", "user_friends")
 
