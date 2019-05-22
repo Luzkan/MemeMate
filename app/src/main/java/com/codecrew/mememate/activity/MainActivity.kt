@@ -25,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 //todo przybiliżanie mema
 //todo nie wchodzi w camera roll tylko w jakieś zdjęcia google XD
-//todo inny zminimalizowany obrazek niż powiększony XD
 
 
 class MainActivity : AppCompatActivity() {

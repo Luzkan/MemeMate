@@ -44,12 +44,12 @@ class AddMemeFragment : Fragment() {
 
     private lateinit var memeUrl: String
     private lateinit var uri: Uri
-    private lateinit var pic : ImageView
+    private lateinit var pic: ImageView
 
     private lateinit var user: FirebaseUser
 
-    private lateinit var confirmButton : CircularProgressButton
-    private lateinit var pickButton : Button
+    private lateinit var confirmButton: CircularProgressButton
+    private lateinit var pickButton: Button
 
     private lateinit var name: TextView
 
@@ -85,7 +85,7 @@ class AddMemeFragment : Fragment() {
         return v
     }
 
-    private fun setButtons(){
+    private fun setButtons() {
         confirmButton.isEnabled = (activity as MainActivity).isValid
 
         confirmButton.background = this.context!!.getDrawable(R.drawable.button_round2)
@@ -94,9 +94,9 @@ class AddMemeFragment : Fragment() {
         //(KS) picking meme when image is clicked
         pic.setOnClickListener { bPickClick() }
 
-        pickButton.setOnClickListener{bPickClick()}
+        pickButton.setOnClickListener { bPickClick() }
 
-        confirmButton.setOnClickListener{
+        confirmButton.setOnClickListener {
             confirmButton.startAnimation()
 //            if(name.text.isEmpty()){
 //                Toast.makeText(this.context, "Name your meme", Toast.LENGTH_SHORT).show()
@@ -114,7 +114,14 @@ class AddMemeFragment : Fragment() {
             }).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     memeUrl = task.result.toString()
-                    val newMeme = MemeModel(url=memeUrl, seenBy = arrayListOf(user.uid), rate = 0, location = "location.downloaded.from.phone", addedBy = user.displayName.toString(),dbId = "")
+                    val newMeme = MemeModel(
+                        url = memeUrl,
+                        seenBy = arrayListOf(user.uid),
+                        rate = 0,
+                        location = "location.downloaded.from.phone",
+                        addedBy = user.displayName.toString(),
+                        dbId = ""
+                    )
                     val meme = HashMap<String, Any>()
                     meme["url"] = memeUrl
                     meme["title"] = name.text.toString()
@@ -125,18 +132,21 @@ class AddMemeFragment : Fragment() {
                     meme["addedBy"] = user.displayName.toString()
                     database.collection("Memes").add(meme)
                         .addOnSuccessListener {
-                            database.collection("Users").document(user.uid).update("addedMemes", FieldValue.arrayUnion(it.id))
+                            database.collection("Users").document(user.uid)
+                                .update("addedMemes", FieldValue.arrayUnion(it.id))
 
-                            if((activity as MainActivity).globalUserMemes == null){
+                            if ((activity as MainActivity).globalUserMemes == null) {
                                 (activity as MainActivity).globalUserMemes = ArrayList<MemeModel>()
                             }
+                            (activity as MainActivity).globalUserMemes!!.add(0, newMeme)
 
-                            (activity as MainActivity).globalUserMemes!!.add(0,newMeme)                        }
-                    (activity as MainActivity).pic = Uri.parse("android.resource://" + this.context!!.packageName + "/" + R.drawable.default_meme_add)
-                    (activity as MainActivity).isValid = false
-                    setConfirmButton(R.drawable.tick)
-                    (activity as MainActivity).nav_view.selectedItemId = R.id.navigation_profile
-                    (activity as MainActivity).displayProfile()
+                            (activity as MainActivity).pic =
+                                Uri.parse("android.resource://" + this.context!!.packageName + "/" + R.drawable.default_meme_add)
+                            (activity as MainActivity).isValid = false
+                            setConfirmButton(R.drawable.tick)
+                            (activity as MainActivity).nav_view.selectedItemId = R.id.navigation_profile
+                            (activity as MainActivity).displayProfile()
+                        }
                 }
             }.addOnFailureListener {
                 Toast.makeText(this.context, "Sorry! Something went wrong :(", Toast.LENGTH_SHORT).show()
@@ -149,7 +159,7 @@ class AddMemeFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "select picture"), 2233 )
+        startActivityForResult(Intent.createChooser(intent, "select picture"), 2233)
     }
 
     //(KS) set image after loading on button
