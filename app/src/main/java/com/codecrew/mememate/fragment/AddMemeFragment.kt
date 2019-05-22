@@ -2,8 +2,11 @@ package com.codecrew.mememate.fragment
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +16,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
 import com.bumptech.glide.Glide
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
@@ -33,6 +37,8 @@ import kotlin.collections.HashMap
 
 class AddMemeFragment : Fragment() {
 
+    private val handler = Handler()
+
     private lateinit var database: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
 
@@ -42,10 +48,18 @@ class AddMemeFragment : Fragment() {
 
     private lateinit var user: FirebaseUser
 
-    private lateinit var confirmButton: Button
-    private lateinit var pickButton: Button
+    private lateinit var confirmButton : CircularProgressButton
+    private lateinit var pickButton : Button
 
     private lateinit var name: TextView
+
+    //(KS) Reverting loading button
+    private val runnableButton = {
+        confirmButton.stopAnimation()
+        confirmButton.revertAnimation()
+//        confirmButton.background = this.context!!.getDrawable(R.drawable.button_round2)
+//        pickButton.background = this.context!!.getDrawable(R.drawable.button_round2)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +76,7 @@ class AddMemeFragment : Fragment() {
 
         // (SG) Find widgets
         val v = inflater.inflate(R.layout.fragment_meme_adding, container, false)
-        confirmButton = v.findViewById(R.id.confirmButton) as Button
+        confirmButton = v.findViewById(R.id.confirmButton) as CircularProgressButton
         pickButton = v.findViewById(R.id.pickButton) as Button
         name = v.findViewById(R.id.name) as TextView
         pic = v.findViewById(R.id.memeImage) as ImageView
@@ -73,23 +87,22 @@ class AddMemeFragment : Fragment() {
         return v
     }
 
-    private fun setButtons() {
-//        confirmButton.isEnabled = false
+    private fun setButtons(){
         confirmButton.isEnabled = (activity as MainActivity).isValid
 
-//        searchButton.setOnClickListener{
-//            val intent = Intent(Intent.ACTION_GET_CONTENT)
-//            intent.type = "image/*"
-//            intent.action = Intent.ACTION_GET_CONTENT
-//            startActivityForResult(Intent.createChooser(intent, "select picture"), 2233 )
-//        }
+        confirmButton.background = this.context!!.getDrawable(R.drawable.button_round2)
+        pickButton.background = this.context!!.getDrawable(R.drawable.button_round2)
+
+        //(KS) picking meme when image is clicked
+        pic.setOnClickListener { bPickClick() }
 
         pickButton.setOnClickListener { bPickClick() }
 
-        confirmButton.setOnClickListener {
-            if (name.text.isEmpty()) {
-                Toast.makeText(this.context, "Name your meme", Toast.LENGTH_SHORT).show()
-            }
+        confirmButton.setOnClickListener{
+            confirmButton.startAnimation()
+//            if(name.text.isEmpty()){
+//                Toast.makeText(this.context, "Name your meme", Toast.LENGTH_SHORT).show()
+//            }
             val path = "memes/" + UUID.randomUUID()
             val memeRef = storage.getReference(path)
             val uploadTask = memeRef.putFile(uri)
@@ -128,11 +141,16 @@ class AddMemeFragment : Fragment() {
                                 (activity as MainActivity).globalUserMemes = ArrayList<MemeModel>()
                             }
 
-                            (activity as MainActivity).globalUserMemes!!.add(0, newMeme)
-                        }
+                            (activity as MainActivity).globalUserMemes!!.add(0,newMeme)                        }
+                    (activity as MainActivity).pic = Uri.parse("android.resource://" + this.context!!.packageName + "/" + R.drawable.default_meme_add)
+                    (activity as MainActivity).isValid = false
+                    setConfirmButton(R.drawable.tick)
                     (activity as MainActivity).nav_view.selectedItemId = R.id.navigation_profile
                     (activity as MainActivity).displayProfile()
                 }
+            }.addOnFailureListener {
+                Toast.makeText(this.context, "Sorry! Something went wrong :(", Toast.LENGTH_SHORT).show()
+                setConfirmButton(R.drawable.cross)
             }
         }
     }
@@ -143,6 +161,13 @@ class AddMemeFragment : Fragment() {
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "select picture"), 2233)
     }
+
+    //(KS) set image after loading on button
+    private fun setConfirmButton(image: Int) {
+        confirmButton.doneLoadingAnimation(Color.parseColor("#FAB162"), BitmapFactory.decodeResource(resources, image))
+        handler.postDelayed(runnableButton, 800)
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

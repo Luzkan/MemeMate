@@ -20,7 +20,8 @@
             <!--android:theme="@style/AppTheme.NoActionBar"></activity>-->
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
@@ -28,7 +29,8 @@
             <!--</intent-filter>-->
         <activity
             android:name=".activity.login.RegisterActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
