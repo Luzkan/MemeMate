@@ -1,5 +1,6 @@
 package com.codecrew.mememate.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -12,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
+import com.codecrew.mememate.activity.SettingsActivity
 import com.codecrew.mememate.activity.profile.GalleryAdapter
 import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
 import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
@@ -75,7 +77,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         location = v.findViewById(R.id.item_city)
 
         settingsButton = v.findViewById(R.id.settings_button)
-        settingsButton.setOnClickListener { openSettingDialog() }
+        settingsButton.setOnClickListener { openSettingsActivity() }
         // Set up RecyclerView.
         recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
         recyclerView.adapter = galleryAdapter
@@ -96,9 +98,10 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         return v
     }
 
-    private fun openSettingDialog() {
-        // TODO: settings dialog
-        Toast.makeText(context, "Test", Toast.LENGTH_LONG).show()
+    private fun openSettingsActivity() {
+        // TODO: settings
+        val intent = Intent(context, SettingsActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onGalleryMemeClickListener(position: Int) {

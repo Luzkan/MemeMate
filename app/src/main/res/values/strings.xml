@@ -27,7 +27,7 @@
     <string name="fb_login_protocol_scheme">fb2672329152795068</string>
 
     <!--Default meme-->
-<string name="default_meme">https://i.redd.it/529mjgxyexw21.jpg</string>
+    <string name="default_meme">https://i.redd.it/529mjgxyexw21.jpg</string>
 
     <!-- Demo memes -->
     <string-array name="memes">
@@ -45,4 +45,5 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="profile_name">Profile_Name</string>
     <string name="profile_location">Profile_Location</string>
+    <string name="log_out">Log out</string>
 </resources>
