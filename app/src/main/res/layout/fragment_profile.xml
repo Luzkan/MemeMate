@@ -27,33 +27,33 @@
                 android:id="@+id/main_meme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitCenter"/>
+                android:scaleType="fitCenter" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:padding="16dp"
-                android:background="@drawable/gradation_black">
+                android:background="@drawable/gradation_black"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/item_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:text="ELO 3 2 0"
                     android:textColor="@android:color/white"
                     android:textSize="26sp"
-                    android:text="ELO 3 2 0"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/item_city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:text="TEST"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
-                    android:text="TEST"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -65,4 +65,5 @@
             android:layout_height="0dp"
             android:layout_weight="0.5" />
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
