@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
-import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import com.codecrew.mememate.MemeDiffCallback
@@ -45,15 +44,14 @@ class BrowseFragment : Fragment(), CardStackListener {
 
     // (MJ) Database late init
     private var memeDatabase: FirebaseFirestore? = null
-    private lateinit var  memeList : ArrayList<MemeModel>
-
+    private lateinit var memeList: ArrayList<MemeModel>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // (SG) Firebase init
         memeDatabase = FirebaseFirestore.getInstance()
 
-        if( (activity as MainActivity).globalMemeList == null || (activity as MainActivity).globalMemeList!!.size == 0){
+        if ((activity as MainActivity).globalMemeList == null || (activity as MainActivity).globalMemeList!!.size == 0) {
             memeList = ArrayList<MemeModel>()
             (activity as MainActivity).globalMemeList = memeList
             // (SG) Downloading memes
@@ -88,7 +86,7 @@ class BrowseFragment : Fragment(), CardStackListener {
     // (MJ) Everything below is for meme browsing & swiping
     override fun onCardSwiped(direction: Direction) {
         memeList.removeAt(0)
-        val currentMeme = adapter.getSpots()[manager.topPosition-1]
+        val currentMeme = adapter.getSpots()[manager.topPosition - 1]
 
         if (direction == Direction.Right) {
             currentMeme.rate++
@@ -97,7 +95,7 @@ class BrowseFragment : Fragment(), CardStackListener {
         }
         updateMemeInfo(currentMeme)
 
-        if(memeList.size < 5){
+        if (memeList.size < 5) {
             loadMemes(30)
         }
 
@@ -224,7 +222,7 @@ class BrowseFragment : Fragment(), CardStackListener {
 
     /* DATABASE FUNCTIONS */
     // (MJ) Load Memes from Database Function
-    private fun loadMemes(limit : Long) {
+    private fun loadMemes(limit: Long) {
         // (SG) Downloading only memes that user haven't seen yet
         memeDatabase!!.collection("Memes").limit(limit).get().addOnSuccessListener {
             // (SG) Casting downloaded memes into objects
@@ -237,11 +235,11 @@ class BrowseFragment : Fragment(), CardStackListener {
                     seenBy = meme["seenBy"] as ArrayList<String>,
                     addedBy = meme["addedBy"].toString()
                 )
-                if(!newMeme.seenBy.contains(currentUser!!.uid)) {
+                if (!newMeme.seenBy.contains(currentUser!!.uid)) {
                     memeList.add(newMeme)
                 }
 
-                if(memeList.size < 15){
+                if (memeList.size < 15) {
                     loadMemes(limit + 30)
                 }
             }

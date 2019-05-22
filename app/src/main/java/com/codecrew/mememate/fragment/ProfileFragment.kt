@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.activity.profile.GalleryAdapter
@@ -26,13 +27,14 @@ private const val SPAN_COUNT = 3
 
 class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
-    private lateinit var memesList : ArrayList<MemeModel>
+    private lateinit var memesList: ArrayList<MemeModel>
     private lateinit var galleryAdapter: GalleryAdapter
     private var currentPosition: Int = 0
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var mainMeme: RoundedImageView
 
+    private lateinit var settingsButton: ImageButton
 
     // (SG) Database
     private lateinit var database: FirebaseFirestore
@@ -50,7 +52,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         user = FirebaseAuth.getInstance().currentUser!!
 
         //(SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
-        if((activity as MainActivity).globalUserMemes == null) {
+        if ((activity as MainActivity).globalUserMemes == null) {
             memesList = ArrayList()
             loadMemes()
             (activity as MainActivity).globalUserMemes = memesList
@@ -72,6 +74,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         username = v.findViewById(R.id.item_name)
         location = v.findViewById(R.id.item_city)
 
+        settingsButton = v.findViewById(R.id.settings_button)
+        settingsButton.setOnClickListener { openSettingDialog() }
         // Set up RecyclerView.
         recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
         recyclerView.adapter = galleryAdapter
@@ -80,16 +84,21 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         username.text = user.displayName
 
         // Main meme
-        mainMeme.setOnClickListener{mainMemeListener()}
+        mainMeme.setOnClickListener { mainMemeListener() }
 
         // (SG) must be here because the imageView wont be initialized earlier
-        if(memesList.size ==0){
+        if (memesList.size == 0) {
             displayDefaultProfile()
         } else {
             displayLastMeme(currentPosition)
         }
 
         return v
+    }
+
+    private fun openSettingDialog() {
+        // TODO: settings dialog
+        Toast.makeText(context, "Test", Toast.LENGTH_LONG).show()
     }
 
     override fun onGalleryMemeClickListener(position: Int) {
@@ -100,7 +109,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
             .into(mainMeme)
     }
 
-        private fun mainMemeListener() {
+    private fun mainMemeListener() {
         val bundle = Bundle()
         bundle.putSerializable("images", memesList)
         bundle.putInt("position", currentPosition)
@@ -156,7 +165,11 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
                 } else {
                     displayLastMeme(currentPosition)
-                    location.text = memesList[currentPosition].location
+                    location.text = if (!memesList[currentPosition].location.startsWith("location.downloaded")) {
+                        memesList[currentPosition].location
+                    } else {
+                        "User location."
+                    }
                     galleryAdapter.notifyDataSetChanged()
                 }
             }
@@ -171,7 +184,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         location.text = "Add new meme :("
     }
 
-    private fun displayLastMeme(currentPosition : Int) {
+    private fun displayLastMeme(currentPosition: Int) {
         Picasso.get()
             .load(memesList[currentPosition].url)
             .into(mainMeme)

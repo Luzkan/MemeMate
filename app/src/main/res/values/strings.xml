@@ -43,4 +43,6 @@
     <string name="title_activity_full_meme">FullMemeActivity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="profile_name">Profile_Name</string>
+    <string name="profile_location">Profile_Location</string>
 </resources>

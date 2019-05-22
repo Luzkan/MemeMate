@@ -26,17 +26,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 class MainActivity : AppCompatActivity() {
 
     // (SG) Meme list
-    var globalMemeList : ArrayList<MemeModel>? = null
+    var globalMemeList: ArrayList<MemeModel>? = null
 
     // (SG) Memes added by user
-    var globalUserMemes : ArrayList<MemeModel>? = null
+    var globalUserMemes: ArrayList<MemeModel>? = null
 
     // (SG) Top meme List
-    var globalTopMemes : ArrayList<MemeModel>? = null
+    var globalTopMemes: ArrayList<MemeModel>? = null
 
     // (KS) properties to manage addMeme
     var isValid = false
-    lateinit var pic : Uri
+    lateinit var pic: Uri
 
     var currentPanel = 3
 
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     val fragmentManager: FragmentManager = supportFragmentManager
 
     //(SG) Current user
-    private lateinit var currentUser : FirebaseUser
+    private lateinit var currentUser: FirebaseUser
 
     private lateinit var textMessage: TextView
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
 
         var database = FirebaseFirestore.getInstance()
 
-        memeUrl.forEachIndexed {index, it ->
+        memeUrl.forEachIndexed { index, it ->
 
             val meme = HashMap<String, Any>()
             meme["url"] = it

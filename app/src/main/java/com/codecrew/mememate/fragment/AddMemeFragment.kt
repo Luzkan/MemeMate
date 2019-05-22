@@ -27,7 +27,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_meme_adding.*
-import kotlinx.android.synthetic.main.fragment_meme_adding.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -39,12 +38,12 @@ class AddMemeFragment : Fragment() {
 
     private lateinit var memeUrl: String
     private lateinit var uri: Uri
-    private lateinit var pic : ImageView
+    private lateinit var pic: ImageView
 
     private lateinit var user: FirebaseUser
 
-    private lateinit var confirmButton : Button
-    private lateinit var pickButton : Button
+    private lateinit var confirmButton: Button
+    private lateinit var pickButton: Button
 
     private lateinit var name: TextView
 
@@ -74,7 +73,7 @@ class AddMemeFragment : Fragment() {
         return v
     }
 
-    private fun setButtons(){
+    private fun setButtons() {
 //        confirmButton.isEnabled = false
         confirmButton.isEnabled = (activity as MainActivity).isValid
 
@@ -85,10 +84,10 @@ class AddMemeFragment : Fragment() {
 //            startActivityForResult(Intent.createChooser(intent, "select picture"), 2233 )
 //        }
 
-        pickButton.setOnClickListener{bPickClick()}
+        pickButton.setOnClickListener { bPickClick() }
 
-        confirmButton.setOnClickListener{
-            if(name.text.isEmpty()){
+        confirmButton.setOnClickListener {
+            if (name.text.isEmpty()) {
                 Toast.makeText(this.context, "Name your meme", Toast.LENGTH_SHORT).show()
             }
             val path = "memes/" + UUID.randomUUID()
@@ -104,7 +103,14 @@ class AddMemeFragment : Fragment() {
             }).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     memeUrl = task.result.toString()
-                    val newMeme = MemeModel(url=memeUrl, seenBy = arrayListOf(user.uid), rate = 0, location = "location.downloaded.from.phone", addedBy = user.displayName.toString(),dbId = "")
+                    val newMeme = MemeModel(
+                        url = memeUrl,
+                        seenBy = arrayListOf(user.uid),
+                        rate = 0,
+                        location = "location.downloaded.from.phone",
+                        addedBy = user.displayName.toString(),
+                        dbId = ""
+                    )
                     val meme = HashMap<String, Any>()
                     meme["url"] = memeUrl
                     meme["title"] = name.text.toString()
@@ -115,13 +121,15 @@ class AddMemeFragment : Fragment() {
                     meme["addedBy"] = user.displayName.toString()
                     database.collection("Memes").add(meme)
                         .addOnSuccessListener {
-                            database.collection("Users").document(user.uid).update("addedMemes", FieldValue.arrayUnion(it.id))
+                            database.collection("Users").document(user.uid)
+                                .update("addedMemes", FieldValue.arrayUnion(it.id))
 
-                            if((activity as MainActivity).globalUserMemes == null){
+                            if ((activity as MainActivity).globalUserMemes == null) {
                                 (activity as MainActivity).globalUserMemes = ArrayList<MemeModel>()
                             }
 
-                            (activity as MainActivity).globalUserMemes!!.add(0,newMeme)                        }
+                            (activity as MainActivity).globalUserMemes!!.add(0, newMeme)
+                        }
                     (activity as MainActivity).nav_view.selectedItemId = R.id.navigation_profile
                     (activity as MainActivity).displayProfile()
                 }
@@ -133,7 +141,7 @@ class AddMemeFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "select picture"), 2233 )
+        startActivityForResult(Intent.createChooser(intent, "select picture"), 2233)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

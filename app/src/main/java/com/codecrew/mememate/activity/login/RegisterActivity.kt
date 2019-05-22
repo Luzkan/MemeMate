@@ -20,7 +20,6 @@ import android.widget.EditText
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.UserModel
-import com.facebook.login.widget.LoginButton
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
@@ -73,7 +72,7 @@ class RegisterActivity : AppCompatActivity() {
         checkBlank(true)
 
         // (PR) Facebook login fix (facebook_login changed to LoginButton (see activity_register.xml))
-        facebook_login.setReadPermissions("email", "public_profile", "user_friends");
+        facebook_login.setReadPermissions("email", "public_profile", "user_friends")
 
         //(KS) Splash screen
         handler.postDelayed(runnableSplash, 1500)

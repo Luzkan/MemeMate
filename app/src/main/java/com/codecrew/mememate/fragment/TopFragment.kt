@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
@@ -15,7 +14,6 @@ import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
 import com.codecrew.mememate.activity.top.TopAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.acitivity_top.*
 
 class TopFragment : Fragment(), GalleryMemeClickListener {
 
@@ -31,7 +29,7 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         database = FirebaseFirestore.getInstance()
 
-        if((activity as MainActivity).globalTopMemes == null){
+        if ((activity as MainActivity).globalTopMemes == null) {
             memesList = ArrayList()
             (activity as MainActivity).globalTopMemes = memesList
         } else {

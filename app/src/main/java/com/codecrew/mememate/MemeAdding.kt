@@ -45,8 +45,8 @@ class MemeAdding : AppCompatActivity() {
     //search for meme in a gallery
     fun searchFor(view: View) {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.setType("image/*")
-        intent.setAction(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "select picture"), 2233)
     }
 
