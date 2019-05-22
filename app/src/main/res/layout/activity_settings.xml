@@ -24,11 +24,25 @@
             android:padding="15dp">
 
             <Button
+                android:id="@+id/email_change_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="changeEmail"
+                android:text="@string/change_your_email"
+                android:enabled="false"/>
+
+            <Button
+                android:id="@+id/password_reset_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="passwordReset"
+                android:text="@string/reset_password" />
+
+            <Button
                 android:id="@+id/logout_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="logout"
-                android:padding="15dp"
                 android:text="@string/log_out" />
         </LinearLayout>
     </ScrollView>

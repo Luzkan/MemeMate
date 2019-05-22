@@ -68,7 +68,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         db = FirebaseFirestore.getInstance()
-        //(SG) Dynamic enabling submit button
+        // (SG) Dynamic enabling submit button
         checkBlank(true)
 
         // (PR) After log out.
@@ -77,9 +77,9 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         // (PR) Facebook login fix (facebook_login changed to LoginButton (see activity_register.xml))
-        facebook_login.setReadPermissions("email", "public_profile", "user_friends")
+        facebook_login.setReadPermissions("email", "public_profile")
 
-        //(KS) Splash screen
+        // (KS) Splash screen
         handler.postDelayed(runnableSplash, 1500)
         if (FirebaseAuth.getInstance().currentUser != null) {
             Log.d(

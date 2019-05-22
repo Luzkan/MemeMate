@@ -50,4 +50,6 @@
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="already_have_an_account">Already have an account?</string>
+    <string name="change_your_email">Change your email</string>
+    <string name="reset_password">Reset password</string>
 </resources>
