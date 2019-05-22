@@ -31,7 +31,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_meme_adding.*
-import kotlinx.android.synthetic.main.fragment_meme_adding.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -58,8 +57,6 @@ class AddMemeFragment : Fragment() {
     private val runnableButton = {
         confirmButton.stopAnimation()
         confirmButton.revertAnimation()
-//        confirmButton.background = this.context!!.getDrawable(R.drawable.button_round2)
-//        pickButton.background = this.context!!.getDrawable(R.drawable.button_round2)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
