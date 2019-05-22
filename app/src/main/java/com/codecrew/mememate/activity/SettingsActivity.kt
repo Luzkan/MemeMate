@@ -2,9 +2,11 @@ package com.codecrew.mememate.activity
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.codecrew.mememate.R
@@ -39,7 +41,7 @@ class SettingsActivity : AppCompatActivity() {
 
     // (PR) Sends an email with password reset link.
     fun passwordReset(view: View) {
-        password_reset_button.isEnabled = false
+//        password_reset_button.isEnabled = false
         val auth = FirebaseAuth.getInstance()
         auth.currentUser?.email?.also { userEmail ->
             auth.sendPasswordResetEmail(userEmail)
@@ -47,11 +49,11 @@ class SettingsActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Email sent.", Toast.LENGTH_SHORT).show()
                         Log.d("SETTINGS", "Email sent.")
-                        password_reset_button.isEnabled = true
+//                        password_reset_button.isEnabled = true
                     } else {
                         Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show()
                         Log.d("SETTINGS", "Email sending error.")
-                        password_reset_button.isEnabled = true
+//                        password_reset_button.isEnabled = true
                     }
                 }
         }
@@ -59,7 +61,8 @@ class SettingsActivity : AppCompatActivity() {
 
     // (PR) Deleting user
     fun deleteUser(view: View) {
-        delete_account_button.isEnabled = false
+        println("CLICK")
+//        delete_account_button.isEnabled = false
 
         val alertDialog = this.let { settingsActivity ->
             val builder = AlertDialog.Builder(settingsActivity)
@@ -80,13 +83,13 @@ class SettingsActivity : AppCompatActivity() {
                             } else {
                                 Log.d("SETTINGS", "User account deletion error.")
                                 Toast.makeText(this.context, "Something went wrong.", Toast.LENGTH_SHORT).show()
-                                delete_account_button.isEnabled = true
+//                                delete_account_button.isEnabled = true
                             }
                         }
                 }
                 setNegativeButton(R.string.no) { _, _ ->
                     // User cancelled the dialog
-                    delete_account_button.isEnabled = true
+//                    delete_account_button.isEnabled = true
                 }
             }
             builder.setMessage("Are you sure? This operation cannot be rewind!")
@@ -125,4 +128,5 @@ class SettingsActivity : AppCompatActivity() {
                 Log.d("SETTINGS", "User deleted from Users collection.")
             }
     }
+
 }
