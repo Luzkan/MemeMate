@@ -82,7 +82,6 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         // Main meme
         mainMeme.setOnClickListener{mainMemeListener()}
 
-
         // (SG) must be here because the imageView wont be initialized earlier
         if(memesList.size ==0){
             displayDefaultProfile()
@@ -157,11 +156,6 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
                 } else {
                     displayLastMeme(currentPosition)
-//                    val currentMeme = memesList[currentPosition]
-//                    Picasso.get()
-//                        .load(currentMeme.url)
-//                        .into(mainMeme)
-
                     location.text = memesList[currentPosition].location
                     galleryAdapter.notifyDataSetChanged()
                 }

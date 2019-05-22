@@ -75,8 +75,9 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
 
     private fun loadMemes() {
         database.collection("Memes").orderBy("rate").get().addOnSuccessListener { memeCollection ->
+            var tempMemeList = ArrayList<MemeModel>()
             for (meme in memeCollection) {
-                memesList.add(
+                tempMemeList.add(
                     MemeModel(
                         url = meme["url"].toString(),
                         location = meme["location"].toString(),
@@ -87,7 +88,9 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
                     )
                 )
             }
-            memesList.reverse()
+            tempMemeList.reverse()
+            memesList.clear()
+            memesList.addAll(tempMemeList)
             topAdapter.notifyDataSetChanged()
         }
     }
