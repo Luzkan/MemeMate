@@ -82,9 +82,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         false
-
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         pic = Uri.parse("android.resource://" + this.packageName + "/" + R.drawable.default_meme_add)
@@ -105,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         var memeUrl = ArrayList<String>()
 
         memeUrl.add("https://s.newsweek.com/sites/www.newsweek.com/files/styles/md/public/2018/10/18/obesity-meme.png")
-
         memeUrl.add("https://i.redd.it/wp1jwvrqekz21.jpg")
         memeUrl.add("https://i.redd.it/lqkp9slwokz21.png")
         memeUrl.add("https://i.redd.it/e03i956pkjz21.jpg")
@@ -207,5 +204,7 @@ class MainActivity : AppCompatActivity() {
         }
         currentPanel = target
     }
+
+
 
 }

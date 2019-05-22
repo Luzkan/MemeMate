@@ -68,6 +68,10 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         db = FirebaseFirestore.getInstance()
+
+        // (KS) Round login     button
+        bSubmit.background = getDrawable(R.drawable.button_round2)
+
         // (SG) Dynamic enabling submit button
         checkBlank(true)
 
@@ -207,17 +211,15 @@ class RegisterActivity : AppCompatActivity() {
                 //(SG) Checking if email is taken
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
-
-
-                        FirebaseAuth.getInstance().currentUser!!.updateProfile(
-                            UserProfileChangeRequest.Builder().setDisplayName(
-                                userName
-                            ).build()
-                        )
-
                         if (task.isSuccessful) {
                             val uid = FirebaseAuth.getInstance().uid ?: ""
                             val newUser = UserModel(uid, email, userName, ArrayList(), ArrayList())
+
+                            FirebaseAuth.getInstance().currentUser!!.updateProfile(
+                                UserProfileChangeRequest.Builder().setDisplayName(
+                                    userName
+                                ).build()
+                            )
 
                             // (SG) Creating a new user in database
                             db.collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(newUser)

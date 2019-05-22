@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.activity.SettingsActivity
@@ -136,7 +135,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
                 uid = it["uid"].toString(),
                 email = it["email"].toString(),
                 userName = it["username"].toString(),
-                lickedMemes = it["lickedMemems"] as ArrayList<String>?,
+                likedMemes = it["likedMemems"] as ArrayList<String>?,
                 addedMemes = it["addedMemes"] as ArrayList<String>?
             )
 
