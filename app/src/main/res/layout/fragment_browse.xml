@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,43 +15,66 @@
             android:clipChildren="false"
             android:orientation="horizontal">
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/skip_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/rewind_button"
-                android:layout_toLeftOf="@+id/rewind_button"
-                android:src="@drawable/skip_red_24dp"
-                app:backgroundTint="@color/peachpuff"
-                app:fabSize="auto"
-                app:rippleColor="#22ED7563" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/rewind_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginRight="32dp"
-                android:src="@drawable/rewind_blue_24dp"
-                app:backgroundTint="@color/peachpuff"
-                app:fabSize="mini"
-                app:rippleColor="#225BC9FA" />
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/skip_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/skip_red_24dp"
+                    app:backgroundTint="@color/peachpuff"
+                    app:fabSize="auto"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:rippleColor="#22ED7563" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/like_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/rewind_button"
-                android:layout_toRightOf="@+id/rewind_button"
-                android:src="@drawable/like_green_24dp"
-                app:backgroundTint="@color/peachpuff"
-                app:fabSize="auto"
-                app:rippleColor="#226FE2B3" />
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/like_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/like_green_24dp"
+                    app:backgroundTint="@color/peachpuff"
+                    app:fabSize="auto"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:rippleColor="#226FE2B3" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <!--<android.support.design.widget.FloatingActionButton-->
+                <!--android:id="@+id/rewind_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_marginStart="32dp"-->
+                <!--android:layout_marginLeft="32dp"-->
+                <!--android:layout_marginEnd="32dp"-->
+                <!--android:layout_marginRight="32dp"-->
+                <!--android:src="@drawable/rewind_blue_24dp"-->
+                <!--app:backgroundTint="@color/peachpuff"-->
+                <!--app:fabSize="mini"-->
+                <!--app:rippleColor="#225BC9FA" />-->
 
         </RelativeLayout>
 

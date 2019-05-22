@@ -16,6 +16,7 @@ import android.widget.TextView
 import com.codecrew.mememate.MemeDiffCallback
 import com.codecrew.mememate.MemeStackAdapter
 import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.MemeModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -44,16 +45,22 @@ class BrowseFragment : Fragment(), CardStackListener {
 
     // (MJ) Database late init
     private var memeDatabase: FirebaseFirestore? = null
-    private val memeList = ArrayList<MemeModel>()
+    private lateinit var  memeList : ArrayList<MemeModel>
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // (SG) Firebase init
         memeDatabase = FirebaseFirestore.getInstance()
 
-        // (SG) Downloading memes
-        loadMemes()
-
+        if( (activity as MainActivity).globalMemeList == null || (activity as MainActivity).globalMemeList!!.size == 0){
+            memeList = ArrayList<MemeModel>()
+            (activity as MainActivity).globalMemeList = memeList
+            // (SG) Downloading memes
+            loadMemes(30)
+        } else {
+            memeList = (activity as MainActivity).globalMemeList!!
+        }
         super.onCreate(savedInstanceState)
     }
 
@@ -62,7 +69,7 @@ class BrowseFragment : Fragment(), CardStackListener {
         cardStackView = v.findViewById(R.id.card_stack_view) as CardStackView
         likeButton = v.findViewById(R.id.like_button) as FloatingActionButton
         skipButton = v.findViewById(R.id.skip_button) as FloatingActionButton
-        rewindButton = v.findViewById(R.id.rewind_button) as FloatingActionButton
+//        rewindButton = v.findViewById(R.id.rewind_button) as FloatingActionButton
 
         // (MJ) MemeModel Swipe
         setupCardStackView()
@@ -71,12 +78,17 @@ class BrowseFragment : Fragment(), CardStackListener {
         return v
     }
 
+    override fun onDestroy() {
+
+        (activity as MainActivity).globalMemeList = memeList
+        super.onDestroy()
+    }
 
     /* SWIPE */
     // (MJ) Everything below is for meme browsing & swiping
     override fun onCardSwiped(direction: Direction) {
-
-        val currentMeme = adapter.getSpots()[manager.topPosition]
+        memeList.removeAt(0)
+        val currentMeme = adapter.getSpots()[manager.topPosition-1]
 
         if (direction == Direction.Right) {
             currentMeme.rate++
@@ -84,6 +96,10 @@ class BrowseFragment : Fragment(), CardStackListener {
             currentMeme.rate--
         }
         updateMemeInfo(currentMeme)
+
+        if(memeList.size < 5){
+            loadMemes(30)
+        }
 
         Log.d("CardStackView", "onCardSwiped: p = ${manager.topPosition}, d = $direction")
         if (manager.topPosition == adapter.itemCount - 5) {
@@ -142,15 +158,15 @@ class BrowseFragment : Fragment(), CardStackListener {
             cardStackView.swipe()
         }
 
-        rewindButton.setOnClickListener {
-            val setting = RewindAnimationSetting.Builder()
-                .setDirection(Direction.Bottom)
-                .setDuration(Duration.Normal.duration)
-                .setInterpolator(DecelerateInterpolator())
-                .build()
-            manager.setRewindAnimationSetting(setting)
-            cardStackView.rewind()
-        }
+//        rewindButton.setOnClickListener {
+//            val setting = RewindAnimationSetting.Builder()
+//                .setDirection(Direction.Bottom)
+//                .setDuration(Duration.Normal.duration)
+//                .setInterpolator(DecelerateInterpolator())
+//                .build()
+//            manager.setRewindAnimationSetting(setting)
+//            cardStackView.rewind()
+//        }
 
         likeButton.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
@@ -208,10 +224,9 @@ class BrowseFragment : Fragment(), CardStackListener {
 
     /* DATABASE FUNCTIONS */
     // (MJ) Load Memes from Database Function
-    private fun loadMemes() {
-        memeList.clear()
+    private fun loadMemes(limit : Long) {
         // (SG) Downloading only memes that user haven't seen yet
-        memeDatabase!!.collection("Memes").get().addOnSuccessListener {
+        memeDatabase!!.collection("Memes").limit(limit).get().addOnSuccessListener {
             // (SG) Casting downloaded memes into objects
             for (meme in it) {
                 val newMeme = MemeModel(
@@ -222,11 +237,14 @@ class BrowseFragment : Fragment(), CardStackListener {
                     seenBy = meme["seenBy"] as ArrayList<String>,
                     addedBy = meme["addedBy"].toString()
                 )
-                if (!newMeme.seenBy.contains(currentUser!!.uid)) {
+                if(!newMeme.seenBy.contains(currentUser!!.uid)) {
                     memeList.add(newMeme)
                 }
-            }
 
+                if(memeList.size < 15){
+                    loadMemes(limit + 30)
+                }
+            }
             reload()
         }.addOnFailureListener {
             Log.d("Error", it.message)

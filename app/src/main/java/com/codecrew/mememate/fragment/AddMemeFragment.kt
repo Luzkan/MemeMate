@@ -16,6 +16,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
+import com.codecrew.mememate.database.models.MemeModel
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_meme_adding.*
 import kotlinx.android.synthetic.main.fragment_meme_adding.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class AddMemeFragment : Fragment() {
@@ -102,6 +104,7 @@ class AddMemeFragment : Fragment() {
             }).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     memeUrl = task.result.toString()
+                    val newMeme = MemeModel(url=memeUrl, seenBy = arrayListOf(user.uid), rate = 0, location = "location.downloaded.from.phone", addedBy = user.displayName.toString(),dbId = "")
                     val meme = HashMap<String, Any>()
                     meme["url"] = memeUrl
                     meme["title"] = name.text.toString()
@@ -112,9 +115,13 @@ class AddMemeFragment : Fragment() {
                     meme["addedBy"] = user.displayName.toString()
                     database.collection("Memes").add(meme)
                         .addOnSuccessListener {
-                            database.collection("Users").document(user.uid)
-                                .update("addedMemes", FieldValue.arrayUnion(it.id))
-                        }
+                            database.collection("Users").document(user.uid).update("addedMemes", FieldValue.arrayUnion(it.id))
+
+                            if((activity as MainActivity).globalUserMemes == null){
+                                (activity as MainActivity).globalUserMemes = ArrayList<MemeModel>()
+                            }
+
+                            (activity as MainActivity).globalUserMemes!!.add(0,newMeme)                        }
                     (activity as MainActivity).nav_view.selectedItemId = R.id.navigation_profile
                     (activity as MainActivity).displayProfile()
                 }
