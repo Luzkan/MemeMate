@@ -1,9 +1,18 @@
-#Changelog
+# Changelog
 All notable changes to this project will be documented in this file.
 
 ___________________________________
 
-## [[0.8.0b]] - 2019-05-23 - Marcel Jerzyk
+## [0.8.0c] - 2019-05-24 - Marcel Jerzyk
+### Improved
+- Instead of weird two profile fragments, now the "Matches" is just empty
+### Fixed
+- Swipe disabled on meme swiping fragment
+	- Added: CustomViewPager to achieve that with disable/enable touches functions
+	- Could be Improved: Disable Touch on MemeDrag (onCardDraggin in BrowseFragment) and Enable on MemeSwiped or MemeSwipeCanceled (onCardCanceled & onCardSwiped)
+- Navbar is responsive to swipes between fragments
+
+## [[0.8.0b]](https://github.com/Luzkan/MemeMate/commit/b0efc8f610cb70c81d9d93b4b04fffd56d5dc1f8) - 2019-05-23 - Marcel Jerzyk
 ### Added
 - Wrote whole version history from version 0.2.1 to 0.6.4 with their authors (based on commits)
 - Version Files are now clickable hyperlinks to commits
@@ -18,6 +27,8 @@ ___________________________________
 - Adjusted "container" in activity_main to fit on screen (end on navbar)
 
 ## [[0.8.0]](https://github.com/Luzkan/MemeMate/commit/ace7e50b531187ffae988618c8516c243ce3226c) - 2019-05-23 - Marcel Jerzyk
+### Description:
+This feels like it is a really "no-brain" feature that needs to be added to an app like that for the increased comfort of use and to keep "the flow" since all main features rely on swipe gestures. 
 ### Added
 - Swipe hand gesture to move between fragments added
 

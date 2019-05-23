@@ -13,10 +13,8 @@ ___________________________________
 ___________________________________
 
 ## Current TodoTasks:
-- Give Priority on swipe on Memes over Fragment swipe
 
 ### Build-on:
-
 
 ### Improve:
 

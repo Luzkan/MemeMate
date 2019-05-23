@@ -20,11 +20,13 @@ import com.codecrew.mememate.fragment.AddMemeFragment
 import com.codecrew.mememate.fragment.BrowseFragment
 import com.codecrew.mememate.fragment.ProfileFragment
 import com.codecrew.mememate.fragment.TopFragment
+import com.codecrew.mememate.ui.main.CustomViewPager
 import com.codecrew.mememate.ui.main.Pager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 //todo przybiliżanie mema
@@ -61,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     // (MJ) Fragment Pager View
     private var mTabLayout: TabLayout? = null
-    private var mViewPager: ViewPager? = null
+    var mViewPager: CustomViewPager? = null
 
     // (SG) Current user
     private lateinit var currentUser: FirebaseUser
@@ -118,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         mTabLayout!!.setupWithViewPager(mViewPager)
 
         // (MJ) Add Upper Tabs (they are invisible [gone] in layout, needed for swipe feature.
-        // --------> IMPORTANT <-------- Matches have "profile" function now due to lack of Matches Fragment
+        // --> IMPORTANT <-- Matches have "profile" function now due to lack of Matches Fragment
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Top"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Matches"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Browse"))
@@ -133,6 +135,17 @@ class MainActivity : AppCompatActivity() {
 
         mViewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+                // Toggles "Checked" button on navbar depending on scrolled page
+                nav_view.menu.getItem(position).isChecked = true
+
+                // Disables Touch on browse memes fragment
+                if(position == 2){
+                    mViewPager!!.disableTouches()
+                }else{
+                    mViewPager!!.enableTouches()
+                }
+
             }
 
             override fun onPageSelected(position: Int) {

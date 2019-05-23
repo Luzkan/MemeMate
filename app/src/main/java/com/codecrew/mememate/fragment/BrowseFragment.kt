@@ -6,10 +6,11 @@ import android.support.v4.app.Fragment
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.DefaultItemAnimator
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
@@ -28,7 +29,6 @@ class BrowseFragment : Fragment(), CardStackListener {
     // (SG) Current user
     private val currentUser = FirebaseAuth.getInstance().currentUser
 
-
     //(SG) Layout elements
     private lateinit var cardStackView: CardStackView
     private lateinit var skipButton: FloatingActionButton
@@ -37,24 +37,13 @@ class BrowseFragment : Fragment(), CardStackListener {
     private val manager by lazy { CardStackLayoutManager(this.context, this) }
     private val adapter by lazy { MemeStackAdapter(createSpots(), context) }
 
-
     // (MJ) Database late init
     private var memeDatabase: FirebaseFirestore? = null
     private lateinit var memeList: ArrayList<MemeModel>
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-
-//        var r = (this.getParent() as ViewGroup).parent as RelativeLayout
-//
-//        // (MJ) Disable Fragments Swipe on MemeSwipe
-//        card_stack_view.setOnTouchListener { _, _ ->
-//            getParent().requestDisallowInterceptTouchEvent(true)
-//        }
-
         // (SG) Firebase init
         memeDatabase = FirebaseFirestore.getInstance()
-
 
         if ((activity as MainActivity).globalMemeList == null || (activity as MainActivity).globalMemeList!!.size == 0) {
             memeList = ArrayList()
