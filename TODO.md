@@ -14,6 +14,10 @@ ___________________________________
 
 ## Current TodoTasks:
 
+- Adjust navbar to fragments swipe
+- Adjust "container" in activity_main to fit on screen (end on navbar)
+
+
 ### Build-on:
 
 
@@ -37,6 +41,7 @@ ___________________________________
 	- *Concern: dick pics*
 
 ### Done:
+- Swipe hand gesture between fragments
 - Colors & Icons
 - Meme Browsing
 - Memes DB

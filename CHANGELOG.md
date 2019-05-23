@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ___________________________________
+
+## [?.?.?] - 2019-05-23 - Marcel Jerzyk
+### Added
+ - Swipe hand gesture to move between fragments added
+
 ## [] - 2019-05-14 - Szymon Głąb & Karol Szymończyk
 ### Added
  - Added sign in panel

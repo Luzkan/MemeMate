@@ -68,8 +68,9 @@ class AddMemeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
+        // (MJ Edit) Annoying with swipe feature
         if (!(activity as MainActivity).isValid) {
-            bPickClick()
+            //bPickClick()
         }
 
         // (SG) Find widgets

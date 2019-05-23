@@ -5,10 +5,13 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
@@ -16,6 +19,7 @@ import com.codecrew.mememate.fragment.AddMemeFragment
 import com.codecrew.mememate.fragment.BrowseFragment
 import com.codecrew.mememate.fragment.ProfileFragment
 import com.codecrew.mememate.fragment.TopFragment
+import com.codecrew.mememate.ui.main.Pager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
@@ -54,6 +58,10 @@ class MainActivity : AppCompatActivity() {
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
 
+    // (MJ) Fragment Pager View
+    private var mTabLayout: TabLayout? = null
+    private var mViewPager: ViewPager? = null
+
     // (SG) Current user
     private lateinit var currentUser: FirebaseUser
 
@@ -61,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.navigation_top -> {
                 if (currentPanel != 1) {
-                    displayTop()
+                    //displayTop()
                     return@OnNavigationItemSelectedListener true
                 }
             }
@@ -72,19 +80,19 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.navigation_main -> {
                 if (currentPanel != 3) {
-                    displayBrowsing()
+                    //displayBrowsing()
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_add -> {
                 if (currentPanel != 4) {
-                    displayAddMeme()
+                    //displayAddMeme()
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_profile -> {
                 if (currentPanel != 5) {
-                    displayProfile()
+                    //displayProfile()
                     return@OnNavigationItemSelectedListener true
                 }
             }
@@ -96,14 +104,45 @@ class MainActivity : AppCompatActivity() {
         pic = Uri.parse("android.resource://" + this.packageName + "/" + R.drawable.default_meme_add)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // (MJ) Pager Adapter
+        // (MJ) Tab ID
+        mTabLayout = findViewById<View>(R.id.tabs) as TabLayout
+        mTabLayout!!.setupWithViewPager(mViewPager)
+
+        // (MJ) Add Upper Tabs (they are invisible [gone] in layout, needed for swipe feature.
+        // --------> IMPORTANT <-------- Matches have "browse" function now due to lack of Matches Fragment
+        mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Top"))
+        mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Matches"))
+        mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Browse"))
+        mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Add"))
+        mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Profile"))
+        mTabLayout!!.tabGravity = TabLayout.GRAVITY_FILL
+
+        // (MJ) Set up the ViewPager with the sections adapter.
+        mViewPager = findViewById(R.id.container)
+        val adapter = Pager(supportFragmentManager, mTabLayout!!.tabCount)
+        mViewPager!!.adapter = adapter
+
+        mViewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                mTabLayout!!.setScrollPosition(position, 0F, true)
+                mTabLayout!!.isSelected = true
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+        })
+
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         currentUser = FirebaseAuth.getInstance().currentUser!!
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-        displayBrowsing()
-        navView.selectedItemId = R.id.navigation_main
-//        createMemes()
-
+        //displayBrowsing()
+        //navView.selectedItemId = R.id.navigation_top
     }
 
     private fun createMemes() {
