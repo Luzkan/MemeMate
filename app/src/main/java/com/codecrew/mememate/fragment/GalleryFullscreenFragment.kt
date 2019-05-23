@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.interfaces.FragmentCallBack
 import com.eftimoff.viewpagertransformers.ZoomOutSlideTransformer
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.image_fullscreen.view.*
@@ -19,6 +22,8 @@ class GalleryFullscreenFragment : DialogFragment() {
     private var selectedPosition: Int = 0
     private lateinit var viewPager: ViewPager
     private lateinit var galleryPagerAdapter: GalleryPagerAdapter
+
+    private lateinit var callBack: FragmentCallBack
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_gallery_fullscreen, container, false)
@@ -30,12 +35,21 @@ class GalleryFullscreenFragment : DialogFragment() {
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener)
         viewPager.setPageTransformer(true, ZoomOutSlideTransformer())
         setCurrentItem(selectedPosition)
+
+        if (container?.context is FragmentCallBack) {
+            this.callBack = container.context as FragmentCallBack
+        }
+
         return view
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        if (targetFragment is FragmentCallBack) {
+            callBack = targetFragment as FragmentCallBack
+        }
     }
 
     private fun setCurrentItem(position: Int) {
@@ -46,9 +60,11 @@ class GalleryFullscreenFragment : DialogFragment() {
     private var viewPagerPageChangeListener: ViewPager.OnPageChangeListener =
         object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
+                callBack.onAction(position)
             }
 
             override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
+
             }
 
             override fun onPageScrollStateChanged(arg0: Int) {
@@ -68,6 +84,7 @@ class GalleryFullscreenFragment : DialogFragment() {
                 .into(view.ivFullscreenImage)
 
             container.addView(view)
+
             return view
         }
 

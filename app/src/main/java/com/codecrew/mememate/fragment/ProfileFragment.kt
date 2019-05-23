@@ -17,6 +17,7 @@ import com.codecrew.mememate.activity.SettingsActivity
 import com.codecrew.mememate.adapter.GalleryAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
+import com.codecrew.mememate.interfaces.FragmentCallBack
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,7 +27,17 @@ import com.squareup.picasso.Picasso
 
 private const val SPAN_COUNT = 3
 
-class ProfileFragment : Fragment(), GalleryMemeClickListener {
+class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
+
+    override fun onAction(position: Int) {
+        Picasso.get()
+            .load(
+                when (viewType) {
+                    ViewType.LIKED -> likedMemesList[position].url
+                    ViewType.ADDED -> userMemesList[position].url
+                }
+            ).into(mainMeme)
+    }
 
     private lateinit var likedMemesList: ArrayList<MemeModel>
     private lateinit var userMemesList: ArrayList<MemeModel>
@@ -123,11 +134,13 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
                 viewType = ViewType.LIKED
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.liked_icon))
                 recyclerView.adapter = likedMemesAdapter
+                Picasso.get().load(likedMemesList[0].url).into(mainMeme)
             }
             ViewType.LIKED -> {
                 viewType = ViewType.ADDED
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.added_icon))
                 recyclerView.adapter = userMemesAdapter
+                Picasso.get().load(userMemesList[0].url).into(mainMeme)
             }
         }
     }
@@ -157,8 +170,10 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         val galleryFragment = GalleryFullscreenFragment()
         galleryFragment.arguments = bundle
+        galleryFragment.setTargetFragment(this, 2137)
         galleryFragment.show(fragmentTransaction, "gallery")
     }
+
 
     override fun onDestroy() {
         (activity as MainActivity).globalUserMemes = userMemesList
@@ -167,16 +182,6 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
     private fun loadUserMemes() {
         database.document("Users/${user.uid}").get().addOnSuccessListener {
-            // (SG) Casting downloaded memes into objects
-            val userModel = UserModel(
-                uid = it["uid"].toString(),
-                email = it["email"].toString(),
-                userName = it["username"].toString(),
-                likedMemes = it["likedMemes"] as ArrayList<String>?,
-                addedMemes = it["addedMemes"] as ArrayList<String>?
-            )
-
-            //todo pobieramy całą kolekcję memów (jedno duże zapytanie) czy pobieramy tylko memy danego użytkownika (dużo zapytań)?
 
             val userMemes = ArrayList<MemeModel>()
 
@@ -184,34 +189,35 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
                 .whereEqualTo("userId", user.uid)
                 .get()
                 .addOnSuccessListener { memeCollection ->
-                for (meme in memeCollection) {
-                    val memeObject = MemeModel(
-                        url = meme["url"].toString(),
-                        location = meme["location"].toString(),
-                        rate = meme["rate"].toString().toInt(),
-                        seenBy = meme["seenBy"] as ArrayList<String>,
-                        dbId = meme.toString(),
-                        addedBy = meme["addedBy"].toString()
-                    )
-                    userMemes.add(memeObject)
-                }
-                userMemesList.addAll(userMemes)
-
-                if (userMemesList.size == 0) {
-                    displayDefaultProfile()
-                    //todo wyświetl powiadomienie, np takie jak na ig w miejscu gdzie normalnie znajdują się zdjęcia
-
-                } else {
-                    displayLastMeme(currentPosition)
-                    location.text = if (!userMemesList[currentPosition].location.startsWith("location.downloaded")) {
-                        userMemesList[currentPosition].location
-                    } else {
-                        "User location."
+                    for (meme in memeCollection) {
+                        val memeObject = MemeModel(
+                            url = meme["url"].toString(),
+                            location = meme["location"].toString(),
+                            rate = meme["rate"].toString().toInt(),
+                            seenBy = meme["seenBy"] as ArrayList<String>,
+                            dbId = meme.toString(),
+                            addedBy = meme["addedBy"].toString()
+                        )
+                        userMemes.add(memeObject)
                     }
-                    userMemesAdapter.notifyDataSetChanged()
+                    userMemesList.addAll(userMemes)
+
+                    if (userMemesList.size == 0) {
+                        displayDefaultProfile()
+                        //todo wyświetl powiadomienie, np takie jak na ig w miejscu gdzie normalnie znajdują się zdjęcia
+
+                    } else {
+                        displayLastMeme(currentPosition)
+                        location.text =
+                            if (!userMemesList[currentPosition].location.startsWith("location.downloaded")) {
+                                userMemesList[currentPosition].location
+                            } else {
+                                "User location."
+                            }
+                        userMemesAdapter.notifyDataSetChanged()
+                    }
+                    (activity as MainActivity).globalUserMemes = userMemesList
                 }
-                (activity as MainActivity).globalUserMemes = userMemesList
-            }
         }
     }
 
