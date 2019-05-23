@@ -24,6 +24,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 //todo przybiliżanie mema
 //todo nie wchodzi w camera roll tylko w jakieś zdjęcia google XD
+//todo animacja serduszka
+//todo kolejność liked
+//todo zmiana dużego obrazka na ostani polubiony
+//todo zmienić startową pozycje navbar na browse (main)
+//todo zmienić na włączanie galerii przed zmianą fragemntu
+
 
 
 class MainActivity : AppCompatActivity() {

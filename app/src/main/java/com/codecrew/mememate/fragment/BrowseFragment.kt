@@ -90,6 +90,8 @@ class BrowseFragment : Fragment(), CardStackListener {
 
         if (direction == Direction.Right) {
             currentMeme.rate++
+            memeDatabase!!.document("/Users/${currentUser!!.uid}")
+                .update("likedMemes", FieldValue.arrayUnion(currentMeme.dbId))
         } else {
             currentMeme.rate--
         }
@@ -121,8 +123,6 @@ class BrowseFragment : Fragment(), CardStackListener {
         newMemeParameters["seenBy"] = currentMeme.seenBy
 
         memeDatabase!!.document("/Memes/${currentMeme.dbId}").update(newMemeParameters)
-        memeDatabase!!.document("/Users/${currentUser.uid}")
-            .update("likedMemes", FieldValue.arrayUnion(currentMeme.dbId))
     }
 
     override fun onCardAppeared(view: View, position: Int) {
