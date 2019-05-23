@@ -9,7 +9,7 @@ import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
 import com.codecrew.mememate.database.models.MemeModel
 import com.squareup.picasso.Picasso
 
-class TopAdapter(private val memes: List<MemeModel>) : RecyclerView.Adapter<TopViewHolder>() {
+class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter<TopViewHolder>() {
 
     private var context: Context? = null
     var listener: GalleryMemeClickListener? = null
@@ -44,7 +44,7 @@ class TopAdapter(private val memes: List<MemeModel>) : RecyclerView.Adapter<TopV
         holder.location.text = currentMeme.location
         holder.username.text = currentMeme.addedBy
         holder.itemView.setOnClickListener {
-            listener?.onGalleryMemeClickListener(holder.adapterPosition)
+            listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
         }
     }
 }

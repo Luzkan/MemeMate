@@ -31,11 +31,11 @@ class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
 //        loadDemoMemes()
     }
 
-    override fun onGalleryMemeClickListener(position: Int) {
+    override fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
 
         val bundle = Bundle()
-        bundle.putSerializable("images", memesList)
+        bundle.putSerializable("images", memes)
         bundle.putInt("position", position)
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val galleryFragment = GalleryFullscreenFragment()

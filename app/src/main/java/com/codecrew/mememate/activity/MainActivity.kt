@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.fragment.AddMemeFragment
@@ -25,6 +24,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 //todo przybiliżanie mema
 //todo nie wchodzi w camera roll tylko w jakieś zdjęcia google XD
+//todo animacja serduszka
+//todo kolejność liked
+//todo zmiana dużego obrazka na ostani polubiony
+//todo zmienić startową pozycje navbar na browse (main)
+//todo zmienić na włączanie galerii przed zmianą fragemntu
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +39,9 @@ class MainActivity : AppCompatActivity() {
 
     // (SG) Memes added by user
     var globalUserMemes: ArrayList<MemeModel>? = null
+
+    // (PR) Memes liked by user
+    var globalLikedMemes: ArrayList<MemeModel>? = null
 
     // (SG) Top meme List
     var globalTopMemes: ArrayList<MemeModel>? = null
@@ -53,29 +61,37 @@ class MainActivity : AppCompatActivity() {
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_top -> {
-                displayTop()
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 1) {
+                    displayTop()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             R.id.navigation_matches -> {
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 2) {
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             R.id.navigation_main -> {
-                displayBrowsing()
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 3) {
+                    displayBrowsing()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             R.id.navigation_add -> {
-                displayAddMeme()
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 4) {
+                    displayAddMeme()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
             R.id.navigation_profile -> {
-                displayProfile()
-                return@OnNavigationItemSelectedListener true
+                if (currentPanel != 5) {
+                    displayProfile()
+                    return@OnNavigationItemSelectedListener true
+                }
             }
         }
         false
-
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         pic = Uri.parse("android.resource://" + this.packageName + "/" + R.drawable.default_meme_add)
@@ -96,7 +112,6 @@ class MainActivity : AppCompatActivity() {
         var memeUrl = ArrayList<String>()
 
         memeUrl.add("https://s.newsweek.com/sites/www.newsweek.com/files/styles/md/public/2018/10/18/obesity-meme.png")
-
         memeUrl.add("https://i.redd.it/wp1jwvrqekz21.jpg")
         memeUrl.add("https://i.redd.it/lqkp9slwokz21.png")
         memeUrl.add("https://i.redd.it/e03i956pkjz21.jpg")
@@ -198,5 +213,7 @@ class MainActivity : AppCompatActivity() {
         }
         currentPanel = target
     }
+
+
 
 }

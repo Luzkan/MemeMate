@@ -54,4 +54,10 @@
     <string name="reset_password">Reset password</string>
     <string name="sign_up">SIGN UP</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="delete_your_account">Delete your account</string>
+    <string name="ok">Yes</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="switch_view_button">Switch view button</string>
+    <string name="settings_button">Settings button</string>
 </resources>

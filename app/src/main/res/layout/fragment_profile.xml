@@ -33,15 +33,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:orientation="horizontal"
-                android:background="@drawable/gradation_black">
+                android:background="@drawable/gradation_black"
+                android:baselineAligned="false">
 
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:layout_weight="0.7">
 
                     <TextView
                         android:id="@+id/item_name"
@@ -64,15 +66,26 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:layout_gravity="">
+                    android:layout_weight="0.3">
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_weight="1"/>
+
+                    <ImageButton
+                        android:id="@+id/switch_view_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/added_icon"
+                        android:layout_gravity="bottom"
+                        android:padding="15dp"
+                        android:background="@color/fui_transparent"
+                        android:contentDescription="@string/switch_view_button" />
+
                     <ImageButton
                         android:id="@+id/settings_button"
                         android:layout_width="wrap_content"
@@ -80,7 +93,8 @@
                         android:layout_gravity="bottom"
                         android:src="@drawable/ic_baseline_settings_20px"
                         android:background="@color/fui_transparent"
-                        android:padding="15dp"/>
+                        android:padding="15dp"
+                        android:contentDescription="@string/settings_button" />
                 </LinearLayout>
 
             </LinearLayout>

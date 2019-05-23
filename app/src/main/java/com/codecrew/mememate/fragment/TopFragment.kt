@@ -59,11 +59,11 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
         return v
     }
 
-    override fun onGalleryMemeClickListener(position: Int) {
+    override fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
 
         val bundle = Bundle()
-        bundle.putSerializable("images", memesList)
+        bundle.putSerializable("images", memes)
         bundle.putInt("position", position)
         val fragmentTransaction = fragmentManager!!.beginTransaction()
         val galleryFragment = GalleryFullscreenFragment()
