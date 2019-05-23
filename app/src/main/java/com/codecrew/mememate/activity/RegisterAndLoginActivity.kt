@@ -32,20 +32,20 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     private val handler = Handler()
     private val FB_REQUEST_CODE: Int = 997
 
-    //(KS) Animation after splash screen
+    // (KS) Animation after splash screen
     private val runnableSplash = {
         TransitionManager.beginDelayedTransition(lRoot)
         lRegister.visibility = View.VISIBLE
     }
 
-    //(KS) Reverting loading button
+    // (KS) Reverting loading button
     private val runnableButton = {
         bSubmit.stopAnimation()
         bSubmit.revertAnimation()
         bSubmit.background = getDrawable(R.drawable.button_round2)
     }
 
-    //(KS) Launching main application
+    // (KS) Launching main application
     @SuppressLint("PrivateResource")
     private val runnableStartApp = {
         val intent = Intent(this, MainActivity::class.java)
@@ -80,7 +80,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         }
 
         // (PR) Facebook login fix (facebook_login changed to LoginButton (see activity_register.xml))
-        facebook_login.setReadPermissions("email", "public_profile")
+        facebook_login.setReadPermissions("email")
 
         // (KS) Splash screen
         handler.postDelayed(runnableSplash, 1500)
@@ -117,7 +117,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     fun bSubmitClick(view: View) {
-        //(KS) Animated loading button
+        // (KS) Animated loading button
         bSubmit.startAnimation()
 
         resetError()
@@ -190,7 +190,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         })
     }
 
-    //(KS) set image after loading on button
+    // (KS) set image after loading on button
     private fun setSubmitButton(image: Int) {
         bSubmit.doneLoadingAnimation(Color.parseColor("#FAB162"), BitmapFactory.decodeResource(resources, image))
         handler.postDelayed(runnableButton, 800)
@@ -200,14 +200,14 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun createUser(email: String, password: String, userName: String) {
 
-        //(SG) Check if username is taken
+        // (SG) Check if username is taken
         db.document("Users/$userName").get().addOnSuccessListener {
 
             val user = it.toObject(UserModel::class.java)
 
             if (user == null) {
 
-                //(SG) Checking if email is taken
+                // (SG) Checking if email is taken
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -241,13 +241,13 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         }
     }
 
-    //(KS) Starting app on logged account
+    // (KS) Starting app on logged account
     private fun startApp() {
         setSubmitButton(R.drawable.tick)
         handler.postDelayed(runnableStartApp, 500)
     }
 
-    //(KS) Changing mode login/sign up on textView click
+    // (KS) Changing mode login/sign up on textView click
     fun tvChangeClick(view: View) {
         tvError.visibility = View.GONE
         if (bSubmit.tag == "signup") {
@@ -257,7 +257,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         }
     }
 
-    //(KS) Setting text on textView and button
+    // (KS) Setting text on textView and button
     //     and hiding additional fields
     private fun setLoginPanel() {
         tvError.text = ""
@@ -267,11 +267,11 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         tvChange.text = "New user? Sign up here!"
         bSubmit.text = "LOG IN"
         bSubmit.tag = "login"
-        //(SG) Dynamic enabling submit button
+        // (SG) Dynamic enabling submit button
         checkBlank(false)
     }
 
-    //(KS) Setting text on textView and button
+    // (KS) Setting text on textView and button
     //     and adding additional fields
     private fun setSignUpPanel() {
         tvError.text = ""
@@ -281,11 +281,11 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         tvChange.text = "Already have an account?"
         bSubmit.text = "SIGN UP"
         bSubmit.tag = "signup"
-        //(SG) Dynamic enabling submit button
+        // (SG) Dynamic enabling submit button
         checkBlank(true)
     }
 
-    //(KS) Hiding keyboard when click outside the EditText
+    // (KS) Hiding keyboard when click outside the EditText
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

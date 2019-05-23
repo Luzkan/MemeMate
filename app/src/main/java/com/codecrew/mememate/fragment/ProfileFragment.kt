@@ -133,7 +133,6 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
     }
 
     private fun openSettingsActivity() {
-        // TODO: settings
         val intent = Intent(context, SettingsActivity::class.java)
         startActivity(intent)
     }
@@ -181,21 +180,20 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
             val userMemes = ArrayList<MemeModel>()
 
-            database.collection("Memes").get().addOnSuccessListener { memeCollection ->
+            database.collection("Memes")
+                .whereEqualTo("userId", user.uid)
+                .get()
+                .addOnSuccessListener { memeCollection ->
                 for (meme in memeCollection) {
-                    userModel.addedMemes?.forEach { memeID ->
-                        if (meme.id == (memeID)) {
-                            val memeObject = MemeModel(
-                                url = meme["url"].toString(),
-                                location = meme["location"].toString(),
-                                rate = meme["rate"].toString().toInt(),
-                                seenBy = meme["seenBy"] as ArrayList<String>,
-                                dbId = memeID,
-                                addedBy = meme["addedBy"].toString()
-                            )
-                            userMemes.add(memeObject)
-                        }
-                    }
+                    val memeObject = MemeModel(
+                        url = meme["url"].toString(),
+                        location = meme["location"].toString(),
+                        rate = meme["rate"].toString().toInt(),
+                        seenBy = meme["seenBy"] as ArrayList<String>,
+                        dbId = meme.toString(),
+                        addedBy = meme["addedBy"].toString()
+                    )
+                    userMemes.add(memeObject)
                 }
                 userMemesList.addAll(userMemes)
 

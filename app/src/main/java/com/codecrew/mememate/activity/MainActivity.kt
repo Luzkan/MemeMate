@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
 
-    //(SG) Current user
+    // (SG) Current user
     private lateinit var currentUser: FirebaseUser
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    //(KS) Hiding keyboard when click outside the EditText
+    // (KS) Hiding keyboard when click outside the EditText
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    //(KS) Choosing side to make swipe animation when changing fragment
+    // (KS) Choosing side to make swipe animation when changing fragment
     private fun swipeSide(transaction: FragmentTransaction, src: Int, target: Int) {
         if (src < target) {
             transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
