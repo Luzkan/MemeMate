@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.fragment.AddMemeFragment
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     var isValid = false
     lateinit var pic: Uri
 
-    private var currentPanel = 3
+    private var currentPanel = 1
 
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
@@ -69,30 +70,35 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.navigation_top -> {
                 if (currentPanel != 1) {
+                    currentPanel = 1
                     mViewPager!!.currentItem = 0
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_matches -> {
                 if (currentPanel != 2) {
+                    currentPanel = 2
                     mViewPager!!.currentItem = 1
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_main -> {
                 if (currentPanel != 3) {
+                    currentPanel = 3
                     mViewPager!!.currentItem = 2
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_add -> {
                 if (currentPanel != 4) {
+                    currentPanel = 4
                     mViewPager!!.currentItem = 3
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_profile -> {
                 if (currentPanel != 5) {
+                    currentPanel = 5
                     mViewPager!!.currentItem = 4
                     return@OnNavigationItemSelectedListener true
                 }
@@ -112,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         mTabLayout!!.setupWithViewPager(mViewPager)
 
         // (MJ) Add Upper Tabs (they are invisible [gone] in layout, needed for swipe feature.
-        // --------> IMPORTANT <-------- Matches have "browse" function now due to lack of Matches Fragment
+        // --------> IMPORTANT <-------- Matches have "profile" function now due to lack of Matches Fragment
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Top"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Matches"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Browse"))

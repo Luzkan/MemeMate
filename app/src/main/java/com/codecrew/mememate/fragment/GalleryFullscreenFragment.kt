@@ -60,7 +60,7 @@ class GalleryFullscreenFragment : DialogFragment() {
     private var viewPagerPageChangeListener: ViewPager.OnPageChangeListener =
         object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
-                callBack.onAction(position)
+                //callBack.onAction(position)
             }
 
             override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
