@@ -52,4 +52,6 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="change_your_email">Change your email</string>
     <string name="reset_password">Reset password</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="confirm_password">Confirm password</string>
 </resources>

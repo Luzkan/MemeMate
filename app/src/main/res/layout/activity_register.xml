@@ -53,7 +53,7 @@
             android:drawablePadding="8dp"
             android:ems="10"
             android:hint="@string/email"
-            android:inputType="textPersonName"
+            android:inputType="textEmailAddress"
             android:paddingStart="10dp"
             android:tag="false" />
 
@@ -94,12 +94,12 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="5dp"
             android:background="@drawable/edit_text_round"
-            android:drawableLeft="@drawable/ic_lock_24dp"
+            android:drawableStart="@drawable/ic_lock_24dp"
             android:drawablePadding="8dp"
             android:ems="10"
-            android:hint="Confirm password"
+            android:hint="@string/confirm_password"
             android:inputType="textPassword"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:tag="false" />
 
         <TextView
@@ -121,7 +121,7 @@
             android:enabled="false"
             android:onClick="bSubmitClick"
             android:tag="signup"
-            android:text="SIGN UP"
+            android:text="@string/sign_up"
             android:textStyle="bold"
             app:spinning_bar_color="#000"
             app:spinning_bar_width="5dp" />
@@ -131,8 +131,6 @@
             android:id="@+id/facebook_login"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:layout_marginVertical="3dp"
             android:onClick="showSignOptions"
             android:paddingLeft="10dp"

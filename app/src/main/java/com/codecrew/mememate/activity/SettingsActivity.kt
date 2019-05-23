@@ -24,6 +24,7 @@ class SettingsActivity : AppCompatActivity() {
         Intent(this, RegisterActivity::class.java).also {
             it.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             it.putExtra("logout", true)
+            finish()
             startActivity(it)
             FirebaseAuth.getInstance().signOut()
         }
