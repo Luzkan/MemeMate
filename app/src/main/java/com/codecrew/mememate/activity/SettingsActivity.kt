@@ -2,11 +2,9 @@ package com.codecrew.mememate.activity
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.codecrew.mememate.R
@@ -15,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.activity_settings.*
+
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -28,10 +26,11 @@ class SettingsActivity : AppCompatActivity() {
     fun logout(view: View) {
         Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
         Intent(this, RegisterActivity::class.java).also {
-            it.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            //            it.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             it.putExtra("logout", true)
-            finish()
+            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(it)
+            finish()
             FirebaseAuth.getInstance().signOut()
         }
     }
@@ -115,7 +114,7 @@ class SettingsActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { memes ->
                 for (meme in memes) {
-                    Log.d("USER_DELETE" ,"meme: $meme")
+                    Log.d("USER_DELETE", "meme: $meme")
                     memesRef.child("$meme.jpg") // deleting from storage
                     meme.reference.delete()
                 }
