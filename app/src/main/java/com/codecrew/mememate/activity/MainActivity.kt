@@ -69,30 +69,31 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.navigation_top -> {
                 if (currentPanel != 1) {
-                    //displayTop()
+                    mViewPager!!.currentItem = 0
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_matches -> {
                 if (currentPanel != 2) {
+                    mViewPager!!.currentItem = 1
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_main -> {
                 if (currentPanel != 3) {
-                    //displayBrowsing()
+                    mViewPager!!.currentItem = 2
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_add -> {
                 if (currentPanel != 4) {
-                    //displayAddMeme()
+                    mViewPager!!.currentItem = 3
                     return@OnNavigationItemSelectedListener true
                 }
             }
             R.id.navigation_profile -> {
                 if (currentPanel != 5) {
-                    //displayProfile()
+                    mViewPager!!.currentItem = 4
                     return@OnNavigationItemSelectedListener true
                 }
             }

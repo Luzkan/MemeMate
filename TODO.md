@@ -14,8 +14,7 @@ ___________________________________
 
 ## Current TodoTasks:
 
-- Adjust navbar to fragments swipe
-- Adjust "container" in activity_main to fit on screen (end on navbar)
+- Give Priority on swipe on Memes over Fragment swipe
 
 
 ### Build-on:

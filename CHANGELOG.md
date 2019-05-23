@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 ___________________________________
 
 ## [?.?.?] - 2019-05-23 - Marcel Jerzyk
-### Added
+### Fixed
+- Adjusted navbar to fragments swipe
+- Adjusted "container" in activity_main to fit on screen (end on navbar)
+
+## [?.?.?] - 2019-05-23 - Marcel Jerzyk
+### Improved
  - Swipe hand gesture to move between fragments added
 
 ## [] - 2019-05-14 - Szymon Głąb & Karol Szymończyk

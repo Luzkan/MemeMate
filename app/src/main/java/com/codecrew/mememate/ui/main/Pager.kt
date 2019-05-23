@@ -18,7 +18,7 @@ class Pager(fm: FragmentManager, internal var tabCount: Int) : FragmentStatePage
                 return TopFragment()
             }
             1 -> {
-                return BrowseFragment()
+                return ProfileFragment()
             }
             2 -> {
                 return BrowseFragment()
