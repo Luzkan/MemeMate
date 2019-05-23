@@ -1,4 +1,4 @@
-package com.codecrew.mememate
+package com.codecrew.mememate.activity
 
 import android.app.Activity
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.codecrew.mememate.R
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -21,16 +22,16 @@ import kotlinx.android.synthetic.main.activity_meme_adding.*
 import java.util.*
 import kotlin.collections.HashMap
 
-//(PK) Activity for adding new memes
+// (PK) Activity for adding new memes
 
 class MemeAdding : AppCompatActivity() {
 
     lateinit var database: FirebaseFirestore
-    lateinit var storage: FirebaseStorage
+    private lateinit var storage: FirebaseStorage
 
-    lateinit var memeUrl: String
-    lateinit var uri: Uri
-    lateinit var user: FirebaseUser
+    private lateinit var memeUrl: String
+    private lateinit var uri: Uri
+    private lateinit var user: FirebaseUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +71,9 @@ class MemeAdding : AppCompatActivity() {
             Toast.makeText(this, "Name your meme", Toast.LENGTH_SHORT).show()
             return
         }
-        var path = "memes/" + UUID.randomUUID()
-        var memeRef = storage.getReference(path)
-        var uploadTask = memeRef.putFile(uri)
+        val path = "memes/" + UUID.randomUUID()
+        val memeRef = storage.getReference(path)
+        val uploadTask = memeRef.putFile(uri)
         var url = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
             if (!task.isSuccessful) {
                 task.exception?.let {

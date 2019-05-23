@@ -1,4 +1,4 @@
-package com.codecrew.mememate.activity.profile
+package com.codecrew.mememate.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

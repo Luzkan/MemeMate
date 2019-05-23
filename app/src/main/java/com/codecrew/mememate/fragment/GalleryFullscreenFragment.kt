@@ -1,4 +1,4 @@
-package com.codecrew.mememate.activity.profile
+package com.codecrew.mememate.fragment
 
 import android.content.Context
 import android.os.Bundle

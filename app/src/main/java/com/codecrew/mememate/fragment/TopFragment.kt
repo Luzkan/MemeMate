@@ -9,10 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
-import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
-import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
-import com.codecrew.mememate.activity.top.TopAdapter
+import com.codecrew.mememate.adapter.TopAdapter
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 
 class TopFragment : Fragment(), GalleryMemeClickListener {
@@ -73,7 +72,7 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
 
     private fun loadMemes() {
         database.collection("Memes").orderBy("rate").get().addOnSuccessListener { memeCollection ->
-            var tempMemeList = ArrayList<MemeModel>()
+            val tempMemeList = ArrayList<MemeModel>()
             for (meme in memeCollection) {
                 tempMemeList.add(
                     MemeModel(

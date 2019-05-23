@@ -1,4 +1,4 @@
-package com.codecrew.mememate.activity.login
+package com.codecrew.mememate.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -18,7 +18,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.codecrew.mememate.R
-import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.UserModel
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -28,7 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_register.*
 
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterAndLoginActivity : AppCompatActivity() {
 
     private val handler = Handler()
     private val FB_REQUEST_CODE: Int = 997
@@ -57,10 +56,10 @@ class RegisterActivity : AppCompatActivity() {
         )
     }
 
-    lateinit var db: FirebaseFirestore
+    private lateinit var db: FirebaseFirestore
 
     // (SG) List of account types we can sign in
-    val providers = arrayListOf(
+    private val providers = arrayListOf(
         AuthUI.IdpConfig.FacebookBuilder().build()
     )
 

@@ -1,12 +1,12 @@
-package com.codecrew.mememate.activity.top
+package com.codecrew.mememate.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.codecrew.mememate.R
-import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import com.squareup.picasso.Picasso
 
 class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter<TopViewHolder>() {

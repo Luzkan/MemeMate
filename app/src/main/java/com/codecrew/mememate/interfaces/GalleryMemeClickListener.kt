@@ -1,4 +1,4 @@
-package com.codecrew.mememate.activity.profile
+package com.codecrew.mememate.interfaces
 
 import com.codecrew.mememate.database.models.MemeModel
 

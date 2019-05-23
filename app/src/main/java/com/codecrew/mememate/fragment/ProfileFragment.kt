@@ -14,11 +14,10 @@ import android.widget.TextView
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.activity.SettingsActivity
-import com.codecrew.mememate.activity.profile.GalleryAdapter
-import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
-import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
+import com.codecrew.mememate.adapter.GalleryAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
+import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -148,8 +147,9 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
 
     private fun mainMemeListener() {
         val bundle = Bundle()
-        bundle.putSerializable("images",
-            when(viewType) {
+        bundle.putSerializable(
+            "images",
+            when (viewType) {
                 ViewType.ADDED -> userMemesList
                 ViewType.LIKED -> likedMemesList
             }
@@ -217,11 +217,11 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
         }
     }
 
+    // (PR) Loading liked memes
     private fun loadLikedMemes() {
         database.document("Users/${user.uid}")
             .get()
             .addOnSuccessListener {
-                // (SG) Casting downloaded memes into objects
                 val userModel = UserModel(
                     uid = it["uid"].toString(),
                     email = it["email"].toString(),
@@ -230,8 +230,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener {
                     addedMemes = it["addedMemes"] as ArrayList<String>?
                 )
 
-                val likedMemes = ArrayList<MemeModel>()
-                userModel.likedMemes!!.forEach { likedMeme ->
+                userModel.likedMemes?.forEach { likedMeme ->
                     database.document("Memes/$likedMeme")
                         .get()
                         .addOnSuccessListener { meme ->

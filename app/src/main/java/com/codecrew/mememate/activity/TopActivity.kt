@@ -1,12 +1,13 @@
-package com.codecrew.mememate.activity.top
+package com.codecrew.mememate.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.codecrew.mememate.R
-import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
-import com.codecrew.mememate.activity.profile.GalleryMemeClickListener
+import com.codecrew.mememate.adapter.TopAdapter
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.fragment.GalleryFullscreenFragment
+import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import kotlinx.android.synthetic.main.acitivity_top.*
 
 class TopActivity : AppCompatActivity(), GalleryMemeClickListener {

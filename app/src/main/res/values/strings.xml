@@ -60,4 +60,8 @@
     <string name="yes">Yes</string>
     <string name="switch_view_button">Switch view button</string>
     <string name="settings_button">Settings button</string>
+    <string name="add_new_meme">Add new meme</string>
+    <string name="search">Search</string>
+    <string name="title">title</string>
+    <string name="confirm">Confirm</string>
 </resources>

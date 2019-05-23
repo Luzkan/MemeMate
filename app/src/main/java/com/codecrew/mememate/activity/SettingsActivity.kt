@@ -8,11 +8,11 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.codecrew.mememate.R
-import com.codecrew.mememate.activity.login.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.activity_settings.*
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -25,8 +25,7 @@ class SettingsActivity : AppCompatActivity() {
     // (PR) log_out button functionality.
     fun logout(view: View) {
         Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
-        Intent(this, RegisterActivity::class.java).also {
-            //            it.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        Intent(this, RegisterAndLoginActivity::class.java).also {
             it.putExtra("logout", true)
             it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(it)
@@ -41,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
 
     // (PR) Sends an email with password reset link.
     fun passwordReset(view: View) {
-//        password_reset_button.isEnabled = false
+        password_reset_button.isEnabled = false
         val auth = FirebaseAuth.getInstance()
         auth.currentUser?.email?.also { userEmail ->
             auth.sendPasswordResetEmail(userEmail)
@@ -49,11 +48,11 @@ class SettingsActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Email sent.", Toast.LENGTH_SHORT).show()
                         Log.d("SETTINGS", "Email sent.")
-//                        password_reset_button.isEnabled = true
+                        password_reset_button.isEnabled = true
                     } else {
                         Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show()
                         Log.d("SETTINGS", "Email sending error.")
-//                        password_reset_button.isEnabled = true
+                        password_reset_button.isEnabled = true
                     }
                 }
         }
@@ -61,9 +60,7 @@ class SettingsActivity : AppCompatActivity() {
 
     // (PR) Deleting user
     fun deleteUser(view: View) {
-        println("CLICK")
-//        delete_account_button.isEnabled = false
-
+        delete_account_button.isEnabled = false
         val alertDialog = this.let { settingsActivity ->
             val builder = AlertDialog.Builder(settingsActivity)
             builder.apply {
@@ -76,20 +73,20 @@ class SettingsActivity : AppCompatActivity() {
                                 deleteUserFromDB(user)
                                 Log.d("SETTINGS", "User account deleted.")
                                 Toast.makeText(this.context, "User account deleted.", Toast.LENGTH_SHORT).show()
-                                Intent(this.context, RegisterActivity::class.java).also {
+                                Intent(this.context, RegisterAndLoginActivity::class.java).also {
                                     it.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                                     startActivity(it)
                                 }
                             } else {
                                 Log.d("SETTINGS", "User account deletion error.")
                                 Toast.makeText(this.context, "Something went wrong.", Toast.LENGTH_SHORT).show()
-//                                delete_account_button.isEnabled = true
+                                delete_account_button.isEnabled = true
                             }
                         }
                 }
                 setNegativeButton(R.string.no) { _, _ ->
                     // User cancelled the dialog
-//                    delete_account_button.isEnabled = true
+                    delete_account_button.isEnabled = true
                 }
             }
             builder.setMessage("Are you sure? This operation cannot be rewind!")

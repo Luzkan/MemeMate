@@ -1,4 +1,4 @@
-package com.codecrew.mememate
+package com.codecrew.mememate.interfaces
 
 import android.support.v7.util.DiffUtil
 import com.codecrew.mememate.database.models.MemeModel

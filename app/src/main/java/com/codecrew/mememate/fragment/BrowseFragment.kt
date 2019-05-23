@@ -12,12 +12,11 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
-import com.codecrew.mememate.MemeDiffCallback
-import com.codecrew.mememate.MemeStackAdapter
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
-import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
+import com.codecrew.mememate.adapter.MemeStackAdapter
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.interfaces.MemeDiffCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,9 +34,6 @@ class BrowseFragment : Fragment(), CardStackListener {
     private lateinit var skipButton: FloatingActionButton
     private lateinit var likeButton: FloatingActionButton
 
-    // (MJ) Swipe related late inits
-    private val drawerLayout by lazy { R.id.drawer_layout }
-
     private val manager by lazy { CardStackLayoutManager(this.context, this) }
     private val adapter by lazy { MemeStackAdapter(createSpots(), context) }
 
@@ -52,7 +48,7 @@ class BrowseFragment : Fragment(), CardStackListener {
         memeDatabase = FirebaseFirestore.getInstance()
 
         if ((activity as MainActivity).globalMemeList == null || (activity as MainActivity).globalMemeList!!.size == 0) {
-            memeList = ArrayList<MemeModel>()
+            memeList = ArrayList()
             (activity as MainActivity).globalMemeList = memeList
             // (SG) Downloading memes
             loadMemes(30)
@@ -220,7 +216,7 @@ class BrowseFragment : Fragment(), CardStackListener {
     /* DATABASE FUNCTIONS */
     // (MJ) Load Memes from Database Function
     private fun loadMemes(limit: Long) {
-        Log.d("MEMESKI","DOWNLOADING")
+        Log.d("MEMESKI", "DOWNLOADING")
         Log.d("MEMESKI", "LIMIT = $limit")
         // (SG) Downloading only memes that user haven't seen yet
         memeDatabase!!.collection("Memes").get().addOnSuccessListener {
@@ -234,11 +230,11 @@ class BrowseFragment : Fragment(), CardStackListener {
                     seenBy = meme["seenBy"] as ArrayList<String>,
                     addedBy = meme["addedBy"].toString()
                 )
-                Log.d("MEMESKI","Pobrano mema")
-                if (!newMeme.seenBy.contains(currentUser!!.uid)  && !memeList.contains(newMeme)) {
+                Log.d("MEMESKI", "Pobrano mema")
+                if (!newMeme.seenBy.contains(currentUser!!.uid) && !memeList.contains(newMeme)) {
                     memeList.add(newMeme)
-                } else if(memeList.contains(newMeme)){
-                    Log.d("MEMESKI","ODRZUCONO MEMA")
+                } else if (memeList.contains(newMeme)) {
+                    Log.d("MEMESKI", "ODRZUCONO MEMA")
                 }
             }
             reload()
@@ -258,7 +254,7 @@ class BrowseFragment : Fragment(), CardStackListener {
     /* DATABASE FUNCTIONS */
 
     //(SG) Remove duplicates
-    private fun removeDuplicatedMemes(list : ArrayList<MemeModel>) : ArrayList<MemeModel>{
+    private fun removeDuplicatedMemes(list: ArrayList<MemeModel>): ArrayList<MemeModel> {
         val listWithoutDuplicates = ArrayList<MemeModel>()
         val set = LinkedHashSet<MemeModel>()
         set.addAll(list)
@@ -266,8 +262,5 @@ class BrowseFragment : Fragment(), CardStackListener {
         return listWithoutDuplicates
     }
 
-    private fun setNoMoreMemes(){
-
-    }
 }
 

@@ -36,7 +36,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/email_change_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/papayawhip"
@@ -55,7 +55,7 @@
                 android:background="@color/peachpuff" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/password_reset_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/papayawhip"
@@ -74,7 +74,7 @@
                 android:background="@color/peachpuff" />
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/delete_account_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/papayawhip"
@@ -93,7 +93,7 @@
                 android:background="@color/peachpuff" />
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/logout_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/papayawhip"

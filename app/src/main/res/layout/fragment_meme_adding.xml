@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.codecrew.mememate.MemeAdding">
+    tools:context="com.codecrew.mememate.activity.MemeAdding">
 
     <ImageView
         android:id="@+id/memeImage"

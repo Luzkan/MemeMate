@@ -136,7 +136,7 @@ class AddMemeFragment : Fragment() {
                                 .update("addedMemes", FieldValue.arrayUnion(it.id))
 
                             if ((activity as MainActivity).globalUserMemes == null) {
-                                (activity as MainActivity).globalUserMemes = ArrayList<MemeModel>()
+                                (activity as MainActivity).globalUserMemes = ArrayList()
                             }
                             (activity as MainActivity).globalUserMemes!!.add(0, newMeme)
 

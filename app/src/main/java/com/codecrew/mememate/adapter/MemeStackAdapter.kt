@@ -1,27 +1,31 @@
-package com.codecrew.mememate
+package com.codecrew.mememate.adapter
 
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
-import com.codecrew.mememate.activity.profile.GalleryFullscreenFragment
 import com.codecrew.mememate.database.models.MemeModel
-import com.squareup.picasso.Picasso
+import com.codecrew.mememate.fragment.GalleryFullscreenFragment
 
-class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private val context : Context?) :
+class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private val context: Context?) :
     RecyclerView.Adapter<MemeStackAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater.inflate(R.layout.item_spot, parent, false))
+        return ViewHolder(
+            inflater.inflate(
+                R.layout.item_spot,
+                parent,
+                false
+            )
+        )
 
     }
 

@@ -31,7 +31,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 //todo zmienić na włączanie galerii przed zmianą fragemntu
 
 
-
 class MainActivity : AppCompatActivity() {
 
     // (SG) Meme list
@@ -50,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     var isValid = false
     lateinit var pic: Uri
 
-    var currentPanel = 3
+    private var currentPanel = 3
 
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
@@ -109,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createMemes() {
 
-        var memeUrl = ArrayList<String>()
+        val memeUrl = ArrayList<String>()
 
         memeUrl.add("https://s.newsweek.com/sites/www.newsweek.com/files/styles/md/public/2018/10/18/obesity-meme.png")
         memeUrl.add("https://i.redd.it/wp1jwvrqekz21.jpg")
@@ -134,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         memeUrl.add("https://i.redd.it/mc6beqqr4pz21.jpg")
         memeUrl.add("https://i.redd.it/51qsorieloz21.jpg")
 
-        var database = FirebaseFirestore.getInstance()
+        val database = FirebaseFirestore.getInstance()
 
         memeUrl.forEachIndexed { index, it ->
 
@@ -213,7 +212,6 @@ class MainActivity : AppCompatActivity() {
         }
         currentPanel = target
     }
-
 
 
 }
