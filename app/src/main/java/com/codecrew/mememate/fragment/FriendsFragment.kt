@@ -9,13 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import com.codecrew.mememate.R
+import com.codecrew.mememate.adapter.FeedAdapter
 import com.codecrew.mememate.adapter.FriendsAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class FriendsFragment : Fragment(), GalleryMemeClickListener {
@@ -30,7 +31,7 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
     private lateinit var lMessages: LinearLayout
 
     private lateinit var recyclerViewFriends: RecyclerView
-    private var firendsList = ArrayList<UserModel>()
+    private var friendsList = ArrayList<UserModel>()
     private lateinit var friendsAdapter: FriendsAdapter
 
     private lateinit var recyclerViewFeed: RecyclerView
@@ -38,13 +39,13 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
     private lateinit var feedAdapter: FeedAdapter
 
     private var currentPosition: Int = 0
-    private lateinit var db : FirebaseFirestore
-    private lateinit var currentUser : UserModel
+    private lateinit var db: FirebaseFirestore
+    private lateinit var currentUser: UserModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // (KS) template friends
-        friendsList.add(UserModel("", "", "Shimek", null, null))
-        friendsList.add(UserModel("", "", "Michalec", null, null))
+        friendsList.add(UserModel("", "", "Shimek", null, null, null, null))
+        friendsList.add(UserModel("", "", "Michalec", null, null, null, null))
 
         // (KS) template feed
         feedList.add(
@@ -55,7 +56,8 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                 "",
                 10000,
                 ArrayList(),
-                "Shimek"
+                "Shimek",
+                ""
             )
         )
         feedList.add(
@@ -66,7 +68,8 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                 "",
                 2,
                 ArrayList(),
-                "Michalec"
+                "Michalec",
+                ""
             )
         )
         feedList.add(
@@ -77,7 +80,8 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                 "",
                 -155,
                 ArrayList(),
-                "Shimek"
+                "Shimek",
+                ""
             )
         )
 
