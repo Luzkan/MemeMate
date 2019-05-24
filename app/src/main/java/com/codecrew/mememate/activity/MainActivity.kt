@@ -225,6 +225,15 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
+    private fun displayFriends() {
+        val transaction = fragmentManager.beginTransaction()
+        swipeSide(transaction, currentPanel, 2)
+        val fragment = FriendsFragment()
+        transaction.replace(R.id.fragment_holder, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
     private fun displayBrowsing() {
         val transaction = fragmentManager.beginTransaction()
         swipeSide(transaction, currentPanel, 3)
