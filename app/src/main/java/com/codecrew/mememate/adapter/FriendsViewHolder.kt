@@ -8,5 +8,5 @@ import com.codecrew.mememate.R
 class FriendsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var username: TextView = itemView.findViewById(R.id.tvNick)
-    var news: TextView = itemView.findViewById(R.id.tvNew)
+//    var news: TextView = itemView.findViewById(R.id.tvNew)
 }

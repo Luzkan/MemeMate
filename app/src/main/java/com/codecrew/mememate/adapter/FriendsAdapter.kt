@@ -35,12 +35,13 @@ class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.A
 
         holder.username.text = user.userName
 
-        //todo tutaj ustawiamy jak ktoś dodał nowe
-        holder.news.text = "2"
+//        tutaj ustawiamy jak ktoś dodał nowe
+//        holder.news.text = "2"
 
-        //todo tutaj jak chcemy zeby zniknęło
+        //ttutaj jak chcemy zeby zniknęło
 //        holder.news.visibility = View.INVISIBLE / View.VISIBLE
 
+        // listener podłączyć do profilu użytkownika
 //        holder.itemView.setOnClickListener {
 //            listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
 //        }

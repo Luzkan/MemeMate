@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -14,9 +14,8 @@
             android:id="@+id/main_meme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            />
+            android:scaleType="fitCenter" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,32 +24,31 @@
             android:background="@drawable/gradation_black"
             android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tvIndex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="1."
-                android:textColor="@color/ghostwhite"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="1." />
+            <!--<TextView-->
+            <!--android:id="@+id/tvIndex"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:text="1."-->
+            <!--android:textColor="@color/ghostwhite"-->
+            <!--android:textSize="26sp"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--tools:text="1." />-->
 
             <TextView
                 android:id="@+id/item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="ELO 3 2 0"
+                android:text="@string/dummy"
                 android:textColor="@color/ghostwhite"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tvIndex" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <!--<TextView-->
             <!--android:id="@+id/item_city"-->
@@ -66,7 +64,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:text="1, 500"
                 android:textAlignment="center"
                 android:textColor="@android:color/holo_green_light"
@@ -78,10 +75,10 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
-    <View
-        android:id="@+id/divider5"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/peachpuff" />
+    <!--<View-->
+    <!--android:id="@+id/divider5"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="10dp"-->
+    <!--android:background="@color/peachpuff" />-->
 
 </LinearLayout>

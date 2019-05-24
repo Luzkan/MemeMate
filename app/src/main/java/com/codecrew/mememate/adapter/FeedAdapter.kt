@@ -9,7 +9,7 @@ import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import com.squareup.picasso.Picasso
 
-class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter<TopViewHolder>() {
+class FeedAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter<TopViewHolder>() {
 
     private var context: Context? = null
     var listener: GalleryMemeClickListener? = null
@@ -35,10 +35,8 @@ class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter
                 .into(holder.memeImageView)
         }
 
-//        val index = (position + 1).toString() + "."
         val currentMeme = memes[position]
 
-//        holder.index.text = index
         holder.rate.text = currentMeme.rate.toString()
 //        holder.location.text = currentMeme.location
         holder.username.text = currentMeme.addedBy
