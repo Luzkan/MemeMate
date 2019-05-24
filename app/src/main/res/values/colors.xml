@@ -4,14 +4,14 @@
     <color name="white">#FFFF</color>
     <color name="peachpuff">#FFD8BE</color>
     <color name="papayawhip">#FFEEDD</color>
-    <color name="ghostwhite">#F8F7FF</color>
+    <color name="ghostwhite">#FFEDED</color>
     <color name="periwinkle">#B8B8FF</color>
     <color name="mediumslate">#8C77FF</color>
 
 
     <color name="colorBackgroundAlterP">#FAB162</color>
     <color name="colorBackgroundAlter">#F8C58E</color>
-    <color name="colorTextAlter">#191919</color>
+    <color name="colorTextAlter">#232323</color>
     <color name="colorBackground">#FB9985</color>
     <color name="colorText">#48484A</color>
 

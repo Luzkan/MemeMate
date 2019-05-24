@@ -3,10 +3,8 @@ package com.codecrew.mememate.ui.main
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import com.codecrew.mememate.fragment.AddMemeFragment
-import com.codecrew.mememate.fragment.BrowseFragment
-import com.codecrew.mememate.fragment.ProfileFragment
-import com.codecrew.mememate.fragment.TopFragment
+import com.codecrew.mememate.activity.MainActivity
+import com.codecrew.mememate.fragment.*
 
 // (MJ) Return fragment to adapter based on position
 class Pager(fm: FragmentManager, private var tabCount: Int) : FragmentStatePagerAdapter(fm) {
@@ -17,7 +15,7 @@ class Pager(fm: FragmentManager, private var tabCount: Int) : FragmentStatePager
                 return TopFragment()
             }
             1 -> {
-                return Fragment()
+                return FriendsFragment()
             }
             2 -> {
                 return BrowseFragment()
