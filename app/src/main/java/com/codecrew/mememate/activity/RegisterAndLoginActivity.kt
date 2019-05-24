@@ -94,7 +94,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (SG) Allows us to open activity to sign in with facebook
-    fun showSignOptions() {
+    fun showSignOptions(view: View) {
         startActivityForResult(
             AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(
                 R.style.AppTheme
@@ -118,7 +118,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         }
     }
 
-    fun bSubmitClick() {
+    fun bSubmitClick(view: View) {
         // (KS) Animated loading button
         bSubmit.startAnimation()
 
@@ -224,7 +224,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
 
                             // (SG) Creating a new user in database
                             db.collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(newUser)
-                                .addOnSuccessListener { void: Void? ->
+                                .addOnSuccessListener {
                                     startApp()
                                 }.addOnFailureListener { exception: java.lang.Exception ->
                                     setError(exception.message + ".")
@@ -250,7 +250,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (KS) Changing mode login/sign up on textView click
-    fun tvChangeClick() {
+    fun tvChangeClick(view: View) {
         tvError.visibility = View.GONE
         if (bSubmit.tag == "signup") {
             setLoginPanel()

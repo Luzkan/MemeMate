@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_settings_black_40dp"
-        android:drawablePadding="5dp"
-        android:padding="5dp"
-        android:text="SETTINGS"
+        android:drawablePadding="8dp"
+        android:padding="12dp"
+        android:text="@string/settings"
         android:textColor="@color/colorTextAlter"
         android:textSize="40sp"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,8 @@
                 android:drawablePadding="10dp"
                 android:onClick="changeEmail"
                 android:paddingStart="20dp"
-                android:text="Change your email"
+                android:paddingEnd="20dp"
+                android:text="@string/change_your_email"
                 android:textAlignment="viewStart"
                 android:textSize="15sp" />
 
@@ -63,7 +64,8 @@
                 android:drawablePadding="10dp"
                 android:onClick="passwordReset"
                 android:paddingStart="20dp"
-                android:text="Reset password"
+                android:paddingEnd="20dp"
+                android:text="@string/reset_password"
                 android:textAlignment="viewStart"
                 android:textSize="15sp" />
 
@@ -82,7 +84,8 @@
                 android:drawablePadding="10dp"
                 android:onClick="deleteUser"
                 android:paddingStart="20dp"
-                android:text="Delete your account"
+                android:paddingEnd="20dp"
+                android:text="@string/delete_your_account"
                 android:textAlignment="viewStart"
                 android:textSize="15sp" />
 
@@ -101,7 +104,8 @@
                 android:drawablePadding="10dp"
                 android:onClick="logout"
                 android:paddingStart="20dp"
-                android:text="Log out"
+                android:paddingEnd="20dp"
+                android:text="@string/log_out"
                 android:textAlignment="viewStart"
                 android:textSize="15sp" />
 

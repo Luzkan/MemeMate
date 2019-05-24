@@ -3,7 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ___________________________________
 
-## [0.8.2] - 2019-05-24 - Marcel Jerzyk
+## [0.8.2a] - 2019-05-24 - Marcel Jerzyk
+### Improved
+- Further Paddings adjustments
+- Readme Logo
+### Fixed
+- View crash bug
+
+## [[0.8.2]](https://github.com/Luzkan/MemeMate/commit/812992ac8e3393038def2dc181504acda3366976) - 2019-05-24 - Marcel Jerzyk
 ### Improved
 - Adjusted image constraints & size on meme browsing and meme adding fragment 
 - Adjusted paddings for symmetry

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.codecrew.mememate.R
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     // (PR) log_out button functionality.
-    fun logout() {
+    fun logout(view: View) {
         Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
         Intent(this, RegisterAndLoginActivity::class.java).also {
             it.putExtra("logout", true)
@@ -32,11 +33,11 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    fun changeEmail() {
+    fun changeEmail(view: View) {
     }
 
     // (PR) Sends an email with password reset link.
-    fun passwordReset() {
+    fun passwordReset(view: View) {
         password_reset_button.isEnabled = false
         val auth = FirebaseAuth.getInstance()
         auth.currentUser?.email?.also { userEmail ->
@@ -56,7 +57,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     // (PR) Deleting user
-    fun deleteUser() {
+    fun deleteUser(view: View) {
         delete_account_button.isEnabled = false
         val alertDialog = this.let { settingsActivity ->
             val builder = AlertDialog.Builder(settingsActivity)
@@ -102,7 +103,7 @@ class SettingsActivity : AppCompatActivity() {
         val storage = FirebaseStorage.getInstance()
         val memesRef = storage.reference.child("memes")
 
-        // deleting memes
+        // Deleting memes
         db.collection("Memes")
             .whereEqualTo("userId", userID)
             .get()
@@ -114,7 +115,7 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
 
-        // deleting user
+        // Deleting user
         db.collection("Users").document(userID)
             .delete()
             .addOnSuccessListener {

@@ -52,16 +52,12 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="profile_name">Profile_Name</string>
     <string name="profile_location">Profile_Location</string>
-    <string name="log_out">Log out</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="already_have_an_account">Already have an account?</string>
-    <string name="change_your_email">Change your email</string>
-    <string name="reset_password">Reset password</string>
     <string name="sign_up">SIGN UP</string>
     <string name="confirm_password">Confirm password</string>
-    <string name="delete_your_account">Delete your account</string>
     <string name="ok">Yes</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
@@ -75,4 +71,11 @@
     <string name="upload">Upload</string>
     <string name="you_swiped_through_all_existing_memes">You swiped through all existing memes</string>
     <string name="post_a_new_meme">Post a new meme</string>
+    <string name="delete_your_account">Delete your account</string>
+    <string name="log_out">Log out</string>
+    <string name="reset_password">Reset password</string>
+    <string name="change_your_email">Change your email</string>
+    <string name="settings">SETTINGS</string>
+    <string name="mememate_logo">MemeMate Logo</string>
+    <string name="mememate_logo_text">mememate_logo_text</string>
 </resources>
