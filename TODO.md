@@ -8,7 +8,7 @@ At this moment there's more to create than to improve or build-on so let's chang
 ___________________________________
 
 ### [Bugs found]
-- None
+- After swipe fragment, click does not work on previous fragment nav_bar (e.g. swipe from profil to add and then click on profile icon on nav_bar)
 
 ___________________________________
 
