@@ -69,6 +69,10 @@
     <string name="settings_button">Settings button</string>
     <string name="add_new_meme">Add new meme</string>
     <string name="search">Search</string>
-    <string name="title">title</string>
     <string name="confirm">Confirm</string>
+    <string name="title">title</string>
+    <string name="pick_meme">Pick Meme</string>
+    <string name="upload">Upload</string>
+    <string name="you_swiped_through_all_existing_memes">You swiped through all existing memes</string>
+    <string name="post_a_new_meme">Post a new meme</string>
 </resources>
