@@ -40,5 +40,4 @@ class GalleryAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Ada
             listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
         }
     }
-
 }

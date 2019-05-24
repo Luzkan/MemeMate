@@ -94,7 +94,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (SG) Allows us to open activity to sign in with facebook
-    fun showSignOptions(view: View) {
+    fun showSignOptions() {
         startActivityForResult(
             AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(
                 R.style.AppTheme
@@ -106,9 +106,11 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == FB_REQUEST_CODE) {
-            val response = IdpResponse.fromResultIntent(data)
+            // (MJ) Response:
+            IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
-                val user = FirebaseAuth.getInstance().currentUser
+                // (MJ) User:
+                FirebaseAuth.getInstance().currentUser
                 startApp()
             } else {
 
@@ -116,7 +118,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         }
     }
 
-    fun bSubmitClick(view: View) {
+    fun bSubmitClick() {
         // (KS) Animated loading button
         bSubmit.startAnimation()
 
@@ -248,7 +250,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (KS) Changing mode login/sign up on textView click
-    fun tvChangeClick(view: View) {
+    fun tvChangeClick() {
         tvError.visibility = View.GONE
         if (bSubmit.tag == "signup") {
             setLoginPanel()
@@ -264,8 +266,8 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         TransitionManager.beginDelayedTransition(lRoot)
         etUsername.visibility = View.GONE
         etPasswordConfirm.visibility = View.GONE
-        tvChange.text = "New user? Sign up here!"
-        bSubmit.text = "LOG IN"
+        tvChange.text = getString(R.string.signupalter)
+        bSubmit.text = getString(R.string.login)
         bSubmit.tag = "login"
         // (SG) Dynamic enabling submit button
         checkBlank(false)
@@ -278,8 +280,8 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         TransitionManager.beginDelayedTransition(lRoot)
         etUsername.visibility = View.VISIBLE
         etPasswordConfirm.visibility = View.VISIBLE
-        tvChange.text = "Already have an account?"
-        bSubmit.text = "SIGN UP"
+        tvChange.text = getString(R.string.loginalter)
+        bSubmit.text = getString(R.string.signup)
         bSubmit.tag = "signup"
         // (SG) Dynamic enabling submit button
         checkBlank(true)
@@ -293,6 +295,4 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         }
         return super.dispatchTouchEvent(ev)
     }
-
 }
-

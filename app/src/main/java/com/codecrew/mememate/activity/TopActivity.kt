@@ -10,7 +10,7 @@ import com.codecrew.mememate.fragment.GalleryFullscreenFragment
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import kotlinx.android.synthetic.main.acitivity_top.*
 
-class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
+abstract class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
 
     private var memesList = ArrayList<MemeModel>()
     private lateinit var topAdapter: TopAdapter
@@ -24,7 +24,7 @@ class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
         topAdapter = TopAdapter(memesList)
         topAdapter.listener = this
 
-//        // Set up ReclyclerView.
+        // Set up ReclyclerView.
         recyclerViewTop.layoutManager = LinearLayoutManager(this)
         recyclerViewTop.adapter = topAdapter
 
@@ -43,8 +43,11 @@ class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
         galleryFragment.arguments = bundle
         galleryFragment.show(fragmentTransaction, "top")
     }
+}
 
-    // For demonstration purpose only, we will get the memes for every user from the database.
+/* Legacy Code:
+
+//    // (MJ) For demonstration purpose only, we will get the memes for every user from the database.
 //    private fun loadDemoMemes() {
 //        val memes = resources.getStringArray(R.array.memes)
 //
@@ -53,4 +56,4 @@ class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
 //        }
 //        topAdapter.notifyDataSetChanged()
 //    }
-}
+*/

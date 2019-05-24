@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yuyakaido.android.cardstackview.*
-import kotlinx.android.synthetic.main.fragment_browse.*
 
 
 class BrowseFragment : Fragment(), CardStackListener {
@@ -29,7 +28,7 @@ class BrowseFragment : Fragment(), CardStackListener {
     // (SG) Current user
     private val currentUser = FirebaseAuth.getInstance().currentUser
 
-    //(SG) Layout elements
+    // (SG) Layout elements
     private lateinit var cardStackView: CardStackView
     private lateinit var skipButton: FloatingActionButton
     private lateinit var likeButton: FloatingActionButton
@@ -213,6 +212,7 @@ class BrowseFragment : Fragment(), CardStackListener {
 
     /* DATABASE FUNCTIONS */
     // (MJ) Load Memes from Database Function
+    @Suppress("UNCHECKED_CAST")
     private fun loadMemes(limit: Long) {
         Log.d("MEMESKI", "DOWNLOADING")
         Log.d("MEMESKI", "LIMIT = $limit")
@@ -259,6 +259,4 @@ class BrowseFragment : Fragment(), CardStackListener {
         listWithoutDuplicates.addAll(set)
         return listWithoutDuplicates
     }
-
 }
-

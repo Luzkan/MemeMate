@@ -1,42 +1,23 @@
 package com.codecrew.mememate.activity
 
-
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
-import com.codecrew.mememate.fragment.AddMemeFragment
-import com.codecrew.mememate.fragment.BrowseFragment
-import com.codecrew.mememate.fragment.ProfileFragment
-import com.codecrew.mememate.fragment.TopFragment
 import com.codecrew.mememate.ui.main.CustomViewPager
 import com.codecrew.mememate.ui.main.Pager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
-
-
-//todo przybiliżanie mema
-//todo nie wchodzi w camera roll tylko w jakieś zdjęcia google XD
-//todo animacja serduszka
-//todo kolejność liked
-//todo zmiana dużego obrazka na ostani polubiony
-//todo zmienić startową pozycje navbar na browse (main)
-//todo zmienić na włączanie galerii przed zmianą fragemntu
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -136,21 +117,20 @@ class MainActivity : AppCompatActivity() {
         mViewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
-                // Toggles "Checked" button on navbar depending on scrolled page
-                nav_view.menu.getItem(position).isChecked = true
-
-                // Disables Touch on browse memes fragment
+                // (MJ) Disables Touch on browse memes fragment
                 if(position == 2){
                     mViewPager!!.disableTouches()
                 }else{
                     mViewPager!!.enableTouches()
                 }
-
             }
 
             override fun onPageSelected(position: Int) {
                 mTabLayout!!.setScrollPosition(position, 0F, true)
                 mTabLayout!!.isSelected = true
+
+                // (MJ) Toggles "Checked" button on navbar depending on scrolled page
+                nav_view.menu.getItem(position).isChecked = true
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -165,10 +145,24 @@ class MainActivity : AppCompatActivity() {
         //navView.selectedItemId = R.id.navigation_top
     }
 
+    override fun onBackPressed() {
+        this.moveTaskToBack(true)
+    }
+
+    // (KS) Hiding keyboard when click outside the EditText
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null) {
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+}
+
+/* Legacy Code:
+
     private fun createMemes() {
-
         val memeUrl = ArrayList<String>()
-
         memeUrl.add("https://s.newsweek.com/sites/www.newsweek.com/files/styles/md/public/2018/10/18/obesity-meme.png")
         memeUrl.add("https://i.redd.it/wp1jwvrqekz21.jpg")
         memeUrl.add("https://i.redd.it/lqkp9slwokz21.png")
@@ -195,7 +189,6 @@ class MainActivity : AppCompatActivity() {
         val database = FirebaseFirestore.getInstance()
 
         memeUrl.forEachIndexed { index, it ->
-
             val meme = HashMap<String, Any>()
             meme["url"] = it
             meme["title"] = index.toString()
@@ -212,8 +205,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        this.moveTaskToBack(true)
+    // (KS) Choosing side to make swipe animation when changing fragment
+    private fun swipeSide(transaction: FragmentTransaction, src: Int, target: Int) {
+        if (src < target) {
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+        } else {
+            transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+        }
+        currentPanel = target
     }
 
     /* FRAGMENTS */
@@ -253,24 +252,4 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    // (KS) Hiding keyboard when click outside the EditText
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if (currentFocus != null) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        }
-        return super.dispatchTouchEvent(ev)
-    }
-
-    // (KS) Choosing side to make swipe animation when changing fragment
-    private fun swipeSide(transaction: FragmentTransaction, src: Int, target: Int) {
-        if (src < target) {
-            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-        } else {
-            transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-        }
-        currentPanel = target
-    }
-
-
-}
+ */

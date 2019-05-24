@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso
 
 private const val SPAN_COUNT = 3
 
+@Suppress("UNCHECKED_CAST")
 class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
 
     override fun onAction(position: Int) {
@@ -260,7 +261,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
             .load(getString(R.string.default_meme))
             .into(mainMeme)
 
-        location.text = "Add new meme :("
+        location.text = getString(R.string.user_no_memes)
     }
 
     private fun displayLastMeme(currentPosition: Int) {

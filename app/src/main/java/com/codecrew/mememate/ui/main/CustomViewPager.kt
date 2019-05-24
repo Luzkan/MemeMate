@@ -1,14 +1,14 @@
 package com.codecrew.mememate.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v4.view.MotionEventCompat
 import android.view.MotionEvent
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import java.util.concurrent.atomic.AtomicBoolean
 
+// (MJ) Custom ViewPager to create enable and disable touch feature (to not interfere with meme swipe)
 class CustomViewPager(context: Context, attrs: AttributeSet) : ViewPager(context, attrs) {
-    private val enabled: Boolean = false
 
     private val touchesAllowed = AtomicBoolean()
 
@@ -25,25 +25,25 @@ class CustomViewPager(context: Context, attrs: AttributeSet) : ViewPager(context
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        if (touchesAllowed()) {
-            return super.onInterceptTouchEvent(ev)
+        return if (touchesAllowed()) {
+            super.onInterceptTouchEvent(ev)
         } else {
-            if (MotionEventCompat.getActionMasked(ev) == MotionEvent.ACTION_MOVE) {
-                // ignore move action
+            if (ev.actionMasked == MotionEvent.ACTION_MOVE) {
             } else {
                 if (super.onInterceptTouchEvent(ev)) {
                     super.onTouchEvent(ev)
                 }
             }
-            return false
+            false
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(ev: MotionEvent): Boolean {
         return if (touchesAllowed()) {
             super.onTouchEvent(ev)
         } else {
-            MotionEventCompat.getActionMasked(ev) != MotionEvent.ACTION_MOVE && super.onTouchEvent(ev)
+            ev.actionMasked != MotionEvent.ACTION_MOVE && super.onTouchEvent(ev)
         }
     }
 }

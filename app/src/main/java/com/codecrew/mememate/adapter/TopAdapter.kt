@@ -36,7 +36,6 @@ class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter
         }
 
         val index = (position + 1).toString() + "."
-
         val currentMeme = memes[position]
 
         holder.index.text = index

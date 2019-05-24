@@ -14,6 +14,18 @@ ___________________________________
 
 ## Current TodoTasks:
 
+- Meme Zoom In    
+- Implement changeEmail in SettingsActivity
+- Hearth Animation
+- Order of Liked Memes
+- Fix Camera Roll
+    - At this moment it is Google Photos
+
+## Changes awaiting implementation:
+
+- Big photo to last liked meme
+- Starting position of navbar to browse (main)
+
 ### Build-on:
 
 ### Improve:
@@ -34,6 +46,8 @@ ___________________________________
 	
 - *Moderating module*
 	- *Concern: dick pics*
+	
+- Very Minor: Change Serializable in "GalleryFullscreenFragment", "Browse Fragment" and "Profile Fragment" to Parcelable to avoid potential ClassCastException
 
 ### Done:
 - Swipe hand gesture between fragments

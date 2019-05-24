@@ -88,24 +88,19 @@ class AddMemeFragment : Fragment() {
 
     private fun setButtons() {
         confirmButton.isEnabled = (activity as MainActivity).isValid
-
         confirmButton.background = this.context!!.getDrawable(R.drawable.button_round2)
         pickButton.background = this.context!!.getDrawable(R.drawable.button_round2)
 
         //(KS) picking meme when image is clicked
         pic.setOnClickListener { bPickClick() }
-
         pickButton.setOnClickListener { bPickClick() }
 
         confirmButton.setOnClickListener {
             confirmButton.startAnimation()
-//            if(name.text.isEmpty()){
-//                Toast.makeText(this.context, "Name your meme", Toast.LENGTH_SHORT).show()
-//            }
             val path = "memes/" + UUID.randomUUID()
             val memeRef = storage.getReference(path)
             val uploadTask = memeRef.putFile(uri)
-            var url = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+            uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                 if (!task.isSuccessful) {
                     task.exception?.let {
                         throw it
@@ -146,7 +141,7 @@ class AddMemeFragment : Fragment() {
                             (activity as MainActivity).isValid = false
                             setConfirmButton(R.drawable.tick)
                             (activity as MainActivity).nav_view.selectedItemId = R.id.navigation_profile
-                            (activity as MainActivity).displayProfile()
+                            //(activity as MainActivity).displayProfile()
                         }
                 }
             }.addOnFailureListener {
@@ -160,7 +155,7 @@ class AddMemeFragment : Fragment() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "select picture"), 2233)
+        startActivityForResult(Intent.createChooser(intent, "Select picture"), 2233)
     }
 
     //(KS) set image after loading on button
@@ -168,7 +163,6 @@ class AddMemeFragment : Fragment() {
         confirmButton.doneLoadingAnimation(Color.parseColor("#FAB162"), BitmapFactory.decodeResource(resources, image))
         handler.postDelayed(runnableButton, 800)
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -182,8 +176,7 @@ class AddMemeFragment : Fragment() {
                 confirmButton.isEnabled = true
             }
         } catch (e: Exception) {
-            Log.e("blad", e.message)
+            Log.e("Error", e.message)
         }
     }
-
 }

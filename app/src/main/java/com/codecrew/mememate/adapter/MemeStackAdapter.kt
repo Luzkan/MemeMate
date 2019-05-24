@@ -30,7 +30,6 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         val spot = spots[position]
         holder.name.text = spot.addedBy
         holder.city.text = spot.location
@@ -38,7 +37,7 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
             .load(spot.url)
             .into(holder.image)
         // (SG) Loading big meme
-        holder.itemView.setOnClickListener { v ->
+        holder.itemView.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("images", spots as ArrayList<MemeModel>)
             bundle.putInt("position", position)
@@ -67,5 +66,4 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
         var city: TextView = view.findViewById(R.id.item_city)
         var image: ImageView = view.findViewById(R.id.item_image)
     }
-
 }

@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.interfaces.FragmentCallBack
@@ -25,6 +23,7 @@ class GalleryFullscreenFragment : DialogFragment() {
 
     private lateinit var callBack: FragmentCallBack
 
+    @Suppress("UNCHECKED_CAST")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_gallery_fullscreen, container, false)
         viewPager = view.findViewById(R.id.viewPager)
@@ -41,7 +40,6 @@ class GalleryFullscreenFragment : DialogFragment() {
         }
 
         return view
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +54,7 @@ class GalleryFullscreenFragment : DialogFragment() {
         viewPager.setCurrentItem(position, false)
     }
 
-    // viewpager page change listener
+    // ViewPager page change listener
     private var viewPagerPageChangeListener: ViewPager.OnPageChangeListener =
         object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
@@ -71,7 +69,7 @@ class GalleryFullscreenFragment : DialogFragment() {
             }
         }
 
-    // gallery adapter
+    // Gallery Adapter
     inner class GalleryPagerAdapter : PagerAdapter() {
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
             val layoutInflater = activity?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

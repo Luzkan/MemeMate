@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import com.codecrew.mememate.R
 import com.google.firebase.auth.FirebaseAuth
@@ -13,7 +12,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_settings.*
-
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -23,7 +21,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     // (PR) log_out button functionality.
-    fun logout(view: View) {
+    fun logout() {
         Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show()
         Intent(this, RegisterAndLoginActivity::class.java).also {
             it.putExtra("logout", true)
@@ -34,12 +32,11 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    fun changeEmail(view: View) {
-        // TODO
+    fun changeEmail() {
     }
 
     // (PR) Sends an email with password reset link.
-    fun passwordReset(view: View) {
+    fun passwordReset() {
         password_reset_button.isEnabled = false
         val auth = FirebaseAuth.getInstance()
         auth.currentUser?.email?.also { userEmail ->
@@ -59,7 +56,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     // (PR) Deleting user
-    fun deleteUser(view: View) {
+    fun deleteUser() {
         delete_account_button.isEnabled = false
         val alertDialog = this.let { settingsActivity ->
             val builder = AlertDialog.Builder(settingsActivity)
@@ -125,5 +122,4 @@ class SettingsActivity : AppCompatActivity() {
                 Log.d("SETTINGS", "User deleted from Users collection.")
             }
     }
-
 }

@@ -3,7 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ___________________________________
 
-## [0.8.0c] - 2019-05-24 - Marcel Jerzyk
+## [0.8.1] - 2019-05-24 - Marcel Jerzyk
+### Improved
+- Code overhaul, junked removed or archived, removed junk and weird new lines from code, code and comments were standardized and 'beautified' (& fixed typos)
+### Fixed
+- Syntax, property, type and all the other warnings
+- Weird navbar visual glitch (text was twitching and fading to min size)
+- Found and fixed profile bug fixed after meme added
+- Gathered Todo's spread all over the code into the TODO.md
+
+## [[0.8.0c]](https://github.com/Luzkan/MemeMate/commit/e0d1094fe44bc829d2e1d44be68d3932b889a82e) - 2019-05-24 - Marcel Jerzyk
 ### Improved
 - Instead of weird two profile fragments, now the "Matches" is just empty
 ### Fixed
@@ -12,7 +21,7 @@ ___________________________________
 	- Could be Improved: Disable Touch on MemeDrag (onCardDraggin in BrowseFragment) and Enable on MemeSwiped or MemeSwipeCanceled (onCardCanceled & onCardSwiped)
 - Navbar is responsive to swipes between fragments
 
-## [[0.8.0b]](https://github.com/Luzkan/MemeMate/commit/b0efc8f610cb70c81d9d93b4b04fffd56d5dc1f8) - 2019-05-23 - Marcel Jerzyk
+## [[0.8.0b]](https://github.com/Luzkan/MemeMate/commit/b0efc8f610cb70c81d9d93b4b04fffd56d5dc1f8) - 2019-05-24 - Marcel Jerzyk
 ### Added
 - Wrote whole version history from version 0.2.1 to 0.6.4 with their authors (based on commits)
 - Version Files are now clickable hyperlinks to commits
@@ -169,5 +178,5 @@ Project is now successfully running. We have determined the looks of the app and
 ### Added
 - Bottom navbar
 - Color Palette
-- Launcher Icon
+- Launcher Icon (Logo)
 - Icons

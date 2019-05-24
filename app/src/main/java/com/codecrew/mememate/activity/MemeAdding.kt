@@ -23,8 +23,7 @@ import java.util.*
 import kotlin.collections.HashMap
 
 // (PK) Activity for adding new memes
-
-class MemeAdding : AppCompatActivity() {
+abstract class MemeAdding : AppCompatActivity() {
 
     lateinit var database: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
@@ -39,16 +38,15 @@ class MemeAdding : AppCompatActivity() {
         database = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
         user = FirebaseAuth.getInstance().currentUser!!
-
         confirmButton.isEnabled = false
     }
 
-    //search for meme in a gallery
-    fun searchFor(view: View) {
+    // Search for a meme in a gallery
+    fun searchFor() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "select picture"), 2233)
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2233)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -61,20 +59,20 @@ class MemeAdding : AppCompatActivity() {
                 confirmButton.isEnabled = true
             }
         } catch (e: Exception) {
-            Log.e("blad", e.message)
+            Log.e("Error", e.message)
         }
     }
 
-    //add meme to storage and to database
-    fun confirm(view: View) {
+    // Add meme to storage and to database
+    fun confirm() {
         if (name.text.isEmpty()) {
-            Toast.makeText(this, "Name your meme", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Name Your Meme", Toast.LENGTH_SHORT).show()
             return
         }
         val path = "memes/" + UUID.randomUUID()
         val memeRef = storage.getReference(path)
         val uploadTask = memeRef.putFile(uri)
-        var url = uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+        uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
             if (!task.isSuccessful) {
                 task.exception?.let {
                     throw it

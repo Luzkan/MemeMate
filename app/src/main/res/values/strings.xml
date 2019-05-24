@@ -9,6 +9,13 @@
     <string name="matches">Matches</string>
     <string name="top">Top</string>
 
+    <string name="user_no_memes">You haven\'t added any memes :(</string>
+
+    <!--Register and Login Strings-->
+    <string name="signupalter">"New user? Sign up here!"</string>
+    <string name="loginalter">"Already have an account?"</string>
+    <string name="signup">"SIGN IN"</string>
+    <string name="login">"LOG IN"</string>
 
     <!-- NavigationView -->
     <string name="open_drawer">Open drawer</string>

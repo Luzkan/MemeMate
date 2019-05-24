@@ -8,9 +8,8 @@ import com.codecrew.mememate.fragment.BrowseFragment
 import com.codecrew.mememate.fragment.ProfileFragment
 import com.codecrew.mememate.fragment.TopFragment
 
-
 // (MJ) Return fragment to adapter based on position
-class Pager(fm: FragmentManager, internal var tabCount: Int) : FragmentStatePagerAdapter(fm) {
+class Pager(fm: FragmentManager, private var tabCount: Int) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment? {
         when (position) {
