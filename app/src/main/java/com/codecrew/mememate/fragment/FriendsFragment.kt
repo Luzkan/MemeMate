@@ -12,12 +12,11 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import com.codecrew.mememate.R
-import com.codecrew.mememate.adapter.FeedAdapter
 import com.codecrew.mememate.adapter.FriendsAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
-import kotlinx.android.synthetic.main.fragment_friends.*
+
 
 class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
@@ -31,7 +30,7 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
     private lateinit var lMessages: LinearLayout
 
     private lateinit var recyclerViewFriends: RecyclerView
-    private var friendsList = ArrayList<UserModel>()
+    private var firendsList = ArrayList<UserModel>()
     private lateinit var friendsAdapter: FriendsAdapter
 
     private lateinit var recyclerViewFeed: RecyclerView
@@ -39,6 +38,8 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
     private lateinit var feedAdapter: FeedAdapter
 
     private var currentPosition: Int = 0
+    private lateinit var db : FirebaseFirestore
+    private lateinit var currentUser : UserModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // (KS) template friends

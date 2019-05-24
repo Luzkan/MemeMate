@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import com.squareup.picasso.Picasso
@@ -44,6 +45,9 @@ class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter
         holder.username.text = currentMeme.addedBy
         holder.itemView.setOnClickListener {
             listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
+        }
+        holder.username.setOnClickListener{
+            (context as MainActivity).displayProfile(currentMeme.userID)
         }
     }
 }

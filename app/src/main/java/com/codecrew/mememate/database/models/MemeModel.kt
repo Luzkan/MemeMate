@@ -7,7 +7,8 @@ data class MemeModel(
     var location: String,
     var rate: Int,
     var seenBy: ArrayList<String>,
-    var addedBy: String
+    var addedBy: String,
+    var userID: String
 ) {
     companion object {
         private var counter = 0L

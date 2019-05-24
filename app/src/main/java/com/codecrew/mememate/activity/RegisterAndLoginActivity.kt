@@ -203,43 +203,44 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     private fun createUser(email: String, password: String, userName: String) {
 
         // (SG) Check if username is taken
-        db.document("Users/$userName").get().addOnSuccessListener {
+        db.collection("Users").get().addOnSuccessListener {
 
-            val user = it.toObject(UserModel::class.java)
-
-            if (user == null) {
-
-                // (SG) Checking if email is taken
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val uid = FirebaseAuth.getInstance().uid ?: ""
-                            val newUser = UserModel(uid, email, userName, ArrayList(), ArrayList())
-
-                            FirebaseAuth.getInstance().currentUser!!.updateProfile(
-                                UserProfileChangeRequest.Builder().setDisplayName(
-                                    userName
-                                ).build()
-                            )
-
-                            // (SG) Creating a new user in database
-                            db.collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(newUser)
-                                .addOnSuccessListener { void: Void? ->
-                                    startApp()
-                                }.addOnFailureListener { exception: java.lang.Exception ->
-                                    setError(exception.message + ".")
-                                }
-                        }
-                    }.addOnFailureListener {
-                        if (it.message?.length!! > 70) {
-                            setError(it.message!!.takeLastWhile { character -> character != '[' }.take(41) + ".")
-                        } else {
-                            setError(it.message.toString())
-                        }
-                    }
-            } else {
-                setError("This username is taken.")
+            for (user in it) {
+                val userObj = user.toObject(UserModel::class.java)
+                if (userObj.userName == userName) {
+                    setError("This username is taken.")
+                    return@addOnSuccessListener
+                }
             }
+
+
+            // (SG) Checking if email is taken
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val uid = FirebaseAuth.getInstance().uid ?: ""
+                        val newUser = UserModel(uid, email, userName, ArrayList(), ArrayList(), ArrayList(),ArrayList())
+                        FirebaseAuth.getInstance().currentUser!!.updateProfile(
+                            UserProfileChangeRequest.Builder().setDisplayName(
+                                userName
+                            ).build()
+                        )
+
+                        // (SG) Creating a new user in database
+                        db.collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(newUser)
+                            .addOnSuccessListener { void: Void? ->
+                                startApp()
+                            }.addOnFailureListener { exception: java.lang.Exception ->
+                                setError(exception.message + ".")
+                            }
+                    }
+                }.addOnFailureListener {
+                    if (it.message?.length!! > 70) {
+                        setError(it.message!!.takeLastWhile { character -> character != '[' }.take(41) + ".")
+                    } else {
+                        setError(it.message.toString())
+                    }
+                }
         }
     }
 
@@ -260,7 +261,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (KS) Setting text on textView and button
-    //     and hiding additional fields
+//     and hiding additional fields
     private fun setLoginPanel() {
         tvError.text = ""
         TransitionManager.beginDelayedTransition(lRoot)
@@ -274,7 +275,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (KS) Setting text on textView and button
-    //     and adding additional fields
+//     and adding additional fields
     private fun setSignUpPanel() {
         tvError.text = ""
         TransitionManager.beginDelayedTransition(lRoot)

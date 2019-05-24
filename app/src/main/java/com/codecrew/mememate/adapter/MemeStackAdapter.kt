@@ -36,7 +36,10 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
         Glide.with(holder.image)
             .load(spot.url)
             .into(holder.image)
-        // (SG) Loading big meme
+        // (SG) Redirect after username click
+        holder.name.setOnClickListener{
+            (context as MainActivity).displayProfile(spots[position].userID)
+        }
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("images", spots as ArrayList<MemeModel>)
@@ -65,5 +68,11 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
         val name: TextView = view.findViewById(R.id.item_name)
         var city: TextView = view.findViewById(R.id.item_city)
         var image: ImageView = view.findViewById(R.id.item_image)
+    }
+
+    private fun redirect(username : String){
+
+
+
     }
 }

@@ -21,10 +21,9 @@ import com.bumptech.glide.Glide
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.database.models.UserModel
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -46,7 +45,7 @@ class AddMemeFragment : Fragment() {
     private lateinit var uri: Uri
     private lateinit var pic: ImageView
 
-    private lateinit var user: FirebaseUser
+    private lateinit var user: UserModel
 
     private lateinit var confirmButton: CircularProgressButton
     private lateinit var pickButton: Button
@@ -63,7 +62,7 @@ class AddMemeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         database = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
-        user = FirebaseAuth.getInstance().currentUser!!
+        user = (activity as MainActivity).getCurrentUser()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -115,7 +114,8 @@ class AddMemeFragment : Fragment() {
                         seenBy = arrayListOf(user.uid),
                         rate = 0,
                         location = "location.downloaded.from.phone",
-                        addedBy = user.displayName.toString(),
+                        addedBy = user.userName,
+                        userID = user.uid,
                         dbId = ""
                     )
                     val meme = HashMap<String, Any>()
@@ -125,7 +125,8 @@ class AddMemeFragment : Fragment() {
                     meme["userId"] = user.uid
                     meme["rate"] = 0
                     meme["location"] = "location.downloaded.from.phone"
-                    meme["addedBy"] = user.displayName.toString()
+                    meme["addedBy"] = user.userName
+                    meme["userID"] = user.uid
                     database.collection("Memes").add(meme)
                         .addOnSuccessListener {
                             database.collection("Users").document(user.uid)

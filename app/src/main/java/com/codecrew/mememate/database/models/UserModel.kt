@@ -5,5 +5,10 @@ data class UserModel(
     val email: String,
     val userName: String,
     var likedMemes: ArrayList<String>?,
-    var addedMemes: ArrayList<String>?
+    var addedMemes: ArrayList<String>?,
+    // (SG) Accounts user follows
+    var following: ArrayList<String>?,
+    // (SG) Accounts which follow user
+    var followers: ArrayList<String>?
+
 )

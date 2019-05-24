@@ -16,8 +16,8 @@ import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.adapter.MemeStackAdapter
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.MemeDiffCallback
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yuyakaido.android.cardstackview.*
@@ -26,7 +26,7 @@ import com.yuyakaido.android.cardstackview.*
 class BrowseFragment : Fragment(), CardStackListener {
 
     // (SG) Current user
-    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private lateinit var currentUser: UserModel
 
     // (SG) Layout elements
     private lateinit var cardStackView: CardStackView
@@ -53,6 +53,8 @@ class BrowseFragment : Fragment(), CardStackListener {
             memeList = (activity as MainActivity).globalMemeList!!
             memeList = removeDuplicatedMemes(memeList)
         }
+
+        currentUser = (activity as MainActivity).getCurrentUser()
         super.onCreate(savedInstanceState)
     }
 
@@ -214,8 +216,6 @@ class BrowseFragment : Fragment(), CardStackListener {
     // (MJ) Load Memes from Database Function
     @Suppress("UNCHECKED_CAST")
     private fun loadMemes(limit: Long) {
-        Log.d("MEMESKI", "DOWNLOADING")
-        Log.d("MEMESKI", "LIMIT = $limit")
         // (SG) Downloading only memes that user haven't seen yet
         memeDatabase!!.collection("Memes").get().addOnSuccessListener {
             // (SG) Casting downloaded memes into objects
@@ -226,13 +226,12 @@ class BrowseFragment : Fragment(), CardStackListener {
                     location = meme["location"].toString(),
                     rate = meme["rate"].toString().toInt(),
                     seenBy = meme["seenBy"] as ArrayList<String>,
-                    addedBy = meme["addedBy"].toString()
+                    addedBy = meme["addedBy"].toString(),
+                    userID = meme["userID"].toString()
+
                 )
-                Log.d("MEMESKI", "Pobrano mema")
-                if (!newMeme.seenBy.contains(currentUser!!.uid) && !memeList.contains(newMeme)) {
+                if (!newMeme.seenBy.contains(currentUser.uid) && !memeList.contains(newMeme)) {
                     memeList.add(newMeme)
-                } else if (memeList.contains(newMeme)) {
-                    Log.d("MEMESKI", "ODRZUCONO MEMA")
                 }
             }
             reload()
