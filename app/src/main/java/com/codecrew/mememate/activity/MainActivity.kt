@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     var isValid = false
     lateinit var pic: Uri
 
-    private var currentPanel = 1
+    var currentPanel = 1
 
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
             }
-            R.id.navigation_matches -> {
+            R.id.navigation_friends -> {
                 if (currentPanel != 2) {
                     currentPanel = 2
                     mViewPager!!.currentItem = 1
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         // (MJ) Add Upper Tabs (they are invisible [gone] in layout, needed for swipe feature.
         // --> IMPORTANT <-- Matches have "profile" function now due to lack of Matches Fragment
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Top"))
-        mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Matches"))
+        mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Friends"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Browse"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Add"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Profile"))
@@ -133,10 +133,12 @@ class MainActivity : AppCompatActivity() {
         mViewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
+                currentPanel = position + 1
+
                 // (MJ) Disables Touch on browse memes fragment
-                if(position == 2){
+                if (position == 2) {
                     mViewPager!!.disableTouches()
-                }else{
+                } else {
                     mViewPager!!.enableTouches()
                 }
             }
