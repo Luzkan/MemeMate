@@ -81,7 +81,8 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
                         rate = meme["rate"].toString().toInt(),
                         seenBy = meme["seenBy"] as ArrayList<String>,
                         dbId = meme.id,
-                        addedBy = meme["addedBy"].toString()
+                        addedBy = meme["addedBy"].toString(),
+                        userID = meme["userID"].toString()
                     )
                 )
             }

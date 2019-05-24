@@ -19,8 +19,6 @@ import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.FragmentCallBack
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
@@ -56,7 +54,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
 
     // (SG) Database
     private lateinit var database: FirebaseFirestore
-    private lateinit var user: FirebaseUser
+    private lateinit var user: UserModel
 
     // (SG) User data fields
     private lateinit var location: TextView
@@ -67,7 +65,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
 
         // Creating database instance and current user
         database = FirebaseFirestore.getInstance()
-        user = FirebaseAuth.getInstance().currentUser!!
+        user = (activity as MainActivity).getCurrentUser()
 
         // (SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
         if ((activity as MainActivity).globalUserMemes == null) {
@@ -112,14 +110,16 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         recyclerView.adapter = userMemesAdapter
 
         // (SG) Set up user data
-        username.text = user.displayName
+        username.text = user.userName
 
         // Main meme
         mainMeme.setOnClickListener { mainMemeListener() }
 
 
-        // (SG) must be here because the imageView wont be initialized earlier
-        if (userMemesList.size == 0) {
+        // (SG) Must be here because the imageView wont be initialized earlier (If there are any problems
+        // with displaying user profile when he doesnt have memes, switch to first if
+//        if (userMemesList.size == 0) {
+        if (user.addedMemes!!.size == 0) {
             displayDefaultProfile()
         } else {
             displayLastMeme(currentPosition)
@@ -135,13 +135,20 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
                 viewType = ViewType.LIKED
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.liked_icon))
                 recyclerView.adapter = likedMemesAdapter
-                Picasso.get().load(likedMemesList[0].url).into(mainMeme)
+                if (likedMemesList.size > 0) {
+                    Picasso.get().load(likedMemesList[0].url).into(mainMeme)
+                }
             }
             ViewType.LIKED -> {
                 viewType = ViewType.ADDED
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.added_icon))
                 recyclerView.adapter = userMemesAdapter
-                Picasso.get().load(userMemesList[0].url).into(mainMeme)
+                if (userMemesList.size > 0) {
+                    Picasso.get().load(userMemesList[0].url).into(mainMeme)
+                }
+                username.setOnClickListener{
+                    (activity as MainActivity).displayProfile(userMemesList[0].userID)
+                }
             }
         }
     }
@@ -182,7 +189,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
     }
 
     private fun loadUserMemes() {
-        database.document("Users/${user.uid}").get().addOnSuccessListener {
+//        database.document("Users/${user.uid}").get().addOnSuccessListener {
 
             val userMemes = ArrayList<MemeModel>()
 
@@ -197,7 +204,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
                             rate = meme["rate"].toString().toInt(),
                             seenBy = meme["seenBy"] as ArrayList<String>,
                             dbId = meme.toString(),
-                            addedBy = meme["addedBy"].toString()
+                            addedBy = meme["addedBy"].toString(),
+                            userID = meme["userID"].toString()
                         )
                         userMemes.add(memeObject)
                     }
@@ -220,48 +228,37 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
                     (activity as MainActivity).globalUserMemes = userMemesList
                 }
         }
-    }
+//    }
 
     // (PR) Loading liked memes
     private fun loadLikedMemes() {
-        database.document("Users/${user.uid}")
-            .get()
-            .addOnSuccessListener {
-                val userModel = UserModel(
-                    uid = it["uid"].toString(),
-                    email = it["email"].toString(),
-                    userName = it["username"].toString(),
-                    likedMemes = it["likedMemes"] as ArrayList<String>?,
-                    addedMemes = it["addedMemes"] as ArrayList<String>?
-                )
 
-                userModel.likedMemes?.forEach { likedMeme ->
-                    database.document("Memes/$likedMeme")
-                        .get()
-                        .addOnSuccessListener { meme ->
-                            likedMemesList.add(
-                                MemeModel(
-                                    url = meme["url"].toString(),
-                                    location = meme["location"].toString(),
-                                    rate = meme["rate"].toString().toInt(),
-                                    seenBy = meme["seenBy"] as ArrayList<String>,
-                                    dbId = meme.toString(),
-                                    addedBy = meme["addedBy"].toString()
-                                )
-                            )
-                            likedMemesAdapter.notifyDataSetChanged()
-                            (activity as MainActivity).globalLikedMemes = likedMemesList
-                        }
+        user.likedMemes?.forEach { likedMeme ->
+            database.document("Memes/$likedMeme")
+                .get()
+                .addOnSuccessListener { meme ->
+                    likedMemesList.add(
+                        MemeModel(
+                            url = meme["url"].toString(),
+                            location = meme["location"].toString(),
+                            rate = meme["rate"].toString().toInt(),
+                            seenBy = meme["seenBy"] as ArrayList<String>,
+                            dbId = meme.toString(),
+                            addedBy = meme["addedBy"].toString(),
+                            userID = meme["userID"].toString()
+                        )
+                    )
+                    likedMemesAdapter.notifyDataSetChanged()
+                    (activity as MainActivity).globalLikedMemes = likedMemesList
                 }
-            }
+        }
     }
 
     private fun displayDefaultProfile() {
         Picasso.get()
             .load(getString(R.string.default_meme))
             .into(mainMeme)
-
-        location.text = getString(R.string.user_no_memes)
+        location.text = getString(R.string.default_user_location)
     }
 
     private fun displayLastMeme(currentPosition: Int) {
@@ -270,8 +267,11 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
             .into(mainMeme)
     }
 
+
     private enum class ViewType {
         ADDED,
         LIKED
     }
+
+
 }

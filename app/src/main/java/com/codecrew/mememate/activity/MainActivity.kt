@@ -13,13 +13,20 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.database.models.UserModel
+import com.codecrew.mememate.fragment.ProfileFragment
 import com.codecrew.mememate.ui.main.CustomViewPager
 import com.codecrew.mememate.ui.main.Pager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    //todo uaktualnić żeby w każdym fragmencie nie pobierał się użytkownik tylko raz w mainie (profile zrobione)
+
+
 
     // (SG) Meme list
     var globalMemeList: ArrayList<MemeModel>? = null
@@ -48,6 +55,12 @@ class MainActivity : AppCompatActivity() {
 
     // (SG) Current user
     private lateinit var currentUser: FirebaseUser
+
+    //(SG) Current user model
+    private lateinit var currentUserModel : UserModel
+
+    // (SG) Firebase instance
+    private lateinit var db : FirebaseFirestore
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -95,6 +108,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // (SG)
+        db = FirebaseFirestore.getInstance()
+
         // (MJ) Pager Adapter
         // (MJ) Tab ID
         mTabLayout = findViewById<View>(R.id.tabs) as TabLayout
@@ -140,6 +156,21 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         currentUser = FirebaseAuth.getInstance().currentUser!!
+
+        db.document("Users/${currentUser.uid}")
+            .get()
+            .addOnSuccessListener {
+                currentUserModel = UserModel(
+                    uid = it["uid"].toString(),
+                    email = it["email"].toString(),
+                    userName = it["username"].toString(),
+                    likedMemes = it["likedMemes"] as ArrayList<String>?,
+                    addedMemes = it["addedMemes"] as ArrayList<String>?,
+                    following = it["following"] as ArrayList<String>?,
+                    followers = it["followers"] as ArrayList<String>?
+                )
+            }
+
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         //displayBrowsing()
         //navView.selectedItemId = R.id.navigation_top
@@ -156,6 +187,21 @@ class MainActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    // (SG) Current user getter
+    fun getCurrentUser() : UserModel{
+        return currentUserModel
+    }
+
+
+    // (SG) todo CHANGE PROFILE FRAGMENT TO FR
+    fun displayProfile(uid : String) {
+        val transaction = fragmentManager.beginTransaction()
+        val fragment = ProfileFragment()
+        transaction.replace(R.id.fragment_holder, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }
 

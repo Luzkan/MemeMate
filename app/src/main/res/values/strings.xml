@@ -37,6 +37,9 @@
     <!--Default meme-->
     <string name="default_meme">https://i.redd.it/529mjgxyexw21.jpg</string>
 
+    <!--Default location-->
+    <string name="default_user_location">DefaultLocation</string>
+
     <!-- Demo memes -->
     <string-array name="memes">
         <item>https://i.redd.it/esj4i04bcsw21.png</item>
@@ -72,4 +75,5 @@
     <string name="search">Search</string>
     <string name="title">title</string>
     <string name="confirm">Confirm</string>
+
 </resources>

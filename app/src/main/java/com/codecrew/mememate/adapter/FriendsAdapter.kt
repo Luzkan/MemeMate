@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.UserModel
 
 class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.Adapter<FriendsViewHolder>() {
@@ -27,13 +28,12 @@ class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: FriendsViewHolder, position: Int) {
-//        if (position < itemCount) {
-//            holder.username.text = "You don't have friends ;/"
-//        }
 
         val user = friends[position]
-
         holder.username.text = user.userName
+        holder.username.setOnClickListener{
+            (context as MainActivity).displayProfile(user.uid)
+        }
 
         //todo tutaj ustawiamy jak ktoś dodał nowe
         holder.news.text = "2"
