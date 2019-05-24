@@ -18,8 +18,7 @@ ___________________________________
 - Implement changeEmail in SettingsActivity
 - Hearth Animation
 - Order of Liked Memes
-- Fix Camera Roll
-    - At this moment it is Google Photos
+
 
 ## Changes awaiting implementation:
 

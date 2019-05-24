@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ___________________________________
 
+## [0.8.3] - 2019-05-24 - Piotrek Kołodziejczyk
+### Improved
+- Picking photos from camera roll instead of Google Photos
+
 ## [0.8.2a] - 2019-05-24 - Marcel Jerzyk
 ### Improved
 - Further Paddings adjustments
