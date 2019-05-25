@@ -4,5 +4,5 @@ import com.codecrew.mememate.database.models.MemeModel
 
 interface GalleryMemeClickListener {
 
-    fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>)
+    fun onGalleryMemeClick(position: Int, memes: ArrayList<MemeModel>)
 }

@@ -43,7 +43,7 @@ class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter
         holder.location.text = currentMeme.location
         holder.username.text = currentMeme.addedBy
         holder.itemView.setOnClickListener {
-            listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
+            listener?.onGalleryMemeClick(holder.adapterPosition, memes)
         }
     }
 }

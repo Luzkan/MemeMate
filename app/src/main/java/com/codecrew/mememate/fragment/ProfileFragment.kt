@@ -141,7 +141,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         startActivity(intent)
     }
 
-    override fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>) {
+    override fun onGalleryMemeClick(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
         Picasso.get()
             .load(memes[currentPosition].url)

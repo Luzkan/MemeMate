@@ -37,7 +37,7 @@ class GalleryAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Ada
         }
 
         holder.itemView.setOnClickListener {
-            listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
+            listener?.onGalleryMemeClick(holder.adapterPosition, memes)
         }
     }
 }

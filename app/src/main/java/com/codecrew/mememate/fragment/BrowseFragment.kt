@@ -108,7 +108,7 @@ class BrowseFragment : Fragment(), CardStackListener {
 
         currentMeme.seenBy.add(currentUser!!.uid)
 
-        // Force refresh of liked memes in the profile
+        // (PR) Force refresh of liked memes in the profile
         (activity as MainActivity).globalLikedMemes = null
 
         val newMemeParameters = mutableMapOf<String, Any>()
@@ -143,7 +143,6 @@ class BrowseFragment : Fragment(), CardStackListener {
     override fun onCardCanceled() {
         Log.d("CardStackView", "onCardCanceled: ${manager.topPosition}")
     }
-
 
     private fun setupButton() {
         skipButton.setOnClickListener {

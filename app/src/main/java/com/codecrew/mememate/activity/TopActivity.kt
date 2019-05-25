@@ -32,7 +32,7 @@ abstract class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
 //        loadDemoMemes()
     }
 
-    override fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>) {
+    override fun onGalleryMemeClick(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
 
         val bundle = Bundle()
