@@ -1,11 +1,11 @@
 package com.codecrew.mememate.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +13,11 @@ import android.widget.ImageButton
 import android.widget.TextView
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
-import com.codecrew.mememate.activity.SettingsActivity
 import com.codecrew.mememate.adapter.GalleryAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.FragmentCallBack
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.makeramen.roundedimageview.RoundedImageView
@@ -28,66 +26,43 @@ import com.squareup.picasso.Picasso
 private const val SPAN_COUNT = 3
 
 @Suppress("UNCHECKED_CAST")
-class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
+abstract class ProfileFragment(private val layoutRes: Int, private val user: FirebaseUser) : Fragment(),
+    GalleryMemeClickListener, FragmentCallBack {
 
-    private lateinit var likedMemesList: ArrayList<MemeModel>
+    protected lateinit var likedMemesList: ArrayList<MemeModel>
 
-    private lateinit var userMemesList: ArrayList<MemeModel>
+    protected lateinit var userMemesList: ArrayList<MemeModel>
     private var currentPosition: Int = 0
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var mainMeme: RoundedImageView
-    private lateinit var settingsButton: ImageButton
 
     private lateinit var viewSwitchButton: ImageButton
     private var viewType = ViewType.ADDED
 
     private lateinit var userMemesAdapter: GalleryAdapter
     private lateinit var likedMemesAdapter: GalleryAdapter
+
     // (SG) Database
     private lateinit var database: FirebaseFirestore
 
-    private lateinit var user: FirebaseUser
     // (SG) User data fields
-    private lateinit var location: TextView
-
     private lateinit var username: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Creating database instance and current user
         database = FirebaseFirestore.getInstance()
-        user = FirebaseAuth.getInstance().currentUser!!
-
-        // (SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
-        if ((activity as MainActivity).globalUserMemes == null) {
-            userMemesList = ArrayList()
-            loadUserMemes()
-        } else {
-            userMemesList = (activity as MainActivity).globalUserMemes!!
-        }
-
-        // (PR) Same as above but for likedMemes
-        if ((activity as MainActivity).globalLikedMemes == null) {
-            likedMemesList = ArrayList()
-            loadLikedMemes()
-        } else {
-            likedMemesList = (activity as MainActivity).globalLikedMemes!!
-        }
-
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // (SG) Find widgets
-        val v = inflater.inflate(R.layout.fragment_profile, container, false)
+        val v = inflater.inflate(this.layoutRes, container, false)
         recyclerView = v.findViewById(R.id.recyclerView) as RecyclerView
         mainMeme = v.findViewById(R.id.main_meme) as RoundedImageView
         username = v.findViewById(R.id.item_name)
-        location = v.findViewById(R.id.item_city)
-
-        // (PR) Settings button
-        settingsButton = v.findViewById(R.id.settings_button)
-        settingsButton.setOnClickListener { openSettingsActivity() }
+        username.movementMethod = ScrollingMovementMethod()
 
         // (PR) Switch view button
         viewSwitchButton = v.findViewById(R.id.switch_view_button)
@@ -107,7 +82,6 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         // Main meme
         mainMeme.setOnClickListener { mainMemeListener() }
 
-
         // (SG) must be here because the imageView wont be initialized earlier
         if (userMemesList.size == 0) {
             displayDefaultProfile()
@@ -125,21 +99,19 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
                 viewType = ViewType.LIKED
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.liked_icon))
                 recyclerView.adapter = likedMemesAdapter
+                currentPosition = 0
                 Picasso.get().load(likedMemesList[0].url).into(mainMeme)
             }
             ViewType.LIKED -> {
                 viewType = ViewType.ADDED
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.added_icon))
                 recyclerView.adapter = userMemesAdapter
+                currentPosition = 0
                 Picasso.get().load(userMemesList[0].url).into(mainMeme)
             }
         }
     }
 
-    private fun openSettingsActivity() {
-        val intent = Intent(context, SettingsActivity::class.java)
-        startActivity(intent)
-    }
 
     override fun onGalleryMemeClick(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
@@ -170,8 +142,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         super.onDestroy()
     }
 
-
-    private fun loadUserMemes() {
+    protected fun loadUserMemes() {
         database.document("Users/${user.uid}").get().addOnSuccessListener {
 
             val userMemes = ArrayList<MemeModel>()
@@ -199,12 +170,12 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
 
                     } else {
                         displayLastMeme(currentPosition)
-                        location.text =
-                            if (!userMemesList[currentPosition].location.startsWith("location.downloaded")) {
-                                userMemesList[currentPosition].location
-                            } else {
-                                "User location."
-                            }
+//                        location.text =
+//                            if (!userMemesList[currentPosition].location.startsWith("location.downloaded")) {
+//                                userMemesList[currentPosition].location
+//                            } else {
+//                                "User location."
+//                            }
                         userMemesAdapter.notifyDataSetChanged()
                     }
                     (activity as MainActivity).globalUserMemes = userMemesList
@@ -213,7 +184,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
     }
 
     // (PR) Loading liked memes
-    private fun loadLikedMemes() {
+    protected fun loadLikedMemes() {
         database.document("Users/${user.uid}")
             .get()
             .addOnSuccessListener {
@@ -250,8 +221,6 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         Picasso.get()
             .load(getString(R.string.default_meme))
             .into(mainMeme)
-
-        location.text = getString(R.string.user_no_memes)
     }
 
     private fun displayLastMeme(currentPosition: Int) {
@@ -261,10 +230,10 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
     }
 
     private enum class ViewType {
-
         ADDED,
         LIKED
     }
+
     override fun onAction(position: Int) {
         currentPosition = position
         Picasso.get()

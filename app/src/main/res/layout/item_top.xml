@@ -23,9 +23,8 @@
             android:id="@+id/main_meme"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            />
+            android:scaleType="fitCenter" />
 
         <LinearLayout
             android:layout_width="match_parent"

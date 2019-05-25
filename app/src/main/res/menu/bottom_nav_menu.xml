@@ -2,28 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-            android:id="@+id/navigation_top"
-            android:icon="@drawable/ic_best"
-            android:title="@string/top"/>
+        android:id="@+id/navigation_top"
+        android:icon="@drawable/ic_best"
+        android:title="@string/top" />
 
     <item
-            android:id="@+id/navigation_matches"
-            android:icon="@drawable/ic_matches"
-            android:title="@string/matches"/>
+        android:id="@+id/navigation_matches"
+        android:icon="@drawable/ic_matches"
+        android:title="@string/matches" />
 
     <item
-            android:id="@+id/navigation_main"
-            android:icon="@drawable/ic_dashboard_black_24dp"
-            android:title="@string/memes"/>
+        android:id="@+id/navigation_main"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/memes" />
 
     <item
-            android:id="@+id/navigation_add"
-            android:icon="@drawable/ic_add"
-            android:title="@string/add"/>
+        android:id="@+id/navigation_add"
+        android:icon="@drawable/ic_add"
+        android:title="@string/add" />
 
     <item
-            android:id="@+id/navigation_profile"
-            android:icon="@drawable/ic_profile"
-            android:title="@string/profile"/>
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile" />
 
 </menu>

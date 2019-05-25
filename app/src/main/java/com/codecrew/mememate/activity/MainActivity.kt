@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         mTabLayout = findViewById<View>(R.id.tabs) as TabLayout
         mTabLayout!!.setupWithViewPager(mViewPager)
 
-        // (MJ) Add Upper Tabs (they are invisible [gone] in layout, needed for swipe feature.
+        // (MJ) Add Upper Tabs (they are invisible [gone] in layoutRes, needed for swipe feature.
         // --> IMPORTANT <-- Matches have "profile" function now due to lack of Matches Fragment
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Top"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Matches"))
@@ -118,9 +118,9 @@ class MainActivity : AppCompatActivity() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
                 // (MJ) Disables Touch on browse memes fragment
-                if(position == 2){
+                if (position == 2) {
                     mViewPager!!.disableTouches()
-                }else{
+                } else {
                     mViewPager!!.enableTouches()
                 }
             }

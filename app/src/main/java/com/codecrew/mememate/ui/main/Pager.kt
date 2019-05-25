@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import com.codecrew.mememate.fragment.AddMemeFragment
 import com.codecrew.mememate.fragment.BrowseFragment
-import com.codecrew.mememate.fragment.ProfileFragment
+import com.codecrew.mememate.fragment.LoggedUserProfileFragment
 import com.codecrew.mememate.fragment.TopFragment
 
 // (MJ) Return fragment to adapter based on position
@@ -26,7 +26,7 @@ class Pager(fm: FragmentManager, private var tabCount: Int) : FragmentStatePager
                 return AddMemeFragment()
             }
             4 -> {
-                return ProfileFragment()
+                return LoggedUserProfileFragment()
             }
             else -> return null
         }

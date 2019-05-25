@@ -78,4 +78,7 @@
     <string name="settings">SETTINGS</string>
     <string name="mememate_logo">MemeMate Logo</string>
     <string name="mememate_logo_text">mememate_logo_text</string>
+    <string name="change_your_username">Change your username</string>
+    <string name="user_name">Username</string>
+    <string name="meme">Meme</string>
 </resources>
