@@ -35,7 +35,6 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val spot = spots[position]
         holder.name.text = spot.addedBy
-        holder.city.text = spot.location
         Glide.with(holder.image)
             .load(spot.url)
             .into(holder.image)
@@ -68,7 +67,6 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.item_name)
-        var city: TextView = view.findViewById(R.id.item_city)
         var image: ImageView = view.findViewById(R.id.item_image)
     }
 }
