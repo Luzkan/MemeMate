@@ -27,15 +27,15 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="56dp"
         android:background="@color/papayawhip"
-        tools:context=".activity.MainActivity"
-        android:layout_marginBottom="56dp">
+        tools:context=".activity.MainActivity">
 
         <LinearLayout
+            android:id="@+id/fragment_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/fragment_holder">
+            android:orientation="vertical">
 
         </LinearLayout>
 

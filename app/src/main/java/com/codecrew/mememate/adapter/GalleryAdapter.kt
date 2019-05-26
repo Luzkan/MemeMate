@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
-import com.codecrew.mememate.interfaces.GalleryMemeClickListener
+import com.codecrew.mememate.interfaces.MemeClickListener
 import com.squareup.picasso.Picasso
 
 class GalleryAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter<MemeViewHolder>() {
 
     private var context: Context? = null
-    var listener: GalleryMemeClickListener? = null
+    var listener: MemeClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemeViewHolder {
         context = parent.context
@@ -37,7 +37,7 @@ class GalleryAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Ada
         }
 
         holder.itemView.setOnClickListener {
-            listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
+            listener?.onMemeClick(holder.adapterPosition, memes)
         }
     }
 }

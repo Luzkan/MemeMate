@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity() {
     // (PR) Memes liked by user
     var globalLikedMemes: ArrayList<MemeModel>? = null
 
+    var clickedUserMemesList: ArrayList<MemeModel>? = null
+    var clickedUserLikedMemesList: ArrayList<MemeModel>? = null
+
     // (SG) Top meme List
     var globalTopMemes: ArrayList<MemeModel>? = null
 
@@ -37,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     var isValid = false
     lateinit var pic: Uri
 
-    private var currentPanel = 1
+//    private var currentPanel = 1
 
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
@@ -49,42 +53,34 @@ class MainActivity : AppCompatActivity() {
     // (SG) Current user
     private lateinit var currentUser: FirebaseUser
 
+    // (PR) Clicked user profile
+    var clickedUserNameID: String? = null
+
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_top -> {
-                if (currentPanel != 1) {
-                    currentPanel = 1
-                    mViewPager!!.currentItem = 0
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 0
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_matches -> {
-                if (currentPanel != 2) {
-                    currentPanel = 2
-                    mViewPager!!.currentItem = 1
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 1
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_main -> {
-                if (currentPanel != 3) {
-                    currentPanel = 3
-                    mViewPager!!.currentItem = 2
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 2
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_add -> {
-                if (currentPanel != 4) {
-                    currentPanel = 4
-                    mViewPager!!.currentItem = 3
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 3
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_profile -> {
-                if (currentPanel != 5) {
-                    currentPanel = 5
-                    mViewPager!!.currentItem = 4
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 4
+                return@OnNavigationItemSelectedListener true
             }
         }
         false
@@ -100,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         mTabLayout = findViewById<View>(R.id.tabs) as TabLayout
         mTabLayout!!.setupWithViewPager(mViewPager)
 
-        // (MJ) Add Upper Tabs (they are invisible [gone] in layout, needed for swipe feature.
+        // (MJ) Add Upper Tabs (they are invisible [gone] in layoutRes, needed for swipe feature.
         // --> IMPORTANT <-- Matches have "profile" function now due to lack of Matches Fragment
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Top"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Matches"))
@@ -111,16 +107,16 @@ class MainActivity : AppCompatActivity() {
 
         // (MJ) Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.container)
-        val adapter = Pager(supportFragmentManager, mTabLayout!!.tabCount)
+        val adapter = Pager(supportFragmentManager, mTabLayout!!.tabCount + 1)
         mViewPager!!.adapter = adapter
 
         mViewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
                 // (MJ) Disables Touch on browse memes fragment
-                if(position == 2){
+                if (position in setOf(2, 5)) {
                     mViewPager!!.disableTouches()
-                }else{
+                } else {
                     mViewPager!!.enableTouches()
                 }
             }
@@ -129,8 +125,10 @@ class MainActivity : AppCompatActivity() {
                 mTabLayout!!.setScrollPosition(position, 0F, true)
                 mTabLayout!!.isSelected = true
 
-                // (MJ) Toggles "Checked" button on navbar depending on scrolled page
-                nav_view.menu.getItem(position).isChecked = true
+                if (position in 0 until mTabLayout!!.tabCount) {
+                    // (MJ) Toggles "Checked" button on navbar depending on scrolled page
+                    nav_view.menu.getItem(position).isChecked = true
+                }
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -156,6 +154,15 @@ class MainActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    // (PR) Shows up profile of the user's nickname we clicked.
+    fun goToClickedUsernameProfile(userID: String) {
+        Log.d("Memes", "Username clicked ID: $userID")
+        clickedUserNameID = userID
+        this.clickedUserMemesList = null
+        this.clickedUserLikedMemesList = null
+        mViewPager?.currentItem = 5
     }
 }
 
@@ -243,13 +250,6 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    fun displayProfile() {
-        val transaction = fragmentManager.beginTransaction()
-        swipeSide(transaction, currentPanel, 5)
-        val fragment = ProfileFragment()
-        transaction.replace(R.id.fragment_holder, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
+
 
  */

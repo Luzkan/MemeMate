@@ -21,17 +21,17 @@
             android:id="@+id/imageView"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:contentDescription="@string/mememate_logo"
             android:scaleType="centerCrop"
-            app:srcCompat="@mipmap/ic_launcher_round"
-            android:contentDescription="@string/mememate_logo" />
+            app:srcCompat="@mipmap/ic_launcher_round" />
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="170dp"
             android:layout_height="33dp"
             android:layout_marginTop="5dp"
-            app:srcCompat="@drawable/logo"
-            android:contentDescription="@string/mememate_logo_text" />
+            android:contentDescription="@string/mememate_logo_text"
+            app:srcCompat="@drawable/logo" />
 
     </LinearLayout>
 
@@ -157,7 +157,7 @@
         <!--android:layout_width="150dp"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:background="@drawable/button_round"-->
-        <!--android:onClick="showSignOptions"-->
+        <!--android:onUsernameClick="showSignOptions"-->
         <!--android:drawableStart="@drawable/com_facebook_button_icon"-->
         <!---->
         <!--android:paddingLeft="20dp"-->
@@ -168,7 +168,7 @@
         <!--android:id="@+id/fbButton"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:onClick="showSignOptions"-->
+        <!--android:onUsernameClick="showSignOptions"-->
         <!--android:text="faceokButton" />-->
 
         <TextView
