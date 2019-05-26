@@ -30,8 +30,7 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
         database = FirebaseFirestore.getInstance()
 
         if ((activity as MainActivity).globalTopMemes == null) {
-            memesList = ArrayList()
-            (activity as MainActivity).globalTopMemes = memesList
+            (activity as MainActivity   ).globalTopMemes = memesList
         } else {
             memesList = (activity as MainActivity).globalTopMemes!!
         }
@@ -83,7 +82,8 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
                         seenBy = meme["seenBy"] as ArrayList<String>,
                         dbId = meme.id,
                         addedBy = meme["addedBy"].toString(),
-                        userID = meme["userID"].toString()
+                        userID = meme["userID"].toString(),
+                        addDate = meme["addDate"].toString()
                     )
                 )
             }

@@ -227,7 +227,8 @@ class BrowseFragment : Fragment(), CardStackListener {
                     rate = meme["rate"].toString().toInt(),
                     seenBy = meme["seenBy"] as ArrayList<String>,
                     addedBy = meme["addedBy"].toString(),
-                    userID = meme["userID"].toString()
+                    userID = meme["userID"].toString(),
+                    addDate = meme["addDate"].toString()
 
                 )
                 if (!newMeme.seenBy.contains(currentUser.uid) && !memeList.contains(newMeme)) {

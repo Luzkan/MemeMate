@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
 import android.transition.TransitionManager
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
@@ -45,11 +48,9 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
     private var currentPosition: Int = 0
     private lateinit var db: FirebaseFirestore
     private lateinit var user: UserModel
-    private lateinit var memeDatabase: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-//        friendsList.add(UserModel("XD","XD", "XD", ArrayList(), ArrayList(), ArrayList(), ArrayList()))
         super.onCreate(savedInstanceState)
         // (SG) Firebase init
         db = FirebaseFirestore.getInstance()
@@ -65,19 +66,22 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                 followers = it["followers"] as ArrayList<String>?
             )
             if ((activity as MainActivity).globalFriends == null) {
-//                friendsList =  ArrayList()
                 downloadFriends()
+                downloadFeed()
             } else {
                 friendsList = (activity as MainActivity).globalFriends!!
+                feedList = (activity as MainActivity).globalFeed!!
                 downloadFriends()
+                downloadFeed()
             }
-            bFriendsClick()
+            bFeedClick()
         }
     }
 
     override fun onPause() {
         super.onPause()
         (activity as MainActivity).globalFriends = friendsList
+        (activity as MainActivity).globalFeed = feedList
 
     }
 
@@ -108,13 +112,11 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
         bFriends.setOnClickListener { bFriendsClick() }
         bFeed.setOnClickListener { bFeedClick() }
         bMessages.setOnClickListener { bMessagesClick() }
-
         return v
     }
 
     // (KS) functions to handle changing layouts and buttons
     private fun bFriendsClick() {
-        Log.d("ONCLICK","B FRIENDS CLICK")
 
         TransitionManager.beginDelayedTransition(lScreen)
 
@@ -136,7 +138,6 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
     private fun bFeedClick() {
         TransitionManager.beginDelayedTransition(lScreen)
-        Log.d("ONCLICK","B FEED CLICKED")
         downloadFeed()
 
         (bFriends.layoutParams as LinearLayout.LayoutParams).weight = 0f
@@ -154,7 +155,6 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
     private fun bMessagesClick() {
         TransitionManager.beginDelayedTransition(lScreen)
-        Log.d("ONCLICK","B MESSSAGE CLICK")
 
         (bFriends.layoutParams as LinearLayout.LayoutParams).weight = 0f
         (bFeed.layoutParams as LinearLayout.LayoutParams).weight = 0f
@@ -194,16 +194,13 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                     following = it["following"] as ArrayList<String>?,
                     followers = it["followers"] as ArrayList<String>?
                 )
-                friendsList.add(friend)
+                if(!friendsList.contains(friend)){
+                    friendsList.add(friend)
+                }
             }
         }
-        friendsList.forEach {
-            Log.d("FRIENDS", it.userName)
-        }
-        Log.d("FRIENDS","FRIENDS LIST SIZE = " + friendsList.size)
-
+        sortFriends(friendsList)
         friendsAdapter.notifyDataSetChanged()
-        Log.d("FRIENDS","NOTIFYING")
     }
 
     private fun downloadFeed() {
@@ -217,12 +214,27 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                         seenBy = meme["seenBy"] as ArrayList<String>,
                         dbId = meme.id,
                         addedBy = meme["addedBy"].toString(),
-                        userID = meme["userID"].toString()
+                        userID = meme["userID"].toString(),
+                        addDate = meme["addDate"].toString()
                     )
+                    if(!feedList.contains(memeModel))
                     feedList.add(memeModel)
                 }
             }
         }
+        sortFeed(feedList)
         feedAdapter.notifyDataSetChanged()
     }
+
+    private fun sortFeed(feedList: ArrayList<MemeModel>) {
+        val sortedList = feedList.sortedWith(compareByDescending {it.addDate})
+        feedList.clear()
+        feedList.addAll(sortedList)
+    }
+    private fun sortFriends(friendsList: ArrayList<UserModel>) {
+        val sortedList = friendsList.sortedWith(compareBy {it.userName})
+        friendsList.clear()
+        friendsList.addAll(sortedList)
+    }
+
 }

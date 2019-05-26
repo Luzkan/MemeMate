@@ -131,6 +131,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
             val passwordCheck = etPasswordConfirm.text.toString()
 
             if (passwordCheck == password) {
+                userName.toLowerCase()
                 createUser(email, password, userName)
             } else {
                 setError("Those passwords didn't match.")

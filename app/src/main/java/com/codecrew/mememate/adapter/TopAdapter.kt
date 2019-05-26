@@ -47,7 +47,8 @@ class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter
             listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
         }
         holder.username.setOnClickListener{
-            (context as MainActivity).displayProfile(currentMeme.userID)
+            //todo add redirect
+//            (context as MainActivity).displayProfile(currentMeme.userID)
         }
     }
 }

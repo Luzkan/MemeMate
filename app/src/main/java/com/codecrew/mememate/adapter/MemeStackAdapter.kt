@@ -38,7 +38,7 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
             .into(holder.image)
         // (SG) Redirect after username click
         holder.name.setOnClickListener{
-            (context as MainActivity).displayProfile(spots[position].userID)
+            //todo add redirect
         }
         holder.itemView.setOnClickListener {
             val bundle = Bundle()

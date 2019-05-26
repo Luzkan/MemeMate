@@ -26,6 +26,9 @@ import com.squareup.picasso.Picasso
 
 private const val SPAN_COUNT = 3
 
+
+//todo po zmienie porgfliu po dodaniu mema nie uaktualnia sie lista global?
+//todo dodać sortowanie na profilu po dacie dodania
 @Suppress("UNCHECKED_CAST")
 class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
 
@@ -148,7 +151,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
                     Picasso.get().load(userMemesList[0].url).into(mainMeme)
                 }
                 username.setOnClickListener{
-                    (activity as MainActivity).displayProfile(userMemesList[0].userID)
+                    //todo add redirect
+//                    (activity as MainActivity).displayProfile(userMemesList[0].userID)
                 }
             }
         }
@@ -206,7 +210,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
                             seenBy = meme["seenBy"] as ArrayList<String>,
                             dbId = meme.toString(),
                             addedBy = meme["addedBy"].toString(),
-                            userID = meme["userID"].toString()
+                            userID = meme["userID"].toString(),
+                            addDate = meme["addDate"].toString()
                         )
                         userMemes.add(memeObject)
                     }
@@ -246,7 +251,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
                             seenBy = meme["seenBy"] as ArrayList<String>,
                             dbId = meme.toString(),
                             addedBy = meme["addedBy"].toString(),
-                            userID = meme["userID"].toString()
+                            userID = meme["userID"].toString(),
+                            addDate = meme["addDate"].toString()
                         )
                     )
                     likedMemesAdapter.notifyDataSetChanged()

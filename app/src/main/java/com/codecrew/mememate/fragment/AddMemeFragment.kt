@@ -30,6 +30,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_meme_adding.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -57,6 +59,11 @@ class AddMemeFragment : Fragment() {
         confirmButton.stopAnimation()
         confirmButton.revertAnimation()
     }
+
+    // (SG) Adding meme time utils
+    private val current = LocalDateTime.now()
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,6 +114,9 @@ class AddMemeFragment : Fragment() {
                 }
                 return@Continuation memeRef.downloadUrl
             }).addOnCompleteListener { task ->
+
+                val addTime = current.format(formatter)
+
                 if (task.isSuccessful) {
                     memeUrl = task.result.toString()
                     val newMeme = MemeModel(
@@ -116,7 +126,9 @@ class AddMemeFragment : Fragment() {
                         location = "location.downloaded.from.phone",
                         addedBy = user.userName,
                         userID = user.uid,
-                        dbId = ""
+                        dbId = "",
+                        addDate = addTime
+
                     )
                     val meme = HashMap<String, Any>()
                     meme["url"] = memeUrl
@@ -127,6 +139,7 @@ class AddMemeFragment : Fragment() {
                     meme["location"] = "location.downloaded.from.phone"
                     meme["addedBy"] = user.userName
                     meme["userID"] = user.uid
+                    meme["addDate"] = addTime
                     database.collection("Memes").add(meme)
                         .addOnSuccessListener {
                             database.collection("Users").document(user.uid)
