@@ -9,7 +9,7 @@ import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class UserProfileFragment : ProfileFragment(R.layout.fragment_profile) {
+class UserProfileFragment : ProfileFragment(R.layout.fragment_profile_user) {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
