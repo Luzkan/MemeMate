@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                 currentUserModel = UserModel(
                     uid = it["uid"].toString(),
                     email = it["email"].toString(),
-                    userName = it["username"].toString(),
+                    userName = it["userName"].toString(),
                     likedMemes = it["likedMemes"] as ArrayList<String>?,
                     addedMemes = it["addedMemes"] as ArrayList<String>?,
                     following = it["following"] as ArrayList<String>?,

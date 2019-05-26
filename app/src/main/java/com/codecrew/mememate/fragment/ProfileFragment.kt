@@ -69,6 +69,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         // Creating database instance and current user
         database = FirebaseFirestore.getInstance()
         user = (activity as MainActivity).getCurrentUser()
+        Log.d("MEMESKIE",user.toString())
 
         // (SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
         if ((activity as MainActivity).globalUserMemes == null) {
