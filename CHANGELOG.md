@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ___________________________________
 
+## [0.8.5] - 2019-05-27 - Karol Szymończyk, Szymon Głąb
+### Added
+- Friends panel
+- You can see feed from your friends
+- You can search for your friends
+
 ## [0.8.4] - 2019-05-26 - Paweł Rubin
 ### Added
 - You can see the profile of any user.
