@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lFriendsPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/papayawhip"
+    android:orientation="vertical">
+
+    <!--<TextView-->
+    <!--android:id="@+id/textView2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:drawableStart="@drawable/ic_people_black_40dp"-->
+    <!--android:drawablePadding="5dp"-->
+    <!--android:padding="5dp"-->
+    <!--android:text="FRIENDS"-->
+    <!--android:textColor="@color/colorTextAlter"-->
+    <!--android:textSize="40sp" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/peachpuff"
+        android:orientation="horizontal">
+
+        <!--<Button-->
+        <!--android:id="@+id/bMessage"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@color/peachpuff"-->
+        <!--android:text="Butt" />-->
+
+        <!--<Button-->
+        <!--android:id="@+id/bFriends"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@color/peachpuff"-->
+        <!--android:text="Button" />-->
+
+        <Button
+            android:id="@+id/bFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/peachpuff"
+            android:drawableStart="@drawable/ic_people_black_40dp"
+            android:paddingHorizontal="25dp"
+            android:textAllCaps="false"
+            android:textSize="30sp"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/bFeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="37.2dp"
+            android:layout_weight="1"
+            android:background="@color/peachpuff"
+            android:drawableStart="@drawable/ic_reorder_black_40dp"
+            android:text="@string/feed"
+            android:textAllCaps="false"
+            android:textSize="30sp"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/bMessages"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/peachpuff"
+            android:drawableStart="@drawable/ic_chat_black_40dp"
+            android:paddingHorizontal="25dp"
+            android:textAllCaps="false"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/lFriends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/edit_text_round"
+                android:queryBackground="@android:color/transparent"/>
+
+            <!--<EditText-->
+                <!--android:id="@+id/etSearch"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginHorizontal="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginBottom="20dp"-->
+                <!--android:background="@drawable/edit_text_round"-->
+                <!--android:drawableStart="@drawable/ic_search_gray_24dp"-->
+                <!--android:drawablePadding="5dp"-->
+                <!--android:ems="10"-->
+                <!--android:hint="@string/search"-->
+                <!--android:inputType="textPersonName"-->
+                <!--android:padding="10dp" />-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewFriends"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lFeed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewFeed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lMessages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Messages" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

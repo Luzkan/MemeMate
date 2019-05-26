@@ -16,13 +16,16 @@ import com.codecrew.mememate.interfaces.UsernameClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 
 class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
+    override fun onUsernameClick(userID: String) {
+        (activity as MainActivity).goToClickedUsernameProfile(userID)
+    }
+
     private lateinit var recyclerViewTop: RecyclerView
 
     // (SG) Database
     lateinit var database: FirebaseFirestore
 
     private var memesList = ArrayList<MemeModel>()
-
     private lateinit var topAdapter: TopAdapter
     private var currentPosition: Int = 0
 
@@ -30,8 +33,7 @@ class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
         database = FirebaseFirestore.getInstance()
 
         if ((activity as MainActivity).globalTopMemes == null) {
-            memesList = ArrayList()
-            (activity as MainActivity).globalTopMemes = memesList
+            (activity as MainActivity   ).globalTopMemes = memesList
         } else {
             memesList = (activity as MainActivity).globalTopMemes!!
         }
@@ -52,7 +54,7 @@ class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
 
         loadMemes()
 
-        // Set up RecyclerView.
+        // Set up ReclyclerView.
         recyclerViewTop.layoutManager = LinearLayoutManager(this.context)
         recyclerViewTop.adapter = topAdapter
 
@@ -72,10 +74,6 @@ class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
         galleryFragment.show(fragmentTransaction, "top")
     }
 
-    override fun onUsernameClick(userID: String) {
-        (activity as MainActivity).goToClickedUsernameProfile(userID)
-    }
-
     private fun loadMemes() {
         database.collection("Memes").orderBy("rate").get().addOnSuccessListener { memeCollection ->
             val tempMemeList = ArrayList<MemeModel>()
@@ -88,7 +86,8 @@ class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
                         seenBy = meme["seenBy"] as ArrayList<String>,
                         dbId = meme.id,
                         addedBy = meme["addedBy"].toString(),
-                        userId = meme["userId"].toString()
+                        userID = meme["userId"].toString(),
+                        addDate = meme["addDate"].toString()
                     )
                 )
             }

@@ -165,7 +165,8 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                             seenBy = meme["seenBy"] as ArrayList<String>,
                             dbId = meme.toString(),
                             addedBy = meme["addedBy"].toString(),
-                            userId = meme["userId"].toString()
+                            userID = meme["userId"].toString(),
+                            addDate = meme["addDate"].toString()
                         )
                         userMemes.add(memeObject)
                     }
@@ -191,7 +192,9 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                     email = it["email"].toString(),
                     userName = it["username"].toString(),
                     likedMemes = it["likedMemes"] as ArrayList<String>?,
-                    addedMemes = it["addedMemes"] as ArrayList<String>?
+                    addedMemes = it["addedMemes"] as ArrayList<String>?,
+                    following = it["following"] as ArrayList<String>?,
+                    followers = it["followers"] as ArrayList<String>?
                 )
 
                 userModel.likedMemes?.forEach { likedMeme ->
@@ -206,7 +209,8 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                                     seenBy = meme["seenBy"] as ArrayList<String>,
                                     dbId = meme.toString(),
                                     addedBy = meme["addedBy"].toString(),
-                                    userId = meme["userId"].toString()
+                                    userID = meme["userId"].toString(),
+                                    addDate = meme["addDate"].toString()
                                 )
                             )
                         }

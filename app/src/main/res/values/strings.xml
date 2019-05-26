@@ -7,6 +7,7 @@
     <string name="add">Add</string>
     <string name="memes">Memes</string>
     <string name="matches">Matches</string>
+    <string name="friends">Friends</string>
     <string name="top">Top</string>
 
     <string name="user_no_memes">You haven\'t added any memes :(</string>
@@ -35,6 +36,9 @@
 
     <!--Default meme-->
     <string name="default_meme">https://i.redd.it/529mjgxyexw21.jpg</string>
+
+    <!--Default location-->
+    <string name="default_user_location">DefaultLocation</string>
 
     <!-- Demo memes -->
     <string-array name="memes">
@@ -66,6 +70,9 @@
     <string name="add_new_meme">Add new meme</string>
     <string name="search">Search</string>
     <string name="confirm">Confirm</string>
+    <string name="feed">Feed</string>
+    <string name="dummy">DUMMY</string>
+    <string name="inbox">Inbox</string>
     <string name="title">title</string>
     <string name="pick_meme">Pick Meme</string>
     <string name="upload">Upload</string>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/papayawhip"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/main_meme"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:background="@color/papayawhip"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
+            android:layout_marginHorizontal="5dp"
+            android:background="@drawable/rounded_card"
+            android:padding="16dp">
+
+            <TextView
+            android:id="@+id/tvNick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="@string/dummy"
+            android:textColor="@color/colorTextAlter"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+            <!--<TextView-->
+                <!--android:id="@+id/tvNick"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:text="@string/dummy"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="26sp"-->
+                <!--android:textStyle="bold"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent" />-->
+
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <!--<View-->
+        <!--android:id="@+id/divider4"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/peachpuff" />-->
+
+    <!--<android.support.constraint.ConstraintLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tvNick"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:paddingStart="20dp"-->
+            <!--android:text="Shimek"-->
+            <!--android:textColor="@color/colorTextAlter"-->
+            <!--android:textSize="20sp"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+        <!---->
+    <!--</android.support.constraint.ConstraintLayout>-->
+
+</LinearLayout>

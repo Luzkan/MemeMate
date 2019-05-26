@@ -21,16 +21,17 @@ import com.bumptech.glide.Glide
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.MemeModel
+import com.codecrew.mememate.database.models.UserModel
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_meme_adding.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -46,7 +47,7 @@ class AddMemeFragment : Fragment() {
     private lateinit var uri: Uri
     private lateinit var pic: ImageView
 
-    private lateinit var user: FirebaseUser
+    private lateinit var user: UserModel
 
     private lateinit var confirmButton: CircularProgressButton
     private lateinit var pickButton: Button
@@ -59,11 +60,16 @@ class AddMemeFragment : Fragment() {
         confirmButton.revertAnimation()
     }
 
+    // (SG) Adding meme time utils
+    private val current = LocalDateTime.now()
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         database = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
-        user = FirebaseAuth.getInstance().currentUser!!
+        user = (activity as MainActivity).getCurrentUser()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -108,6 +114,9 @@ class AddMemeFragment : Fragment() {
                 }
                 return@Continuation memeRef.downloadUrl
             }).addOnCompleteListener { task ->
+
+                val addTime = current.format(formatter)
+
                 if (task.isSuccessful) {
                     memeUrl = task.result.toString()
                     val newMeme = MemeModel(
@@ -115,9 +124,10 @@ class AddMemeFragment : Fragment() {
                         seenBy = arrayListOf(user.uid),
                         rate = 0,
                         location = "location.downloaded.from.phone",
-                        addedBy = user.displayName.toString(),
+                        addedBy = user.userName,
+                        userID = user.uid,
                         dbId = "",
-                        userId = user.uid
+                        addDate = addTime
                     )
                     val meme = HashMap<String, Any>()
                     meme["url"] = memeUrl
@@ -126,7 +136,9 @@ class AddMemeFragment : Fragment() {
                     meme["userId"] = user.uid
                     meme["rate"] = 0
                     meme["location"] = "location.downloaded.from.phone"
-                    meme["addedBy"] = user.displayName.toString()
+                    meme["addedBy"] = user.userName
+                    meme["userID"] = user.uid
+                    meme["addDate"] = addTime
                     database.collection("Memes").add(meme)
                         .addOnSuccessListener {
                             database.collection("Users").document(user.uid)

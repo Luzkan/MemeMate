@@ -38,7 +38,10 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
         Glide.with(holder.image)
             .load(spot.url)
             .into(holder.image)
-        // (SG) Loading big meme
+        // (SG) Redirect after username click
+        holder.name.setOnClickListener{
+            //todo add redirect
+        }
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
             bundle.putSerializable("images", spots as ArrayList<MemeModel>)
@@ -50,7 +53,7 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
             galleryFragment.show(fragmentTransaction, "browse")
         }
 
-        holder.name.setOnClickListener { usernameClickListener?.onUsernameClick(spot.userId) }
+        holder.name.setOnClickListener { usernameClickListener?.onUsernameClick(spot.userID) }
     }
 
     override fun getItemCount(): Int {
@@ -68,5 +71,11 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.item_name)
         var image: ImageView = view.findViewById(R.id.item_image)
+    }
+
+    private fun redirect(username : String){
+
+
+
     }
 }
