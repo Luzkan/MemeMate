@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import com.codecrew.mememate.R
-import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.adapter.GalleryAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
@@ -74,7 +73,7 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
         likedMemesAdapter = GalleryAdapter(likedMemesList).also { it.listener = this }
 
         // (PR) Set up RecyclerView.
-        recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT) as RecyclerView.LayoutManager?
+        recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
         recyclerView.adapter = userMemesAdapter
 
         // (SG) Set up user data
@@ -149,11 +148,6 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
         galleryFragment.show(fragmentTransaction, "gallery")
     }
 
-    override fun onDestroy() {
-//        (activity as MainActivity).globalUserMemes = userMemesList
-        super.onDestroy()
-    }
-
     protected fun loadUserMemes() {
         database.document("Users/$userID").get().addOnSuccessListener {
 
@@ -179,8 +173,6 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                     userMemesAdapter.notifyDataSetChanged()
                     if (userMemesList.size == 0) {
                         displayDefaultProfile()
-                        //todo wyświetl powiadomienie, np takie jak na ig w miejscu gdzie normalnie znajdują się zdjęcia
-
                     } else {
                         displayLastMeme(currentPosition)
                         userMemesAdapter.notifyDataSetChanged()

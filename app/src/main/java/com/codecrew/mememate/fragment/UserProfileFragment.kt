@@ -15,9 +15,9 @@ import kotlinx.android.synthetic.main.fragment_profile_user.view.*
 
 class UserProfileFragment : ProfileFragment(R.layout.fragment_profile_user) {
 
-    var amIFollowing: Boolean = false
-    val loggedUser= FirebaseAuth.getInstance().currentUser
-    lateinit var followButton: ImageButton
+    private var amIFollowing: Boolean = false
+    private val loggedUser = FirebaseAuth.getInstance().currentUser
+    private lateinit var followButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,7 @@ class UserProfileFragment : ProfileFragment(R.layout.fragment_profile_user) {
                     }
                 }
         }
-        followButton.setOnClickListener{ followUser() }
+        followButton.setOnClickListener { followUser() }
         getMemes()
         return v
     }

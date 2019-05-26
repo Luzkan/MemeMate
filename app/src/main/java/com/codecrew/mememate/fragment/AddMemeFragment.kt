@@ -136,7 +136,7 @@ class AddMemeFragment : Fragment() {
                                 (activity as MainActivity).globalUserMemes = ArrayList()
                             }
                             (activity as MainActivity).globalUserMemes!!.add(0, newMeme)
-                            
+
                             (activity as MainActivity).pic =
                                 Uri.parse("android.resource://" + this.context!!.packageName + "/" + R.drawable.default_meme_add)
                             (activity as MainActivity).isValid = false
