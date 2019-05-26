@@ -13,9 +13,12 @@ import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.fragment.GalleryFullscreenFragment
+import com.codecrew.mememate.interfaces.UsernameClickListener
 
 class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private val context: Context?) :
     RecyclerView.Adapter<MemeStackAdapter.ViewHolder>() {
+
+    var usernameClickListener: UsernameClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -47,6 +50,8 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
             galleryFragment.arguments = bundle
             galleryFragment.show(fragmentTransaction, "browse")
         }
+
+        holder.name.setOnClickListener { usernameClickListener?.onUsernameClick(spot.userId) }
     }
 
     override fun getItemCount(): Int {
