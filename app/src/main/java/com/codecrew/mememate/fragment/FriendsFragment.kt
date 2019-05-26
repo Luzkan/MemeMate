@@ -144,12 +144,25 @@ class FriendsFragment : Fragment(), MemeClickListener {
 
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.i("ZIOMO",query)
-                return false
+                if (query!!.isNotEmpty()) {
+                    displayList.clear()
+
+                    val searchVal = query.toLowerCase()
+                    friendsList.forEach {
+                        if (it.userName.toLowerCase().contains(searchVal)) { //todo jak są w bazie z małej to nie trzeba toLowerCase
+                            displayList.add(it)
+                        }
+                    }
+                    friendsAdapter.notifyDataSetChanged()
+                } else {
+                    displayList.clear()
+                    displayList.addAll(friendsList)
+                    friendsAdapter.notifyDataSetChanged()
+                }
+                return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-
                 if (newText.isNotEmpty()) {
                     displayList.clear()
 
@@ -165,8 +178,6 @@ class FriendsFragment : Fragment(), MemeClickListener {
                     displayList.addAll(friendsList)
                     friendsAdapter.notifyDataSetChanged()
                 }
-
-                Log.i("ZIOMO",newText)
                 return true
             }
         })
