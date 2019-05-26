@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     // (PR) Memes liked by user
     var globalLikedMemes: ArrayList<MemeModel>? = null
 
+    var clickedUserMemesList: ArrayList<MemeModel>? = null
+    var clickedUserLikedMemesList: ArrayList<MemeModel>? = null
+
     // (SG) Top meme List
     var globalTopMemes: ArrayList<MemeModel>? = null
 
@@ -37,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     var isValid = false
     lateinit var pic: Uri
 
-    private var currentPanel = 1
+//    private var currentPanel = 1
 
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
@@ -49,42 +52,34 @@ class MainActivity : AppCompatActivity() {
     // (SG) Current user
     private lateinit var currentUser: FirebaseUser
 
+    // (PR) Clicked user profile
+    lateinit var clickedUserNameID: String
+
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_top -> {
-                if (currentPanel != 1) {
-                    currentPanel = 1
-                    mViewPager!!.currentItem = 0
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 0
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_matches -> {
-                if (currentPanel != 2) {
-                    currentPanel = 2
-                    mViewPager!!.currentItem = 1
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 1
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_main -> {
-                if (currentPanel != 3) {
-                    currentPanel = 3
-                    mViewPager!!.currentItem = 2
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 2
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_add -> {
-                if (currentPanel != 4) {
-                    currentPanel = 4
-                    mViewPager!!.currentItem = 3
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 3
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_profile -> {
-                if (currentPanel != 5) {
-                    currentPanel = 5
-                    mViewPager!!.currentItem = 4
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 4
+                return@OnNavigationItemSelectedListener true
             }
         }
         false
@@ -111,7 +106,7 @@ class MainActivity : AppCompatActivity() {
 
         // (MJ) Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.container)
-        val adapter = Pager(supportFragmentManager, mTabLayout!!.tabCount)
+        val adapter = Pager(supportFragmentManager, mTabLayout!!.tabCount + 1)
         mViewPager!!.adapter = adapter
 
         mViewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -129,8 +124,10 @@ class MainActivity : AppCompatActivity() {
                 mTabLayout!!.setScrollPosition(position, 0F, true)
                 mTabLayout!!.isSelected = true
 
-                // (MJ) Toggles "Checked" button on navbar depending on scrolled page
-                nav_view.menu.getItem(position).isChecked = true
+                if (position in 0 until mTabLayout!!.tabCount) {
+                    // (MJ) Toggles "Checked" button on navbar depending on scrolled page
+                    nav_view.menu.getItem(position).isChecked = true
+                }
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -156,6 +153,12 @@ class MainActivity : AppCompatActivity() {
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    // (PR) Shows up profile of the user's nickname we clicked.
+    fun goToClickedUsernameProfile(userID: String) {
+        clickedUserNameID = userID
+        mViewPager?.currentItem = 5
     }
 }
 

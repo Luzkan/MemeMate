@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +16,7 @@ import com.codecrew.mememate.adapter.GalleryAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.FragmentCallBack
-import com.codecrew.mememate.interfaces.GalleryMemeClickListener
-import com.google.firebase.auth.FirebaseUser
+import com.codecrew.mememate.interfaces.MemeClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
@@ -26,25 +24,27 @@ import com.squareup.picasso.Picasso
 private const val SPAN_COUNT = 3
 
 @Suppress("UNCHECKED_CAST")
-abstract class ProfileFragment(private val layoutRes: Int, private val user: FirebaseUser) : Fragment(),
-    GalleryMemeClickListener, FragmentCallBack {
+abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
+    MemeClickListener, FragmentCallBack {
 
     protected lateinit var likedMemesList: ArrayList<MemeModel>
-
     protected lateinit var userMemesList: ArrayList<MemeModel>
+
     private var currentPosition: Int = 0
+
     private lateinit var recyclerView: RecyclerView
-
     private lateinit var mainMeme: RoundedImageView
-
     private lateinit var viewSwitchButton: ImageButton
+
     private var viewType = ViewType.ADDED
 
+    // Adapters
     private lateinit var userMemesAdapter: GalleryAdapter
     private lateinit var likedMemesAdapter: GalleryAdapter
 
     // (SG) Database
     private lateinit var database: FirebaseFirestore
+    protected lateinit var userID: String
 
     // (SG) User data fields
     private lateinit var username: TextView
@@ -52,17 +52,19 @@ abstract class ProfileFragment(private val layoutRes: Int, private val user: Fir
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         // Creating database instance and current user
         database = FirebaseFirestore.getInstance()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        // Creating database instance and current user
+        database = FirebaseFirestore.getInstance()
         // (SG) Find widgets
         val v = inflater.inflate(this.layoutRes, container, false)
         recyclerView = v.findViewById(R.id.recyclerView) as RecyclerView
         mainMeme = v.findViewById(R.id.main_meme) as RoundedImageView
         username = v.findViewById(R.id.item_name)
-        username.movementMethod = ScrollingMovementMethod()
 
         // (PR) Switch view button
         viewSwitchButton = v.findViewById(R.id.switch_view_button)
@@ -73,11 +75,15 @@ abstract class ProfileFragment(private val layoutRes: Int, private val user: Fir
         likedMemesAdapter = GalleryAdapter(likedMemesList).also { it.listener = this }
 
         // (PR) Set up RecyclerView.
-        recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT) as RecyclerView.LayoutManager?
+        recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
         recyclerView.adapter = userMemesAdapter
 
         // (SG) Set up user data
-        username.text = user.displayName
+        database.document("Users/$userID")
+            .get()
+            .addOnSuccessListener {
+                username.text = it["userName"] as CharSequence?
+            }
 
         // Main meme
         mainMeme.setOnClickListener { mainMemeListener() }
@@ -112,8 +118,7 @@ abstract class ProfileFragment(private val layoutRes: Int, private val user: Fir
         }
     }
 
-
-    override fun onGalleryMemeClick(position: Int, memes: ArrayList<MemeModel>) {
+    override fun onMemeClick(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
         Picasso.get()
             .load(memes[currentPosition].url)
@@ -138,17 +143,17 @@ abstract class ProfileFragment(private val layoutRes: Int, private val user: Fir
     }
 
     override fun onDestroy() {
-        (activity as MainActivity).globalUserMemes = userMemesList
+//        (activity as MainActivity).globalUserMemes = userMemesList
         super.onDestroy()
     }
 
     protected fun loadUserMemes() {
-        database.document("Users/${user.uid}").get().addOnSuccessListener {
+        database.document("Users/$userID").get().addOnSuccessListener {
 
             val userMemes = ArrayList<MemeModel>()
 
             database.collection("Memes")
-                .whereEqualTo("userId", user.uid)
+                .whereEqualTo("userId", userID)
                 .get()
                 .addOnSuccessListener { memeCollection ->
                     for (meme in memeCollection) {
@@ -158,7 +163,8 @@ abstract class ProfileFragment(private val layoutRes: Int, private val user: Fir
                             rate = meme["rate"].toString().toInt(),
                             seenBy = meme["seenBy"] as ArrayList<String>,
                             dbId = meme.toString(),
-                            addedBy = meme["addedBy"].toString()
+                            addedBy = meme["addedBy"].toString(),
+                            userId = meme["userId"].toString()
                         )
                         userMemes.add(memeObject)
                     }
@@ -170,22 +176,16 @@ abstract class ProfileFragment(private val layoutRes: Int, private val user: Fir
 
                     } else {
                         displayLastMeme(currentPosition)
-//                        location.text =
-//                            if (!userMemesList[currentPosition].location.startsWith("location.downloaded")) {
-//                                userMemesList[currentPosition].location
-//                            } else {
-//                                "User location."
-//                            }
                         userMemesAdapter.notifyDataSetChanged()
                     }
-                    (activity as MainActivity).globalUserMemes = userMemesList
+//                    (activity as MainActivity).globalUserMemes = userMemesList
                 }
         }
     }
 
     // (PR) Loading liked memes
     protected fun loadLikedMemes() {
-        database.document("Users/${user.uid}")
+        database.document("Users/$userID")
             .get()
             .addOnSuccessListener {
                 val userModel = UserModel(
@@ -207,11 +207,12 @@ abstract class ProfileFragment(private val layoutRes: Int, private val user: Fir
                                     rate = meme["rate"].toString().toInt(),
                                     seenBy = meme["seenBy"] as ArrayList<String>,
                                     dbId = meme.toString(),
-                                    addedBy = meme["addedBy"].toString()
+                                    addedBy = meme["addedBy"].toString(),
+                                    userId = meme["userId"].toString()
                                 )
                             )
                             likedMemesAdapter.notifyDataSetChanged()
-                            (activity as MainActivity).globalLikedMemes = likedMemesList
+//                            (activity as MainActivity).globalLikedMemes = likedMemesList
                         }
                 }
             }

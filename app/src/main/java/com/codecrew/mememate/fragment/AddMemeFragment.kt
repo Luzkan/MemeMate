@@ -116,7 +116,8 @@ class AddMemeFragment : Fragment() {
                         rate = 0,
                         location = "location.downloaded.from.phone",
                         addedBy = user.displayName.toString(),
-                        dbId = ""
+                        dbId = "",
+                        userId = user.uid
                     )
                     val meme = HashMap<String, Any>()
                     meme["url"] = memeUrl

@@ -11,7 +11,7 @@ import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.activity.SettingsActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile, FirebaseAuth.getInstance().currentUser!!) {
+class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile) {
 
     private lateinit var settingsButton: ImageButton
 
@@ -28,10 +28,13 @@ class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile, Fir
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        userID = FirebaseAuth.getInstance().currentUser!!.uid
+
         // (SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
         if ((activity as MainActivity).globalUserMemes == null) {
             userMemesList = ArrayList()
             loadUserMemes()
+            (activity as MainActivity).globalUserMemes = userMemesList
         } else {
             userMemesList = (activity as MainActivity).globalUserMemes!!
         }
@@ -40,6 +43,7 @@ class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile, Fir
         if ((activity as MainActivity).globalLikedMemes == null) {
             likedMemesList = ArrayList()
             loadLikedMemes()
+            (activity as MainActivity).globalLikedMemes = likedMemesList
         } else {
             likedMemesList = (activity as MainActivity).globalLikedMemes!!
         }

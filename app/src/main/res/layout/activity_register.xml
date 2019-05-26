@@ -157,7 +157,7 @@
         <!--android:layout_width="150dp"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:background="@drawable/button_round"-->
-        <!--android:onClick="showSignOptions"-->
+        <!--android:onUsernameClick="showSignOptions"-->
         <!--android:drawableStart="@drawable/com_facebook_button_icon"-->
         <!---->
         <!--android:paddingLeft="20dp"-->
@@ -168,7 +168,7 @@
         <!--android:id="@+id/fbButton"-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:onClick="showSignOptions"-->
+        <!--android:onUsernameClick="showSignOptions"-->
         <!--android:text="faceokButton" />-->
 
         <TextView
