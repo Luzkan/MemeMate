@@ -33,9 +33,9 @@ class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.A
         val user = friends[position]
         holder.username.text = user.userName
         Log.d("MEMESKI",user.userName+  " W ADAPTERZE")
-        holder.username.setOnClickListener{
-            (context as MainActivity).displayProfile(user.uid)
-        }
+//        holder.username.setOnClickListener{
+//            (context as MainActivity).displayProfile(user.uid)
+//        }
 
 //        tutaj ustawiamy jak ktoś dodał nowe
 //        holder.news.text = "2"

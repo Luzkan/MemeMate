@@ -116,6 +116,8 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
     // (KS) functions to handle changing layouts and buttons
     private fun bFriendsClick() {
+        Log.d("ONCLICK","B FRIENDS CLICK")
+
         TransitionManager.beginDelayedTransition(lScreen)
 
         downloadFriends()
@@ -138,6 +140,7 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
     private fun bFeedClick() {
         TransitionManager.beginDelayedTransition(lScreen)
+        Log.d("ONCLICK","B FEED CLICKED")
         downloadFeed()
 
         (bFriends.layoutParams as LinearLayout.LayoutParams).weight = 0f
@@ -155,6 +158,7 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
     private fun bMessagesClick() {
         TransitionManager.beginDelayedTransition(lScreen)
+        Log.d("ONCLICK","B MESSSAGE CLICK")
 
         (bFriends.layoutParams as LinearLayout.LayoutParams).weight = 0f
         (bFeed.layoutParams as LinearLayout.LayoutParams).weight = 0f
@@ -197,7 +201,13 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                 friendsList.add(friend)
             }
         }
+        friendsList.forEach {
+            Log.d("FRIENDS", it.userName)
+        }
+        Log.d("FRIENDS","FRIENDS LIST SIZE = " + friendsList.size)
         friendsAdapter.notifyDataSetChanged()
+        Log.d("FRIENDS","NOTIFYING")
+
     }
 
     private fun downloadFeed() {
