@@ -39,8 +39,8 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
     private var viewType = ViewType.ADDED
 
     // Adapters
-    protected lateinit var userMemesAdapter: GalleryAdapter
-    protected lateinit var likedMemesAdapter: GalleryAdapter
+    private lateinit var userMemesAdapter: GalleryAdapter
+    private lateinit var likedMemesAdapter: GalleryAdapter
 
     // (SG) Database
     private lateinit var database: FirebaseFirestore
@@ -105,14 +105,22 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.liked_icon))
                 recyclerView.adapter = likedMemesAdapter
                 currentPosition = 0
-                Picasso.get().load(likedMemesList[0].url).into(mainMeme)
+                if (likedMemesList.size > 0) {
+                    Picasso.get().load(likedMemesList[0].url).into(mainMeme)
+                } else {
+                    displayDefaultProfile()
+                }
             }
             ViewType.LIKED -> {
                 viewType = ViewType.ADDED
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.added_icon))
                 recyclerView.adapter = userMemesAdapter
                 currentPosition = 0
-                Picasso.get().load(userMemesList[0].url).into(mainMeme)
+                if (userMemesList.size > 0) {
+                    Picasso.get().load(userMemesList[0].url).into(mainMeme)
+                } else {
+                    displayDefaultProfile()
+                }
             }
         }
     }
@@ -142,7 +150,7 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
     }
 
     override fun onDestroy() {
-        (activity as MainActivity).globalUserMemes = userMemesList
+//        (activity as MainActivity).globalUserMemes = userMemesList
         super.onDestroy()
     }
 
