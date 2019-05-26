@@ -1,7 +1,10 @@
 package com.codecrew.mememate.fragment
 
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -11,9 +14,11 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.SearchView
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.adapter.FeedAdapter
@@ -23,6 +28,7 @@ import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.fragment_friends.*
 
 
 @Suppress("UNCHECKED_CAST")
@@ -44,6 +50,8 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
     private lateinit var recyclerViewFeed: RecyclerView
     private var feedList = ArrayList<MemeModel>()
     private lateinit var feedAdapter: FeedAdapter
+
+    private lateinit var searchView: SearchView
 
     private var currentPosition: Int = 0
     private lateinit var db: FirebaseFirestore
@@ -89,6 +97,10 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
         // (KS) setting all layouts and buttons
         val v = inflater.inflate(R.layout.fragment_friends, container, false)
 
+        searchView = v.findViewById(R.id.searchView) as SearchView
+        searchView.setOnClickListener { searchClick() }
+        searching(searchView)
+
         recyclerViewFriends = v.findViewById(R.id.recyclerViewFriends) as RecyclerView
         friendsAdapter = FriendsAdapter(friendsList)
         recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
@@ -113,6 +125,25 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
         bFeed.setOnClickListener { bFeedClick() }
         bMessages.setOnClickListener { bMessagesClick() }
         return v
+    }
+
+    private fun searchClick() {
+        searchView.isIconified = false
+    }
+
+    private fun searching(search: SearchView) {
+
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.i("ZIOMO","Llego al querysubmit")
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                Log.i("ZIOMO","Llego al querytextchange")
+                return true
+            }
+        })
     }
 
     // (KS) functions to handle changing layouts and buttons
@@ -194,7 +225,7 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                     following = it["following"] as ArrayList<String>?,
                     followers = it["followers"] as ArrayList<String>?
                 )
-                if(!friendsList.contains(friend)){
+                if (!friendsList.contains(friend)) {
                     friendsList.add(friend)
                 }
             }
@@ -217,8 +248,8 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                         userID = meme["userID"].toString(),
                         addDate = meme["addDate"].toString()
                     )
-                    if(!feedList.contains(memeModel))
-                    feedList.add(memeModel)
+                    if (!feedList.contains(memeModel))
+                        feedList.add(memeModel)
                 }
             }
         }
@@ -227,12 +258,13 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
     }
 
     private fun sortFeed(feedList: ArrayList<MemeModel>) {
-        val sortedList = feedList.sortedWith(compareByDescending {it.addDate})
+        val sortedList = feedList.sortedWith(compareByDescending { it.addDate })
         feedList.clear()
         feedList.addAll(sortedList)
     }
+
     private fun sortFriends(friendsList: ArrayList<UserModel>) {
-        val sortedList = friendsList.sortedWith(compareBy {it.userName})
+        val sortedList = friendsList.sortedWith(compareBy { it.userName })
         friendsList.clear()
         friendsList.addAll(sortedList)
     }
