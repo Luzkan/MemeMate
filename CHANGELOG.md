@@ -3,7 +3,24 @@ All notable changes to this project will be documented in this file.
 
 ___________________________________
 
-## [0.8.1] - 2019-05-24 - Marcel Jerzyk
+## [0.8.3] - 2019-05-24 - Piotrek Kołodziejczyk
+### Improved
+- Picking photos from camera roll instead of Google Photos
+
+## [0.8.2a] - 2019-05-24 - Marcel Jerzyk
+### Improved
+- Further Paddings adjustments
+- Readme Logo
+### Fixed
+- View crash bug
+
+## [[0.8.2]](https://github.com/Luzkan/MemeMate/commit/812992ac8e3393038def2dc181504acda3366976) - 2019-05-24 - Marcel Jerzyk
+### Improved
+- Adjusted image constraints & size on meme browsing and meme adding fragment 
+- Adjusted paddings for symmetry
+- Extracted strings
+
+## [[0.8.1]](https://github.com/Luzkan/MemeMate/commit/f02045b053ebb18b66de6a06681e349da7d1a1bb) - 2019-05-24 - Marcel Jerzyk
 ### Improved
 - Code overhaul, junked removed or archived, removed junk and weird new lines from code, code and comments were standardized and 'beautified' (& fixed typos)
 ### Fixed

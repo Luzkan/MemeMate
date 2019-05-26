@@ -40,27 +40,27 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
     }
 
     private lateinit var likedMemesList: ArrayList<MemeModel>
+
     private lateinit var userMemesList: ArrayList<MemeModel>
     private var currentPosition: Int = 0
-
     private lateinit var recyclerView: RecyclerView
+
     private lateinit var mainMeme: RoundedImageView
-
     private lateinit var settingsButton: ImageButton
-    private lateinit var viewSwitchButton: ImageButton
 
+    private lateinit var viewSwitchButton: ImageButton
     private var viewType = ViewType.ADDED
+
     private lateinit var userMemesAdapter: GalleryAdapter
     private lateinit var likedMemesAdapter: GalleryAdapter
-
     // (SG) Database
     private lateinit var database: FirebaseFirestore
     private lateinit var user: UserModel
 
     // (SG) User data fields
     private lateinit var location: TextView
-    private lateinit var username: TextView
 
+    private lateinit var username: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("ONCREATEE","PROFILE")
 
@@ -108,7 +108,7 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         likedMemesAdapter = GalleryAdapter(likedMemesList).also { it.listener = this }
 
         // (PR) Set up RecyclerView.
-        recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
+        recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT) as RecyclerView.LayoutManager?
         recyclerView.adapter = userMemesAdapter
 
         // (SG) Set up user data
@@ -182,11 +182,11 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         galleryFragment.show(fragmentTransaction, "gallery")
     }
 
-
     override fun onDestroy() {
         (activity as MainActivity).globalUserMemes = userMemesList
         super.onDestroy()
     }
+
 
     private fun loadUserMemes() {
 //        database.document("Users/${user.uid}").get().addOnSuccessListener {
@@ -269,9 +269,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
 
 
     private enum class ViewType {
+
         ADDED,
         LIKED
     }
-
-
 }

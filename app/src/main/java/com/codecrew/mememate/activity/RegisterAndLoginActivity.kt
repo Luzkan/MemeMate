@@ -94,7 +94,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (SG) Allows us to open activity to sign in with facebook
-    fun showSignOptions() {
+    fun showSignOptions(view: View) {
         startActivityForResult(
             AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).setTheme(
                 R.style.AppTheme
@@ -118,7 +118,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
         }
     }
 
-    fun bSubmitClick() {
+    fun bSubmitClick(view: View) {
         // (KS) Animated loading button
         bSubmit.startAnimation()
 
@@ -203,44 +203,43 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     private fun createUser(email: String, password: String, userName: String) {
 
         // (SG) Check if username is taken
-        db.collection("Users").get().addOnSuccessListener {
+        db.document("Users/$userName").get().addOnSuccessListener {
 
-            for (user in it) {
-                val userObj = user.toObject(UserModel::class.java)
-                if (userObj.userName == userName) {
-                    setError("This username is taken.")
-                    return@addOnSuccessListener
-                }
+            val user = it.toObject(UserModel::class.java)
+
+            if (user == null) {
+
+                // (SG) Checking if email is taken
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val uid = FirebaseAuth.getInstance().uid ?: ""
+                            val newUser = UserModel(uid, email, userName, ArrayList(), ArrayList(), ArrayList(), ArrayList())
+
+                            FirebaseAuth.getInstance().currentUser!!.updateProfile(
+                                UserProfileChangeRequest.Builder().setDisplayName(
+                                    userName
+                                ).build()
+                            )
+
+                            // (SG) Creating a new user in database
+                            db.collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(newUser)
+                                .addOnSuccessListener {
+                                    startApp()
+                                }.addOnFailureListener { exception: java.lang.Exception ->
+                                    setError(exception.message + ".")
+                                }
+                        }
+                    }.addOnFailureListener {
+                        if (it.message?.length!! > 70) {
+                            setError(it.message!!.takeLastWhile { character -> character != '[' }.take(41) + ".")
+                        } else {
+                            setError(it.message.toString())
+                        }
+                    }
+            } else {
+                setError("This username is taken.")
             }
-
-
-            // (SG) Checking if email is taken
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val uid = FirebaseAuth.getInstance().uid ?: ""
-                        val newUser = UserModel(uid, email, userName, ArrayList(), ArrayList(), ArrayList(),ArrayList())
-                        FirebaseAuth.getInstance().currentUser!!.updateProfile(
-                            UserProfileChangeRequest.Builder().setDisplayName(
-                                userName
-                            ).build()
-                        )
-
-                        // (SG) Creating a new user in database
-                        db.collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(newUser)
-                            .addOnSuccessListener { void: Void? ->
-                                startApp()
-                            }.addOnFailureListener { exception: java.lang.Exception ->
-                                setError(exception.message + ".")
-                            }
-                    }
-                }.addOnFailureListener {
-                    if (it.message?.length!! > 70) {
-                        setError(it.message!!.takeLastWhile { character -> character != '[' }.take(41) + ".")
-                    } else {
-                        setError(it.message.toString())
-                    }
-                }
         }
     }
 
@@ -251,7 +250,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (KS) Changing mode login/sign up on textView click
-    fun tvChangeClick() {
+    fun tvChangeClick(view: View) {
         tvError.visibility = View.GONE
         if (bSubmit.tag == "signup") {
             setLoginPanel()
@@ -261,7 +260,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (KS) Setting text on textView and button
-//     and hiding additional fields
+    //     and hiding additional fields
     private fun setLoginPanel() {
         tvError.text = ""
         TransitionManager.beginDelayedTransition(lRoot)
@@ -275,7 +274,7 @@ class RegisterAndLoginActivity : AppCompatActivity() {
     }
 
     // (KS) Setting text on textView and button
-//     and adding additional fields
+    //     and adding additional fields
     private fun setSignUpPanel() {
         tvError.text = ""
         TransitionManager.beginDelayedTransition(lRoot)

@@ -21,7 +21,7 @@ class GalleryFullscreenFragment : DialogFragment() {
     private lateinit var viewPager: ViewPager
     private lateinit var galleryPagerAdapter: GalleryPagerAdapter
 
-    private lateinit var callBack: FragmentCallBack
+    private var callBack: FragmentCallBack? = null
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -58,7 +58,7 @@ class GalleryFullscreenFragment : DialogFragment() {
     private var viewPagerPageChangeListener: ViewPager.OnPageChangeListener =
         object : ViewPager.OnPageChangeListener {
             override fun onPageSelected(position: Int) {
-                //callBack.onAction(position)
+                callBack?.onAction(position)
             }
 
             override fun onPageScrolled(arg0: Int, arg1: Float, arg2: Int) {
