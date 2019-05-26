@@ -33,6 +33,9 @@ class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.A
         val user = friends[position]
         holder.username.text = user.userName
         Log.d("MEMESKI",user.userName+  " W ADAPTERZE")
+        friends.forEach {
+            Log.d("MEMESKI2",it.userName)
+        }
 //        holder.username.setOnClickListener{
 //            (context as MainActivity).displayProfile(user.uid)
 //        }

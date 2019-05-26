@@ -49,7 +49,7 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        friendsList.add(UserModel("XD","XD", "XD", ArrayList(), ArrayList(), ArrayList(), ArrayList()))
+//        friendsList.add(UserModel("XD","XD", "XD", ArrayList(), ArrayList(), ArrayList(), ArrayList()))
         super.onCreate(savedInstanceState)
         // (SG) Firebase init
         db = FirebaseFirestore.getInstance()
@@ -65,7 +65,7 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
                 followers = it["followers"] as ArrayList<String>?
             )
             if ((activity as MainActivity).globalFriends == null) {
-                friendsList = ArrayList()
+//                friendsList =  ArrayList()
                 downloadFriends()
             } else {
                 friendsList = (activity as MainActivity).globalFriends!!
@@ -73,24 +73,22 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
             }
             bFriendsClick()
         }
-
-
     }
 
-    override fun onDestroy() {
+    override fun onPause() {
+        super.onPause()
         (activity as MainActivity).globalFriends = friendsList
-        super.onDestroy()
+
     }
-
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // (KS) setting all layouts and buttons
         val v = inflater.inflate(R.layout.fragment_friends, container, false)
+
         recyclerViewFriends = v.findViewById(R.id.recyclerViewFriends) as RecyclerView
         friendsAdapter = FriendsAdapter(friendsList)
         recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
-         recyclerViewFriends.adapter = friendsAdapter
+        recyclerViewFriends.adapter = friendsAdapter
 
         recyclerViewFeed = v.findViewById(R.id.recyclerViewFeed) as RecyclerView
         feedAdapter = FeedAdapter(feedList)
@@ -134,8 +132,6 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
         lFeed.visibility = View.GONE
         lMessages.visibility = View.GONE
 
-        friendsList.add(UserModel("XD","XD", "XD", ArrayList(), ArrayList(), ArrayList(), ArrayList()))
-        friendsAdapter.notifyDataSetChanged()
     }
 
     private fun bFeedClick() {
@@ -205,9 +201,9 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
             Log.d("FRIENDS", it.userName)
         }
         Log.d("FRIENDS","FRIENDS LIST SIZE = " + friendsList.size)
+
         friendsAdapter.notifyDataSetChanged()
         Log.d("FRIENDS","NOTIFYING")
-
     }
 
     private fun downloadFeed() {
