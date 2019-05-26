@@ -39,11 +39,11 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
     private var viewType = ViewType.ADDED
 
     // Adapters
-    protected lateinit var userMemesAdapter: GalleryAdapter
-    protected lateinit var likedMemesAdapter: GalleryAdapter
+    private lateinit var userMemesAdapter: GalleryAdapter
+    private lateinit var likedMemesAdapter: GalleryAdapter
 
     // (SG) Database
-    private lateinit var database: FirebaseFirestore
+    protected lateinit var database: FirebaseFirestore
     protected lateinit var userID: String
 
     // (SG) User data fields
@@ -105,8 +105,10 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.liked_icon))
                 recyclerView.adapter = likedMemesAdapter
                 currentPosition = 0
-                if(likedMemesList.size > 0) {
+                if (likedMemesList.size > 0) {
                     Picasso.get().load(likedMemesList[0].url).into(mainMeme)
+                } else {
+                    displayDefaultProfile()
                 }
             }
             ViewType.LIKED -> {
@@ -114,8 +116,10 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                 viewSwitchButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.added_icon))
                 recyclerView.adapter = userMemesAdapter
                 currentPosition = 0
-                if(userMemesList.size > 0) {
+                if (userMemesList.size > 0) {
                     Picasso.get().load(userMemesList[0].url).into(mainMeme)
+                } else {
+                    displayDefaultProfile()
                 }
             }
         }
@@ -145,9 +149,9 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
         galleryFragment.show(fragmentTransaction, "gallery")
     }
 
-    override fun onPause() {
-        (activity as MainActivity).globalUserMemes = userMemesList
-        super.onPause()
+    override fun onDestroy() {
+//        (activity as MainActivity).globalUserMemes = userMemesList
+        super.onDestroy()
     }
 
     protected fun loadUserMemes() {
@@ -167,8 +171,7 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                             seenBy = meme["seenBy"] as ArrayList<String>,
                             dbId = meme.toString(),
                             addedBy = meme["addedBy"].toString(),
-                            userID = meme["userId"].toString(),
-                            addDate = meme["addDate"].toString()
+                            userId = meme["userId"].toString()
                         )
                         userMemes.add(memeObject)
                     }
@@ -196,9 +199,7 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                     email = it["email"].toString(),
                     userName = it["username"].toString(),
                     likedMemes = it["likedMemes"] as ArrayList<String>?,
-                    addedMemes = it["addedMemes"] as ArrayList<String>?,
-                    followers = it["followers"] as ArrayList<String>?,
-                    following = it["following"] as ArrayList<String>?
+                    addedMemes = it["addedMemes"] as ArrayList<String>?
                 )
 
                 userModel.likedMemes?.forEach { likedMeme ->
@@ -213,8 +214,7 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                                     seenBy = meme["seenBy"] as ArrayList<String>,
                                     dbId = meme.toString(),
                                     addedBy = meme["addedBy"].toString(),
-                                    userID = meme["userId"].toString(),
-                                    addDate = meme["addDate"].toString()
+                                    userId = meme["userId"].toString()
                                 )
                             )
                         }

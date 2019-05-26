@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.TextView
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.activity.SettingsActivity
@@ -16,15 +15,6 @@ import com.google.firebase.auth.FirebaseAuth
 class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile) {
 
     private lateinit var settingsButton: ImageButton
-    private lateinit var userName : TextView
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        userID = (activity as MainActivity).getCurrentUser().uid
-        getMemes()
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val v = super.onCreateView(inflater, container, savedInstanceState)
@@ -33,11 +23,16 @@ class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile) {
         settingsButton = v.findViewById(R.id.settings_button)
         settingsButton.setOnClickListener { openSettingsActivity() }
 
-        userName = v.findViewById(R.id.item_name)
-        userName.text = (activity as MainActivity).getCurrentUser().userName
-
         getMemes()
         return v
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        userID = FirebaseAuth.getInstance().currentUser!!.uid
+
+        getMemes()
     }
 
     private fun openSettingsActivity() {

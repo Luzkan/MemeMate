@@ -39,7 +39,7 @@ class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter
                 .into(holder.memeImageView)
         }
 
-//        val index = (position + 1).toString() + "."
+        val index = (position + 1).toString() + "."
         val currentMeme = memes[position]
 
 //        holder.index.text = index
@@ -49,10 +49,7 @@ class TopAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter
         holder.itemView.setOnClickListener {
             listener?.onMemeClick(holder.adapterPosition, memes)
         }
-        holder.username.setOnClickListener{
-            //todo add redirect
-//            (context as MainActivity).displayProfile(currentMeme.userID)
-            Log.d("MEMESEK","UID  = " + currentMeme.userID)
+        holder.username.setOnClickListener {
             userNameListener?.onUsernameClick(currentMeme.userID)
         }
     }

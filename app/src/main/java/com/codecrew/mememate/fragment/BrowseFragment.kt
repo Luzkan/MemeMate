@@ -18,12 +18,15 @@ import com.codecrew.mememate.adapter.MemeStackAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.MemeDiffCallback
+import com.codecrew.mememate.interfaces.UsernameClickListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yuyakaido.android.cardstackview.*
 
 
-class BrowseFragment : Fragment(), CardStackListener {
+class BrowseFragment : Fragment(), CardStackListener, UsernameClickListener {
+
 
     // (SG) Current user
     private lateinit var currentUser: UserModel
@@ -44,6 +47,7 @@ class BrowseFragment : Fragment(), CardStackListener {
         // (SG) Firebase init
         memeDatabase = FirebaseFirestore.getInstance()
 
+
         if ((activity as MainActivity).globalMemeList == null || (activity as MainActivity).globalMemeList!!.size == 0) {
             memeList = ArrayList()
             (activity as MainActivity).globalMemeList = memeList
@@ -53,6 +57,7 @@ class BrowseFragment : Fragment(), CardStackListener {
             memeList = (activity as MainActivity).globalMemeList!!
             memeList = removeDuplicatedMemes(memeList)
         }
+        adapter.usernameClickListener = this
         currentUser = (activity as MainActivity).getCurrentUser()
         super.onCreate(savedInstanceState)
     }
@@ -144,7 +149,6 @@ class BrowseFragment : Fragment(), CardStackListener {
     override fun onCardCanceled() {
         Log.d("CardStackView", "onCardCanceled: ${manager.topPosition}")
     }
-
 
     private fun setupButton() {
         skipButton.setOnClickListener {
@@ -257,5 +261,9 @@ class BrowseFragment : Fragment(), CardStackListener {
         set.addAll(list)
         listWithoutDuplicates.addAll(set)
         return listWithoutDuplicates
+    }
+
+    override fun onUsernameClick(userID: String) {
+        (activity as MainActivity).goToClickedUsernameProfile(userID)
     }
 }

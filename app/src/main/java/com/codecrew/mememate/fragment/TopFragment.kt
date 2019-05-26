@@ -22,7 +22,6 @@ class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
     lateinit var database: FirebaseFirestore
 
     private var memesList = ArrayList<MemeModel>()
-
     private lateinit var topAdapter: TopAdapter
     private var currentPosition: Int = 0
 
@@ -51,7 +50,7 @@ class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
 
         loadMemes()
 
-        // Set up RecyclerView.
+        // Set up ReclyclerView.
         recyclerViewTop.layoutManager = LinearLayoutManager(this.context)
         recyclerViewTop.adapter = topAdapter
 
@@ -69,10 +68,6 @@ class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
         val galleryFragment = GalleryFullscreenFragment()
         galleryFragment.arguments = bundle
         galleryFragment.show(fragmentTransaction, "top")
-    }
-
-    override fun onUsernameClick(userID: String) {
-        (activity as MainActivity).goToClickedUsernameProfile(userID)
     }
 
     private fun loadMemes() {

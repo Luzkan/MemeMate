@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
     // (PR) Memes liked by user
     var globalLikedMemes: ArrayList<MemeModel>? = null
 
-    // (SG) Top meme list
     var clickedUserMemesList: ArrayList<MemeModel>? = null
     var clickedUserLikedMemesList: ArrayList<MemeModel>? = null
 
@@ -210,101 +209,6 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-
-//    fun loadData() {
-//        downloadFriends()
-//        downloadAddedMemes()
-//        downloadLikedMemes()
-//        downloadBrowseMemes()
-//    }
-
-//    private fun downloadBrowseMemes() {
-//
-//        globalMemeList = ArrayList()
-//        db.collection("Memes").get().addOnSuccessListener {
-//            // (SG) Casting downloaded memes into objects
-//            for (meme in it) {
-//                val newMeme = MemeModel(
-//                    dbId = meme.id,
-//                    url = meme["url"].toString(),
-//                    location = meme["location"].toString(),
-//                    rate = meme["rate"].toString().toInt(),
-//                    seenBy = meme["seenBy"] as ArrayList<String>,
-//                    addedBy = meme["addedBy"].toString(),
-//                    userID = meme["userID"].toString(),
-//                    addDate = meme["addDate"].toString()
-//
-//                )
-//                if (!newMeme.seenBy.contains(currentUser.uid) && !globalMemeList!!.contains(newMeme)) {
-//                    globalMemeList!!.add(newMeme)
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//private fun downloadAddedMemes() {
-//    globalUserMemes = ArrayList()
-//    db.collection("Memes")
-//        .whereEqualTo("userId", currentUserModel.uid)
-//        .get()
-//        .addOnSuccessListener { memeCollection ->
-//            for (meme in memeCollection) {
-//                val memeObject = MemeModel(
-//                    url = meme["url"].toString(),
-//                    location = meme["location"].toString(),
-//                    rate = meme["rate"].toString().toInt(),
-//                    seenBy = meme["seenBy"] as ArrayList<String>,
-//                    dbId = meme.toString(),
-//                    addedBy = meme["addedBy"].toString(),
-//                    userID = meme["userID"].toString(),
-//                    addDate = meme["addDate"].toString()
-//                )
-//                globalUserMemes!!.add(memeObject)
-//            }
-//        }
-//}
-//
-//
-//private fun downloadLikedMemes() {
-//    globalLikedMemes = ArrayList()
-//    currentUserModel.likedMemes?.forEach { likedMeme ->
-//        db.document("Memes/$likedMeme")
-//            .get()
-//            .addOnSuccessListener { meme ->
-//                globalUserMemes!!.add(
-//                    MemeModel(
-//                        url = meme["url"].toString(),
-//                        location = meme["location"].toString(),
-//                        rate = meme["rate"].toString().toInt(),
-//                        seenBy = meme["seenBy"] as ArrayList<String>,
-//                        dbId = meme.toString(),
-//                        addedBy = meme["addedBy"].toString(),
-//                        userID = meme["userID"].toString(),
-//                        addDate = meme["addDate"].toString()
-//                    )
-//                )
-//            }
-//    }
-//}
-//
-//private fun downloadFriends() {
-//    currentUserModel.following!!.forEach { friendID ->
-//        db.document("Users/$friendID").get().addOnSuccessListener {
-//            val friend = UserModel(
-//                uid = it["uid"].toString(),
-//                email = it["email"].toString(),
-//                userName = it["username"].toString(),
-//                likedMemes = it["likedMemes"] as ArrayList<String>?,
-//                addedMemes = it["addedMemes"] as ArrayList<String>?,
-//                following = it["following"] as ArrayList<String>?,
-//                followers = it["followers"] as ArrayList<String>?
-//            )
-//            globalFriends!!.add(friend)
-//        }
-//    }
-//}
-
 /* Legacy Code:
 
     private fun createMemes() {
@@ -403,13 +307,6 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    fun displayProfile() {
-        val transaction = fragmentManager.beginTransaction()
-        swipeSide(transaction, currentPanel, 5)
-        val fragment = ProfileFragment()
-        transaction.replace(R.id.fragment_holder, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
+
 
  */
