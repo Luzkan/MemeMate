@@ -7,7 +7,7 @@ ___________________________________
 ### Added
 - Friends panel
 - You can see feed from your friends
-- You can see and search for your friends
+- You can search for your friends
 
 ## [0.8.4] - 2019-05-26 - Paweł Rubin
 ### Added
