@@ -7,10 +7,10 @@ import com.codecrew.mememate.R
 import com.codecrew.mememate.adapter.TopAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.fragment.GalleryFullscreenFragment
-import com.codecrew.mememate.interfaces.GalleryMemeClickListener
+import com.codecrew.mememate.interfaces.MemeClickListener
 import kotlinx.android.synthetic.main.acitivity_top.*
 
-abstract class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
+abstract class TopActivity : AppCompatActivity(), MemeClickListener {
 
     private var memesList = ArrayList<MemeModel>()
     private lateinit var topAdapter: TopAdapter
@@ -32,7 +32,7 @@ abstract class TopActivity : AppCompatActivity(), GalleryMemeClickListener {
 //        loadDemoMemes()
     }
 
-    override fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>) {
+    override fun onMemeClick(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
 
         val bundle = Bundle()

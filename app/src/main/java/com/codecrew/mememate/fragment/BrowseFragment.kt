@@ -53,7 +53,6 @@ class BrowseFragment : Fragment(), CardStackListener {
             memeList = (activity as MainActivity).globalMemeList!!
             memeList = removeDuplicatedMemes(memeList)
         }
-        Log.d("MEMESKI","POTRZEBUJE USERAAAAAAA")
         currentUser = (activity as MainActivity).getCurrentUser()
         super.onCreate(savedInstanceState)
     }
@@ -110,7 +109,7 @@ class BrowseFragment : Fragment(), CardStackListener {
 
         currentMeme.seenBy.add(currentUser!!.uid)
 
-        // Force refresh of liked memes in the profile
+        // (PR) Force refresh of liked memes in the profile
         (activity as MainActivity).globalLikedMemes = null
 
         val newMemeParameters = mutableMapOf<String, Any>()

@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
-import com.codecrew.mememate.interfaces.GalleryMemeClickListener
+import com.codecrew.mememate.interfaces.MemeClickListener
 import com.squareup.picasso.Picasso
 
 class FeedAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter<TopViewHolder>() {
 
     private var context: Context? = null
-    var listener: GalleryMemeClickListener? = null
+    var listener: MemeClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopViewHolder {
         context = parent.context
@@ -41,7 +41,7 @@ class FeedAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapte
 //        holder.location.text = currentMeme.location
         holder.username.text = currentMeme.addedBy
         holder.itemView.setOnClickListener {
-            listener?.onGalleryMemeClickListener(holder.adapterPosition, memes)
+            listener?.onMemeClick(holder.adapterPosition, memes)
         }
     }
 }

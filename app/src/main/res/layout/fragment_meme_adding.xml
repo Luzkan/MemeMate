@@ -16,13 +16,13 @@
         android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="64dp"
+        android:contentDescription="@string/post_a_new_meme"
         android:src="@drawable/default_meme_add"
         app:layout_constraintBottom_toTopOf="@+id/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible"
-        android:contentDescription="@string/post_a_new_meme" />
+        tools:visibility="invisible" />
 
     <EditText
         android:id="@+id/name"
@@ -31,6 +31,7 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="8dp"
         android:layout_weight="0.7"
+        android:autofillHints="Sad Pepe redemption"
         android:background="@drawable/edit_text_round"
         android:ems="10"
         android:hint="@string/title"
@@ -39,8 +40,7 @@
         android:paddingEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline6"
-        android:autofillHints="Sad Pepe redemption" />
+        app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"

@@ -17,8 +17,8 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="-88dp"
-        app:srcCompat="@drawable/no_more_memes"
-        android:contentDescription="@string/you_swiped_through_all_existing_memes" />
+        android:contentDescription="@string/you_swiped_through_all_existing_memes"
+        app:srcCompat="@drawable/no_more_memes" />
 
     <RelativeLayout
         android:id="@+id/button_container"
@@ -98,7 +98,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/button_container"
         android:clipToPadding="false"
-        android:padding="4dp" >
+        android:padding="4dp">
 
     </com.yuyakaido.android.cardstackview.CardStackView>
 

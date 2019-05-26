@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +11,18 @@ import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.adapter.TopAdapter
 import com.codecrew.mememate.database.models.MemeModel
-import com.codecrew.mememate.interfaces.GalleryMemeClickListener
+import com.codecrew.mememate.interfaces.MemeClickListener
+import com.codecrew.mememate.interfaces.UsernameClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 
-class TopFragment : Fragment(), GalleryMemeClickListener {
-
+class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
     private lateinit var recyclerViewTop: RecyclerView
 
     // (SG) Database
     lateinit var database: FirebaseFirestore
 
     private var memesList = ArrayList<MemeModel>()
+
     private lateinit var topAdapter: TopAdapter
     private var currentPosition: Int = 0
 
@@ -47,10 +47,11 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
         // (SG) Create Adapter
         topAdapter = TopAdapter(memesList)
         topAdapter.listener = this
+        topAdapter.userNameListener = this
 
         loadMemes()
 
-        // Set up ReclyclerView.
+        // Set up RecyclerView.
         recyclerViewTop.layoutManager = LinearLayoutManager(this.context)
         recyclerViewTop.adapter = topAdapter
 
@@ -58,7 +59,7 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
         return v
     }
 
-    override fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>) {
+    override fun onMemeClick(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
 
         val bundle = Bundle()
@@ -68,6 +69,10 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
         val galleryFragment = GalleryFullscreenFragment()
         galleryFragment.arguments = bundle
         galleryFragment.show(fragmentTransaction, "top")
+    }
+
+    override fun onUsernameClick(userID: String) {
+        (activity as MainActivity).goToClickedUsernameProfile(userID)
     }
 
     private fun loadMemes() {
@@ -82,7 +87,7 @@ class TopFragment : Fragment(), GalleryMemeClickListener {
                         seenBy = meme["seenBy"] as ArrayList<String>,
                         dbId = meme.id,
                         addedBy = meme["addedBy"].toString(),
-                        userID = meme["userID"].toString(),
+                        userID = meme["userId"].toString(),
                         addDate = meme["addDate"].toString()
                     )
                 )

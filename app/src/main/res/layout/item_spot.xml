@@ -1,45 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/selectableItemBackground"
     android:foreground="?attr/selectableItemBackground"
-    app:cardUseCompatPadding="true"
-    app:cardPreventCornerOverlap="false"
+    app:cardBackgroundColor="@android:color/white"
     app:cardCornerRadius="8dp"
-    app:cardBackgroundColor="@android:color/white">
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true">
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/item_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:padding="16dp"
-        android:background="@drawable/gradation_black">
+        android:background="@drawable/gradation_black"
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:textSize="26sp"/>
+            android:textSize="26sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/item_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -52,8 +51,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/skip_white_120dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:src="@drawable/skip_white_120dp" />
 
     </FrameLayout>
 
@@ -66,21 +65,19 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/like_white_120dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:src="@drawable/like_white_120dp" />
 
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/top_overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"></FrameLayout>
 
     <FrameLayout
         android:id="@+id/bottom_overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"></FrameLayout>
 
 </android.support.v7.widget.CardView>

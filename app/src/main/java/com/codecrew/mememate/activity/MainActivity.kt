@@ -15,17 +15,12 @@ import android.view.inputmethod.InputMethodManager
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
-import com.codecrew.mememate.fragment.ProfileFragment
 import com.codecrew.mememate.ui.main.CustomViewPager
 import com.codecrew.mememate.ui.main.Pager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +36,10 @@ class MainActivity : AppCompatActivity() {
     var globalLikedMemes: ArrayList<MemeModel>? = null
 
     // (SG) Top meme list
+    var clickedUserMemesList: ArrayList<MemeModel>? = null
+    var clickedUserLikedMemesList: ArrayList<MemeModel>? = null
+
+    // (SG) Top meme List
     var globalTopMemes: ArrayList<MemeModel>? = null
 
     // (SG) Friends list
@@ -53,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     var isValid = false
     lateinit var pic: Uri
 
-    var currentPanel = 1
+//    private var currentPanel = 1
 
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
@@ -71,42 +70,34 @@ class MainActivity : AppCompatActivity() {
     // (SG) Firebase instance
     private lateinit var db: FirebaseFirestore
 
+    // (PR) Clicked user profile
+    var clickedUserNameID: String? = null
+
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_top -> {
-                if (currentPanel != 1) {
-                    currentPanel = 1
-                    mViewPager!!.currentItem = 0
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 0
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_friends -> {
-                if (currentPanel != 2) {
-                    currentPanel = 2
-                    mViewPager!!.currentItem = 1
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 1
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_main -> {
-                if (currentPanel != 3) {
-                    currentPanel = 3
-                    mViewPager!!.currentItem = 2
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 2
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_add -> {
-                if (currentPanel != 4) {
-                    currentPanel = 4
-                    mViewPager!!.currentItem = 3
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 3
+                return@OnNavigationItemSelectedListener true
+
             }
             R.id.navigation_profile -> {
-                if (currentPanel != 5) {
-                    currentPanel = 5
-                    mViewPager!!.currentItem = 4
-                    return@OnNavigationItemSelectedListener true
-                }
+                mViewPager!!.currentItem = 4
+                return@OnNavigationItemSelectedListener true
             }
         }
         false
@@ -143,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         mTabLayout = findViewById<View>(R.id.tabs) as TabLayout
         mTabLayout!!.setupWithViewPager(mViewPager)
 
-        // (MJ) Add Upper Tabs (they are invisible [gone] in layout, needed for swipe feature.
+        // (MJ) Add Upper Tabs (they are invisible [gone] in layoutRes, needed for swipe feature.
         // --> IMPORTANT <-- Matches have "profile" function now due to lack of Matches Fragment
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Top"))
         mTabLayout!!.addTab(mTabLayout!!.newTab().setText("Friends"))
@@ -154,16 +145,14 @@ class MainActivity : AppCompatActivity() {
 
         // (MJ) Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.container)
-        val adapter = Pager(supportFragmentManager, mTabLayout!!.tabCount)
+        val adapter = Pager(supportFragmentManager, mTabLayout!!.tabCount + 1)
         mViewPager!!.adapter = adapter
 
         mViewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
-                currentPanel = position + 1
-
                 // (MJ) Disables Touch on browse memes fragment
-                if (position == 2) {
+                if (position in setOf(2, 5)) {
                     mViewPager!!.disableTouches()
                 } else {
                     mViewPager!!.enableTouches()
@@ -174,8 +163,10 @@ class MainActivity : AppCompatActivity() {
                 mTabLayout!!.setScrollPosition(position, 0F, true)
                 mTabLayout!!.isSelected = true
 
-                // (MJ) Toggles "Checked" button on navbar depending on scrolled page
-                nav_view.menu.getItem(position).isChecked = true
+                if (position in 0 until mTabLayout!!.tabCount) {
+                    // (MJ) Toggles "Checked" button on navbar depending on scrolled page
+                    nav_view.menu.getItem(position).isChecked = true
+                }
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -187,6 +178,8 @@ class MainActivity : AppCompatActivity() {
 
 //        createMemes()
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        //displayBrowsing()
+        //navView.selectedItemId = R.id.navigation_top
     }
 
     override fun onBackPressed() {
@@ -202,104 +195,117 @@ class MainActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
+    // (PR) Shows up profile of the user's nickname we clicked.
+    fun goToClickedUsernameProfile(userID: String) {
+        Log.d("Memes", "Username clicked ID: $userID")
+        clickedUserNameID = userID
+        this.clickedUserMemesList = null
+        this.clickedUserLikedMemesList = null
+        mViewPager?.currentItem = 5
+    }
+
     // (SG) Current user getter
     fun getCurrentUser(): UserModel {
         return currentUserModel
     }
+}
 
 
-    fun loadData() {
-        downloadFriends()
-        downloadAddedMemes()
-        downloadLikedMemes()
-        downloadBrowseMemes()
-    }
+//    fun loadData() {
+//        downloadFriends()
+//        downloadAddedMemes()
+//        downloadLikedMemes()
+//        downloadBrowseMemes()
+//    }
 
-    private fun downloadBrowseMemes() {
+//    private fun downloadBrowseMemes() {
+//
+//        globalMemeList = ArrayList()
+//        db.collection("Memes").get().addOnSuccessListener {
+//            // (SG) Casting downloaded memes into objects
+//            for (meme in it) {
+//                val newMeme = MemeModel(
+//                    dbId = meme.id,
+//                    url = meme["url"].toString(),
+//                    location = meme["location"].toString(),
+//                    rate = meme["rate"].toString().toInt(),
+//                    seenBy = meme["seenBy"] as ArrayList<String>,
+//                    addedBy = meme["addedBy"].toString(),
+//                    userID = meme["userID"].toString(),
+//                    addDate = meme["addDate"].toString()
+//
+//                )
+//                if (!newMeme.seenBy.contains(currentUser.uid) && !globalMemeList!!.contains(newMeme)) {
+//                    globalMemeList!!.add(newMeme)
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//private fun downloadAddedMemes() {
+//    globalUserMemes = ArrayList()
+//    db.collection("Memes")
+//        .whereEqualTo("userId", currentUserModel.uid)
+//        .get()
+//        .addOnSuccessListener { memeCollection ->
+//            for (meme in memeCollection) {
+//                val memeObject = MemeModel(
+//                    url = meme["url"].toString(),
+//                    location = meme["location"].toString(),
+//                    rate = meme["rate"].toString().toInt(),
+//                    seenBy = meme["seenBy"] as ArrayList<String>,
+//                    dbId = meme.toString(),
+//                    addedBy = meme["addedBy"].toString(),
+//                    userID = meme["userID"].toString(),
+//                    addDate = meme["addDate"].toString()
+//                )
+//                globalUserMemes!!.add(memeObject)
+//            }
+//        }
+//}
+//
+//
+//private fun downloadLikedMemes() {
+//    globalLikedMemes = ArrayList()
+//    currentUserModel.likedMemes?.forEach { likedMeme ->
+//        db.document("Memes/$likedMeme")
+//            .get()
+//            .addOnSuccessListener { meme ->
+//                globalUserMemes!!.add(
+//                    MemeModel(
+//                        url = meme["url"].toString(),
+//                        location = meme["location"].toString(),
+//                        rate = meme["rate"].toString().toInt(),
+//                        seenBy = meme["seenBy"] as ArrayList<String>,
+//                        dbId = meme.toString(),
+//                        addedBy = meme["addedBy"].toString(),
+//                        userID = meme["userID"].toString(),
+//                        addDate = meme["addDate"].toString()
+//                    )
+//                )
+//            }
+//    }
+//}
+//
+//private fun downloadFriends() {
+//    currentUserModel.following!!.forEach { friendID ->
+//        db.document("Users/$friendID").get().addOnSuccessListener {
+//            val friend = UserModel(
+//                uid = it["uid"].toString(),
+//                email = it["email"].toString(),
+//                userName = it["username"].toString(),
+//                likedMemes = it["likedMemes"] as ArrayList<String>?,
+//                addedMemes = it["addedMemes"] as ArrayList<String>?,
+//                following = it["following"] as ArrayList<String>?,
+//                followers = it["followers"] as ArrayList<String>?
+//            )
+//            globalFriends!!.add(friend)
+//        }
+//    }
+//}
 
-        globalMemeList = ArrayList()
-        db.collection("Memes").get().addOnSuccessListener {
-            // (SG) Casting downloaded memes into objects
-            for (meme in it) {
-                val newMeme = MemeModel(
-                    dbId = meme.id,
-                    url = meme["url"].toString(),
-                    location = meme["location"].toString(),
-                    rate = meme["rate"].toString().toInt(),
-                    seenBy = meme["seenBy"] as ArrayList<String>,
-                    addedBy = meme["addedBy"].toString(),
-                    userID = meme["userID"].toString(),
-                    addDate = meme["addDate"].toString()
-
-                )
-                if (!newMeme.seenBy.contains(currentUser.uid) && !globalMemeList!!.contains(newMeme)) {
-                    globalMemeList!!.add(newMeme)
-                }
-            }
-        }
-    }
-
-    private fun downloadAddedMemes() {
-        globalUserMemes = ArrayList()
-        db.collection("Memes")
-            .whereEqualTo("userId", currentUserModel.uid)
-            .get()
-            .addOnSuccessListener { memeCollection ->
-                for (meme in memeCollection) {
-                    val memeObject = MemeModel(
-                        url = meme["url"].toString(),
-                        location = meme["location"].toString(),
-                        rate = meme["rate"].toString().toInt(),
-                        seenBy = meme["seenBy"] as ArrayList<String>,
-                        dbId = meme.toString(),
-                        addedBy = meme["addedBy"].toString(),
-                        userID = meme["userID"].toString(),
-                        addDate = meme["addDate"].toString()
-                    )
-                    globalUserMemes!!.add(memeObject)
-                }
-            }
-    }
-
-
-    private fun downloadLikedMemes() {
-        globalLikedMemes = ArrayList()
-        currentUserModel.likedMemes?.forEach { likedMeme ->
-            db.document("Memes/$likedMeme")
-                .get()
-                .addOnSuccessListener { meme ->
-                    globalUserMemes!!.add(
-                        MemeModel(
-                            url = meme["url"].toString(),
-                            location = meme["location"].toString(),
-                            rate = meme["rate"].toString().toInt(),
-                            seenBy = meme["seenBy"] as ArrayList<String>,
-                            dbId = meme.toString(),
-                            addedBy = meme["addedBy"].toString(),
-                            userID = meme["userID"].toString(),
-                            addDate = meme["addDate"].toString()
-                        )
-                    )
-                }
-        }
-    }
-
-    private fun downloadFriends() {
-        currentUserModel.following!!.forEach { friendID ->
-            db.document("Users/$friendID").get().addOnSuccessListener {
-                val friend = UserModel(
-                    uid = it["uid"].toString(),
-                    email = it["email"].toString(),
-                    userName = it["username"].toString(),
-                    likedMemes = it["likedMemes"] as ArrayList<String>?,
-                    addedMemes = it["addedMemes"] as ArrayList<String>?,
-                    following = it["following"] as ArrayList<String>?,
-                    followers = it["followers"] as ArrayList<String>?
-                )
-                globalFriends!!.add(friend)
-            }
-        }
-    }
+/* Legacy Code:
 
     private fun createMemes() {
 
@@ -358,11 +364,6 @@ class MainActivity : AppCompatActivity() {
                 }
         }
     }
-}
-
-/* Legacy Code:
-
-
 
     // (KS) Choosing side to make swipe animation when changing fragment
     private fun swipeSide(transaction: FragmentTransaction, src: Int, target: Int) {
@@ -379,15 +380,6 @@ class MainActivity : AppCompatActivity() {
         val transaction = fragmentManager.beginTransaction()
         swipeSide(transaction, currentPanel, 1)
         val fragment = TopFragment()
-        transaction.replace(R.id.fragment_holder, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-    private fun displayFriends() {
-        val transaction = fragmentManager.beginTransaction()
-        swipeSide(transaction, currentPanel, 2)
-        val fragment = FriendsFragment()
         transaction.replace(R.id.fragment_holder, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
