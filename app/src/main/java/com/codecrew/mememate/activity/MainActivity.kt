@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -24,9 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    //todo uaktualnić żeby w każdym fragmencie nie pobierał się użytkownik tylko raz w mainie (profile zrobione)
-
-
+    //todo zapisywac model aktaulnie zalogowanego uzytkownika do sharedPrefs
 
     // (SG) Meme list
     var globalMemeList: ArrayList<MemeModel>? = null
@@ -37,8 +36,11 @@ class MainActivity : AppCompatActivity() {
     // (PR) Memes liked by user
     var globalLikedMemes: ArrayList<MemeModel>? = null
 
-    // (SG) Top meme List
+    // (SG) Top meme list
     var globalTopMemes: ArrayList<MemeModel>? = null
+
+    // (SG) Friends list
+    var globalFriends: ArrayList<UserModel>? = null
 
     // (KS) properties to manage addMeme
     var isValid = false
@@ -57,10 +59,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentUser: FirebaseUser
 
     //(SG) Current user model
-    private lateinit var currentUserModel : UserModel
+    private lateinit var currentUserModel: UserModel
 
     // (SG) Firebase instance
-    private lateinit var db : FirebaseFirestore
+    private lateinit var db: FirebaseFirestore
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -111,6 +113,25 @@ class MainActivity : AppCompatActivity() {
         // (SG)
         db = FirebaseFirestore.getInstance()
 
+        currentUser = FirebaseAuth.getInstance().currentUser!!
+
+        Log.d("MEMESKI", "POBIERAM USERA")
+        db.document("Users/${currentUser.uid}")
+            .get()
+            .addOnSuccessListener {
+                Log.d("MEMESKI", "POBRAŁEM USERA")
+                currentUserModel = UserModel(
+                    uid = it["uid"].toString(),
+                    email = it["email"].toString(),
+                    userName = it["username"].toString(),
+                    likedMemes = it["likedMemes"] as ArrayList<String>?,
+                    addedMemes = it["addedMemes"] as ArrayList<String>?,
+                    following = it["following"] as ArrayList<String>?,
+                    followers = it["followers"] as ArrayList<String>?
+                )
+//                loadData()
+            }
+
         // (MJ) Pager Adapter
         // (MJ) Tab ID
         mTabLayout = findViewById<View>(R.id.tabs) as TabLayout
@@ -157,21 +178,7 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        currentUser = FirebaseAuth.getInstance().currentUser!!
 
-        db.document("Users/${currentUser.uid}")
-            .get()
-            .addOnSuccessListener {
-                currentUserModel = UserModel(
-                    uid = it["uid"].toString(),
-                    email = it["email"].toString(),
-                    userName = it["username"].toString(),
-                    likedMemes = it["likedMemes"] as ArrayList<String>?,
-                    addedMemes = it["addedMemes"] as ArrayList<String>?,
-                    following = it["following"] as ArrayList<String>?,
-                    followers = it["followers"] as ArrayList<String>?
-                )
-            }
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         //displayBrowsing()
@@ -192,18 +199,109 @@ class MainActivity : AppCompatActivity() {
     }
 
     // (SG) Current user getter
-    fun getCurrentUser() : UserModel{
+    fun getCurrentUser(): UserModel {
         return currentUserModel
     }
 
 
     // (SG) todo CHANGE PROFILE FRAGMENT TO FR
-    fun displayProfile(uid : String) {
+    fun displayProfile(uid: String) {
         val transaction = fragmentManager.beginTransaction()
         val fragment = ProfileFragment()
         transaction.replace(R.id.fragment_holder, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    fun loadData() {
+        downloadFriends()
+//        downloadAddedMemes()
+//        downloadLikedMemes()
+//        downloadBrowseMemes()
+    }
+
+    private fun downloadBrowseMemes() {
+
+        globalMemeList = ArrayList()
+        db.collection("Memes").get().addOnSuccessListener {
+            // (SG) Casting downloaded memes into objects
+            for (meme in it) {
+                val newMeme = MemeModel(
+                    dbId = meme.id,
+                    url = meme["url"].toString(),
+                    location = meme["location"].toString(),
+                    rate = meme["rate"].toString().toInt(),
+                    seenBy = meme["seenBy"] as ArrayList<String>,
+                    addedBy = meme["addedBy"].toString(),
+                    userID = meme["userID"].toString()
+
+                )
+                if (!newMeme.seenBy.contains(currentUser.uid) && !globalMemeList!!.contains(newMeme)) {
+                    globalMemeList!!.add(newMeme)
+                }
+            }
+        }
+    }
+
+    private fun downloadAddedMemes() {
+        globalUserMemes = ArrayList()
+        db.collection("Memes")
+            .whereEqualTo("userId", currentUserModel.uid)
+            .get()
+            .addOnSuccessListener { memeCollection ->
+                for (meme in memeCollection) {
+                    val memeObject = MemeModel(
+                        url = meme["url"].toString(),
+                        location = meme["location"].toString(),
+                        rate = meme["rate"].toString().toInt(),
+                        seenBy = meme["seenBy"] as ArrayList<String>,
+                        dbId = meme.toString(),
+                        addedBy = meme["addedBy"].toString(),
+                        userID = meme["userID"].toString()
+                    )
+                    globalUserMemes!!.add(memeObject)
+                }
+            }
+    }
+
+
+    private fun downloadLikedMemes() {
+        globalLikedMemes = ArrayList()
+        currentUserModel.likedMemes?.forEach { likedMeme ->
+            db.document("Memes/$likedMeme")
+                .get()
+                .addOnSuccessListener { meme ->
+                    globalUserMemes!!.add(
+                        MemeModel(
+                            url = meme["url"].toString(),
+                            location = meme["location"].toString(),
+                            rate = meme["rate"].toString().toInt(),
+                            seenBy = meme["seenBy"] as ArrayList<String>,
+                            dbId = meme.toString(),
+                            addedBy = meme["addedBy"].toString(),
+                            userID = meme["userID"].toString()
+                        )
+                    )
+                }
+        }
+    }
+
+    private fun downloadFriends() {
+        globalFriends = ArrayList()
+        currentUserModel.following!!.forEach { friendID ->
+            db.document("Users/$friendID").get().addOnSuccessListener {
+                val friend = UserModel(
+                    uid = it["uid"].toString(),
+                    email = it["email"].toString(),
+                    userName = it["username"].toString(),
+                    likedMemes = it["likedMemes"] as ArrayList<String>?,
+                    addedMemes = it["addedMemes"] as ArrayList<String>?,
+                    following = it["following"] as ArrayList<String>?,
+                    followers = it["followers"] as ArrayList<String>?
+                )
+                globalFriends!!.add(friend)
+            }
+        }
     }
 }
 

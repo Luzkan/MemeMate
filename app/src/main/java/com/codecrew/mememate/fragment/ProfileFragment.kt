@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
     private lateinit var username: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("ONCREATEE","PROFILE")
+
         super.onCreate(savedInstanceState)
 
         // Creating database instance and current user
@@ -82,7 +85,6 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         } else {
             likedMemesList = (activity as MainActivity).globalLikedMemes!!
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -116,10 +118,8 @@ class ProfileFragment : Fragment(), GalleryMemeClickListener, FragmentCallBack {
         mainMeme.setOnClickListener { mainMemeListener() }
 
 
-        // (SG) Must be here because the imageView wont be initialized earlier (If there are any problems
-        // with displaying user profile when he doesnt have memes, switch to first if
-//        if (userMemesList.size == 0) {
-        if (user.addedMemes!!.size == 0) {
+        // (SG) Must be here because the imageView wont be initialized earlier
+        if (userMemesList.size == 0) {
             displayDefaultProfile()
         } else {
             displayLastMeme(currentPosition)

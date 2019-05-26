@@ -2,6 +2,7 @@ package com.codecrew.mememate.adapter
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.A
 
         val user = friends[position]
         holder.username.text = user.userName
+        Log.d("MEMESKI",user.userName+  " W ADAPTERZE")
         holder.username.setOnClickListener{
             (context as MainActivity).displayProfile(user.uid)
         }

@@ -5,20 +5,24 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import com.codecrew.mememate.R
+import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.adapter.FeedAdapter
 import com.codecrew.mememate.adapter.FriendsAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.GalleryMemeClickListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
+@Suppress("UNCHECKED_CAST")
 class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
     private lateinit var bFriends: Button
@@ -40,62 +44,53 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
 
     private var currentPosition: Int = 0
     private lateinit var db: FirebaseFirestore
-    private lateinit var currentUser: UserModel
+    private lateinit var user: UserModel
+    private lateinit var memeDatabase: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // (KS) template friends
-        friendsList.add(UserModel("", "", "Shimek", null, null, null, null))
-        friendsList.add(UserModel("", "", "Michalec", null, null, null, null))
 
-        // (KS) template feed
-        feedList.add(
-            MemeModel(
-                9999999999,
-                "",
-                "https://img-9gag-fun.9cache.com/photo/5668845_700bwp.webp",
-                "",
-                10000,
-                ArrayList(),
-                "Shimek",
-                ""
-            )
-        )
-        feedList.add(
-            MemeModel(
-                9999999998,
-                "",
-                "https://wyncode.co/uploads/2014/08/81.jpg",
-                "",
-                2,
-                ArrayList(),
-                "Michalec",
-                ""
-            )
-        )
-        feedList.add(
-            MemeModel(
-                9999999997,
-                "",
-                "https://pics.me.me/baguette-spaghett-33217703.png",
-                "",
-                -155,
-                ArrayList(),
-                "Shimek",
-                ""
-            )
-        )
-
+        friendsList.add(UserModel("XD","XD", "XD", ArrayList(), ArrayList(), ArrayList(), ArrayList()))
         super.onCreate(savedInstanceState)
+        // (SG) Firebase init
+        db = FirebaseFirestore.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        db.document("Users/${currentUser!!.uid}").get().addOnSuccessListener {
+            user = UserModel(
+                uid = it["uid"].toString(),
+                email = it["email"].toString(),
+                userName = it["username"].toString(),
+                likedMemes = it["likedMemes"] as ArrayList<String>?,
+                addedMemes = it["addedMemes"] as ArrayList<String>?,
+                following = it["following"] as ArrayList<String>?,
+                followers = it["followers"] as ArrayList<String>?
+            )
+            if ((activity as MainActivity).globalFriends == null) {
+                friendsList = ArrayList()
+                downloadFriends()
+            } else {
+                friendsList = (activity as MainActivity).globalFriends!!
+                downloadFriends()
+            }
+            bFriendsClick()
+        }
+
+
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onDestroy() {
+        (activity as MainActivity).globalFriends = friendsList
+        super.onDestroy()
+    }
 
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // (KS) setting all layouts and buttons
         val v = inflater.inflate(R.layout.fragment_friends, container, false)
         recyclerViewFriends = v.findViewById(R.id.recyclerViewFriends) as RecyclerView
         friendsAdapter = FriendsAdapter(friendsList)
         recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
-        recyclerViewFriends.adapter = friendsAdapter
+         recyclerViewFriends.adapter = friendsAdapter
 
         recyclerViewFeed = v.findViewById(R.id.recyclerViewFeed) as RecyclerView
         feedAdapter = FeedAdapter(feedList)
@@ -116,14 +111,14 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
         bFeed.setOnClickListener { bFeedClick() }
         bMessages.setOnClickListener { bMessagesClick() }
 
-        bFeedClick()
-
         return v
     }
 
     // (KS) functions to handle changing layouts and buttons
     private fun bFriendsClick() {
         TransitionManager.beginDelayedTransition(lScreen)
+
+        downloadFriends()
 
         (bFriends.layoutParams as LinearLayout.LayoutParams).weight = 1f
         (bFeed.layoutParams as LinearLayout.LayoutParams).weight = 0f
@@ -136,10 +131,14 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
         lFriends.visibility = View.VISIBLE
         lFeed.visibility = View.GONE
         lMessages.visibility = View.GONE
+
+        friendsList.add(UserModel("XD","XD", "XD", ArrayList(), ArrayList(), ArrayList(), ArrayList()))
+        friendsAdapter.notifyDataSetChanged()
     }
 
     private fun bFeedClick() {
         TransitionManager.beginDelayedTransition(lScreen)
+        downloadFeed()
 
         (bFriends.layoutParams as LinearLayout.LayoutParams).weight = 0f
         (bFeed.layoutParams as LinearLayout.LayoutParams).weight = 1f
@@ -181,5 +180,43 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
         val galleryFragment = GalleryFullscreenFragment()
         galleryFragment.arguments = bundle
         galleryFragment.show(fragmentTransaction, "top")
+    }
+
+    private fun downloadFriends() {
+        user.following!!.forEach { friendID ->
+            db.document("Users/$friendID").get().addOnSuccessListener {
+                val friend = UserModel(
+                    uid = it["uid"].toString(),
+                    email = it["email"].toString(),
+                    userName = it["userName"].toString(),
+                    likedMemes = it["likedMemes"] as ArrayList<String>?,
+                    addedMemes = it["addedMemes"] as ArrayList<String>?,
+                    following = it["following"] as ArrayList<String>?,
+                    followers = it["followers"] as ArrayList<String>?
+                )
+                friendsList.add(friend)
+            }
+        }
+        friendsAdapter.notifyDataSetChanged()
+    }
+
+    private fun downloadFeed() {
+        friendsList.forEach {
+            it.addedMemes!!.forEach { memeID ->
+                db.document("Memes/$memeID").get().addOnSuccessListener { meme ->
+                    val memeModel = MemeModel(
+                        url = meme["url"].toString(),
+                        location = meme["location"].toString(),
+                        rate = meme["rate"].toString().toInt(),
+                        seenBy = meme["seenBy"] as ArrayList<String>,
+                        dbId = meme.id,
+                        addedBy = meme["addedBy"].toString(),
+                        userID = meme["userID"].toString()
+                    )
+                    feedList.add(memeModel)
+                }
+            }
+        }
+        feedAdapter.notifyDataSetChanged()
     }
 }

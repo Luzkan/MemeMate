@@ -53,7 +53,7 @@ class BrowseFragment : Fragment(), CardStackListener {
             memeList = (activity as MainActivity).globalMemeList!!
             memeList = removeDuplicatedMemes(memeList)
         }
-
+        Log.d("MEMESKI","POTRZEBUJE USERAAAAAAA")
         currentUser = (activity as MainActivity).getCurrentUser()
         super.onCreate(savedInstanceState)
     }
