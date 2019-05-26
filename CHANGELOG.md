@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ___________________________________
 
+## [0.8.4] - 2019-05-26 - Paweł Rubin
+### Added
+- You can see the profile of any user.
+- Follow/unfollow 
+
 ## [0.8.3] - 2019-05-24 - Piotrek Kołodziejczyk
 ### Improved
 - Picking photos from camera roll instead of Google Photos
