@@ -230,7 +230,7 @@ class BrowseFragment : Fragment(), CardStackListener, UsernameClickListener {
                     rate = meme["rate"].toString().toInt(),
                     seenBy = meme["seenBy"] as ArrayList<String>,
                     addedBy = meme["addedBy"].toString(),
-                    userID = meme["userID"].toString(),
+                    userID = meme["userId"].toString(),
                     addDate = meme["addDate"].toString()
 
                 )

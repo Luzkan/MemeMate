@@ -35,7 +35,6 @@ class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.A
         val user = friends[position]
         holder.username.text = user.userName
         holder.username.setOnClickListener {
-            Log.d("LOLEK","CLICKEDDDD")
             userNameListener?.onUsernameClick(user.uid)
         }
 //        holder.username.setOnClickListener{

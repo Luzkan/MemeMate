@@ -62,7 +62,6 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
     private lateinit var user: UserModel
 
     override fun onUsernameClick(userID: String) {
-        Log.d("LOLEK", "USER ID = $userID")
         (activity as MainActivity).goToClickedUsernameProfile(userID)
     }
 

@@ -35,7 +35,7 @@
     <string name="fb_login_protocol_scheme">fb2672329152795068</string>
 
     <!--Default meme-->
-    <string name="default_meme">https://i.redd.it/529mjgxyexw21.jpg</string>
+    <string name="default_meme">https://img.pngio.com/pepe-the-frogs-creator-wants-to-take-pepe-back-from-the-alt-right-inverse-pepe-the-frog-png-1500_946.png?fbclid=IwAR0WUIFOWaU7w4p_HP0l4RQSfI6piobZvGT6dh_pw-Q-5p5aR2AhHdj7D8U</string>
 
     <!--Default location-->
     <string name="default_user_location">DefaultLocation</string>

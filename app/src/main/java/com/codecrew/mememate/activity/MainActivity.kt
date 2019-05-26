@@ -51,8 +51,6 @@ class MainActivity : AppCompatActivity() {
     var isValid = false
     lateinit var pic: Uri
 
-//    private var currentPanel = 1
-
     // (SG) Fragment manager
     val fragmentManager: FragmentManager = supportFragmentManager
 
@@ -112,11 +110,9 @@ class MainActivity : AppCompatActivity() {
 
         currentUser = FirebaseAuth.getInstance().currentUser!!
 
-        Log.d("MEMESKI", "POBIERAM USERA")
         db.document("Users/${currentUser.uid}")
             .get()
             .addOnSuccessListener {
-                Log.d("MEMESKI", "POBRAŁEM USERA")
                 currentUserModel = UserModel(
                     uid = it["uid"].toString(),
                     email = it["email"].toString(),
@@ -147,6 +143,7 @@ class MainActivity : AppCompatActivity() {
         val adapter = Pager(supportFragmentManager, mTabLayout!!.tabCount + 1)
         mViewPager!!.adapter = adapter
 
+
         mViewPager!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
@@ -173,12 +170,12 @@ class MainActivity : AppCompatActivity() {
         })
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
+//
+//        mViewPager!!.currentItem = 2
+//        navView.selectedItemId=R.id.navigation_main
 
 //        createMemes()
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
-        //displayBrowsing()
-        //navView.selectedItemId = R.id.navigation_top
     }
 
     override fun onBackPressed() {
@@ -196,7 +193,6 @@ class MainActivity : AppCompatActivity() {
 
     // (PR) Shows up profile of the user's nickname we clicked.
     fun goToClickedUsernameProfile(userID: String) {
-        Log.d("Memes", "Username clicked ID: $userID")
         clickedUserNameID = userID
         this.clickedUserMemesList = null
         this.clickedUserLikedMemesList = null

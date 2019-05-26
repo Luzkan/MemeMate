@@ -3,6 +3,7 @@ package com.codecrew.mememate.adapter
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,7 +54,8 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
             galleryFragment.show(fragmentTransaction, "browse")
         }
 
-        holder.name.setOnClickListener { usernameClickListener?.onUsernameClick(spot.userID) }
+        holder.name.setOnClickListener {
+            usernameClickListener?.onUsernameClick(spot.userID) }
     }
 
     override fun getItemCount(): Int {
