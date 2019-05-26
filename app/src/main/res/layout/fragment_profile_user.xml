@@ -89,14 +89,14 @@
                         android:src="@drawable/added_icon" />
 
                     <ImageButton
-                        android:id="@+id/settings_button"
+                        android:id="@+id/follow_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:background="@color/fui_transparent"
-                        android:contentDescription="@string/settings_button"
+                        android:contentDescription="@string/follow_button"
                         android:padding="15dp"
-                        android:src="@drawable/ic_profile" />
+                        android:src="@drawable/ic_follow" />
                 </LinearLayout>
 
             </LinearLayout>

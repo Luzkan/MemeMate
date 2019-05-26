@@ -43,7 +43,7 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
     private lateinit var likedMemesAdapter: GalleryAdapter
 
     // (SG) Database
-    private lateinit var database: FirebaseFirestore
+    protected lateinit var database: FirebaseFirestore
     protected lateinit var userID: String
 
     // (SG) User data fields
