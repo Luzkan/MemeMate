@@ -8,7 +8,7 @@ At this moment there's more to create than to improve or build-on so let's chang
 ___________________________________
 
 ### [Bugs found]
-- None
+- friends array does not update after unfollow/follow
 
 ___________________________________
 
