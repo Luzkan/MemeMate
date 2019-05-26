@@ -39,8 +39,8 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
     private var viewType = ViewType.ADDED
 
     // Adapters
-    private lateinit var userMemesAdapter: GalleryAdapter
-    private lateinit var likedMemesAdapter: GalleryAdapter
+    protected lateinit var userMemesAdapter: GalleryAdapter
+    protected lateinit var likedMemesAdapter: GalleryAdapter
 
     // (SG) Database
     private lateinit var database: FirebaseFirestore
@@ -51,7 +51,6 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         // Creating database instance and current user
         database = FirebaseFirestore.getInstance()
@@ -75,7 +74,7 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
         likedMemesAdapter = GalleryAdapter(likedMemesList).also { it.listener = this }
 
         // (PR) Set up RecyclerView.
-        recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT)
+        recyclerView.layoutManager = GridLayoutManager(this.context, SPAN_COUNT) as RecyclerView.LayoutManager?
         recyclerView.adapter = userMemesAdapter
 
         // (SG) Set up user data
@@ -143,7 +142,7 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
     }
 
     override fun onDestroy() {
-//        (activity as MainActivity).globalUserMemes = userMemesList
+        (activity as MainActivity).globalUserMemes = userMemesList
         super.onDestroy()
     }
 
@@ -168,8 +167,8 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                         )
                         userMemes.add(memeObject)
                     }
-                    userMemesList.addAll(userMemes)
-
+                    this.userMemesList.addAll(userMemes)
+                    userMemesAdapter.notifyDataSetChanged()
                     if (userMemesList.size == 0) {
                         displayDefaultProfile()
                         //todo wyświetl powiadomienie, np takie jak na ig w miejscu gdzie normalnie znajdują się zdjęcia
@@ -178,7 +177,6 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                         displayLastMeme(currentPosition)
                         userMemesAdapter.notifyDataSetChanged()
                     }
-//                    (activity as MainActivity).globalUserMemes = userMemesList
                 }
         }
     }
@@ -211,10 +209,10 @@ abstract class ProfileFragment(private val layoutRes: Int) : Fragment(),
                                     userId = meme["userId"].toString()
                                 )
                             )
-                            likedMemesAdapter.notifyDataSetChanged()
-//                            (activity as MainActivity).globalLikedMemes = likedMemesList
                         }
                 }
+
+                likedMemesAdapter.notifyDataSetChanged()
             }
     }
 

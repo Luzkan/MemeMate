@@ -10,12 +10,12 @@
         android:id="@+id/descriptionInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name" />
+        android:hint="@string/name" />
 
     <android.support.design.widget.TextInputEditText
         android:id="@+id/urlInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="URL" />
+        android:hint="@string/url" />
 
 </LinearLayout>

@@ -136,13 +136,13 @@ class AddMemeFragment : Fragment() {
                                 (activity as MainActivity).globalUserMemes = ArrayList()
                             }
                             (activity as MainActivity).globalUserMemes!!.add(0, newMeme)
-
+                            
                             (activity as MainActivity).pic =
                                 Uri.parse("android.resource://" + this.context!!.packageName + "/" + R.drawable.default_meme_add)
                             (activity as MainActivity).isValid = false
                             setConfirmButton(R.drawable.tick)
                             (activity as MainActivity).nav_view.selectedItemId = R.id.navigation_profile
-                            //(activity as MainActivity).displayProfile()
+//                            (activity as MainActivity).displayProfile()
                         }
                 }
             }.addOnFailureListener {

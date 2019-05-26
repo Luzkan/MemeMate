@@ -81,4 +81,6 @@
     <string name="change_your_username">Change your username</string>
     <string name="user_name">Username</string>
     <string name="meme">Meme</string>
+    <string name="name">Name</string>
+    <string name="url">URL</string>
 </resources>

@@ -2,6 +2,7 @@ package com.codecrew.mememate.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile) {
         settingsButton = v.findViewById(R.id.settings_button)
         settingsButton.setOnClickListener { openSettingsActivity() }
 
+        getMemes()
         return v
     }
 
@@ -30,6 +32,15 @@ class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile) {
 
         userID = FirebaseAuth.getInstance().currentUser!!.uid
 
+        getMemes()
+    }
+
+    private fun openSettingsActivity() {
+        val intent = Intent(context, SettingsActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun getMemes() {
         // (SG) If userMemes Array has not been downloaded yet (When it's first time we click profile tab)
         if ((activity as MainActivity).globalUserMemes == null) {
             userMemesList = ArrayList()
@@ -47,10 +58,5 @@ class LoggedUserProfileFragment : ProfileFragment(R.layout.fragment_profile) {
         } else {
             likedMemesList = (activity as MainActivity).globalLikedMemes!!
         }
-    }
-
-    private fun openSettingsActivity() {
-        val intent = Intent(context, SettingsActivity::class.java)
-        startActivity(intent)
     }
 }

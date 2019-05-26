@@ -8,6 +8,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentUser: FirebaseUser
 
     // (PR) Clicked user profile
-    lateinit var clickedUserNameID: String
+    var clickedUserNameID: String? = null
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -113,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
 
                 // (MJ) Disables Touch on browse memes fragment
-                if (position == 2) {
+                if (position in setOf(2, 5)) {
                     mViewPager!!.disableTouches()
                 } else {
                     mViewPager!!.enableTouches()
@@ -157,7 +158,10 @@ class MainActivity : AppCompatActivity() {
 
     // (PR) Shows up profile of the user's nickname we clicked.
     fun goToClickedUsernameProfile(userID: String) {
+        Log.d("Memes", "Username clicked ID: $userID")
         clickedUserNameID = userID
+        this.clickedUserMemesList = null
+        this.clickedUserLikedMemesList = null
         mViewPager?.currentItem = 5
     }
 }
@@ -246,13 +250,6 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    fun displayProfile() {
-        val transaction = fragmentManager.beginTransaction()
-        swipeSide(transaction, currentPanel, 5)
-        val fragment = ProfileFragment()
-        transaction.replace(R.id.fragment_holder, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
+
 
  */
