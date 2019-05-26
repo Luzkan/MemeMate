@@ -22,7 +22,12 @@ class UserProfileFragment : ProfileFragment(R.layout.fragment_profile_user) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userID = (activity as MainActivity).clickedUserNameID ?: FirebaseAuth.getInstance().currentUser!!.uid
+        getMemes()
+    }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val v = super.onCreateView(inflater, container, savedInstanceState)
+        followButton = v.follow_button
         loggedUser?.also {
             database.document("Users/${loggedUser.uid}")
                 .get()
@@ -33,16 +38,10 @@ class UserProfileFragment : ProfileFragment(R.layout.fragment_profile_user) {
                             break
                         }
                     }
+                    if (amIFollowing) {
+                        followButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.ic_unfollow))
+                    }
                 }
-        }
-        getMemes()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val v = super.onCreateView(inflater, container, savedInstanceState)
-        followButton = v.follow_button
-        if (amIFollowing) {
-            followButton.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.ic_unfollow))
         }
         followButton.setOnClickListener{ followUser() }
         getMemes()
