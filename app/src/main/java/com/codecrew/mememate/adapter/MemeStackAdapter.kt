@@ -54,7 +54,7 @@ class MemeStackAdapter(private var spots: List<MemeModel> = emptyList(), private
             galleryFragment.show(fragmentTransaction, "browse")
         }
 
-        holder.name.setOnClickListener { usernameClickListener?.onUsernameClick(spot.userId) }
+        holder.name.setOnClickListener { usernameClickListener?.onUsernameClick(spot.userID) }
     }
 
     override fun getItemCount(): Int {

@@ -26,13 +26,16 @@ import com.codecrew.mememate.adapter.FriendsAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
 import com.codecrew.mememate.interfaces.MemeClickListener
+import com.codecrew.mememate.interfaces.UsernameClickListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_friends.*
+import java.util.jar.Manifest
 
 
 @Suppress("UNCHECKED_CAST")
-class FriendsFragment : Fragment(), MemeClickListener {
+class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
+
 
     private lateinit var bFriends: Button
     private lateinit var bFeed: Button
@@ -57,6 +60,11 @@ class FriendsFragment : Fragment(), MemeClickListener {
     private var currentPosition: Int = 0
     private lateinit var db: FirebaseFirestore
     private lateinit var user: UserModel
+
+    override fun onUsernameClick(userID: String) {
+        Log.d("LOLEK", "USER ID = $userID")
+        (activity as MainActivity).goToClickedUsernameProfile(userID)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -111,12 +119,18 @@ class FriendsFragment : Fragment(), MemeClickListener {
         recyclerViewFriends = v.findViewById(R.id.recyclerViewFriends) as RecyclerView
 //        friendsAdapter = FriendsAdapter(friendsList)
         friendsAdapter = FriendsAdapter(displayList)
+        friendsAdapter.userNameListener = this
         recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
         recyclerViewFriends.adapter = friendsAdapter
 
         recyclerViewFeed = v.findViewById(R.id.recyclerViewFeed) as RecyclerView
-        feedAdapter = FeedAdapter(feedList)
+        if((activity as  MainActivity).globalFeed != null){
+            feedAdapter = FeedAdapter((activity as MainActivity).globalFeed!!)
+        } else {
+            feedAdapter = FeedAdapter(feedList)
+        }
         feedAdapter.listener = this
+        feedAdapter.userNameListener = this
         recyclerViewFeed.layoutManager = LinearLayoutManager(this.context)
         recyclerViewFeed.adapter = feedAdapter
 
@@ -268,7 +282,6 @@ class FriendsFragment : Fragment(), MemeClickListener {
             }
         }
         sortFriends(friendsList)
-        //todo
         displayList.clear()
         displayList.addAll(friendsList)
         friendsAdapter.notifyDataSetChanged()
@@ -285,7 +298,7 @@ class FriendsFragment : Fragment(), MemeClickListener {
                         seenBy = meme["seenBy"] as ArrayList<String>,
                         dbId = meme.id,
                         addedBy = meme["addedBy"].toString(),
-                        userID = meme["userID"].toString(),
+                        userID = meme["userId"].toString(),
                         addDate = meme["addDate"].toString()
                     )
                     if (!feedList.contains(memeModel))

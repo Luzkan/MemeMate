@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import com.codecrew.mememate.R
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.interfaces.MemeClickListener
+import com.codecrew.mememate.interfaces.UsernameClickListener
 import com.squareup.picasso.Picasso
 
 class FeedAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapter<TopViewHolder>() {
 
     private var context: Context? = null
     var listener: MemeClickListener? = null
+    var userNameListener : UsernameClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopViewHolder {
         context = parent.context
@@ -42,6 +44,9 @@ class FeedAdapter(private val memes: ArrayList<MemeModel>) : RecyclerView.Adapte
         holder.username.text = currentMeme.addedBy
         holder.itemView.setOnClickListener {
             listener?.onMemeClick(holder.adapterPosition, memes)
+        }
+        holder.username.setOnClickListener{
+            userNameListener?.onUsernameClick(memes[position].userID)
         }
     }
 }

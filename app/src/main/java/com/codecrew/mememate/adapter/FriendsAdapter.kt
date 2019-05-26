@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import com.codecrew.mememate.R
 import com.codecrew.mememate.activity.MainActivity
 import com.codecrew.mememate.database.models.UserModel
+import com.codecrew.mememate.interfaces.UsernameClickListener
 
 class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.Adapter<FriendsViewHolder>() {
 
     private var context: Context? = null
+    var userNameListener: UsernameClickListener? = null
 //    var listener: GalleryMemeClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsViewHolder {
@@ -32,9 +34,9 @@ class FriendsAdapter(private val friends: ArrayList<UserModel>) : RecyclerView.A
 
         val user = friends[position]
         holder.username.text = user.userName
-        Log.d("MEMESKI",user.userName+  " W ADAPTERZE")
-        friends.forEach {
-            Log.d("MEMESKI2",it.userName)
+        holder.username.setOnClickListener {
+            Log.d("LOLEK","CLICKEDDDD")
+            userNameListener?.onUsernameClick(user.uid)
         }
 //        holder.username.setOnClickListener{
 //            (context as MainActivity).displayProfile(user.uid)

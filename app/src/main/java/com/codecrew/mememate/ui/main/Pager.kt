@@ -11,7 +11,7 @@ class Pager(fm: FragmentManager, private var tabCount: Int) : FragmentStatePager
     override fun getItem(position: Int): Fragment? {
         return when (position) {
             0 -> TopFragment()
-            1 -> Fragment()
+            1 -> FriendsFragment()
             2 -> BrowseFragment()
             3 -> AddMemeFragment()
             4 -> LoggedUserProfileFragment()

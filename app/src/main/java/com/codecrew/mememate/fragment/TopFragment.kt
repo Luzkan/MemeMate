@@ -16,6 +16,10 @@ import com.codecrew.mememate.interfaces.UsernameClickListener
 import com.google.firebase.firestore.FirebaseFirestore
 
 class TopFragment : Fragment(), MemeClickListener, UsernameClickListener {
+    override fun onUsernameClick(userID: String) {
+        (activity as MainActivity).goToClickedUsernameProfile(userID)
+    }
+
     private lateinit var recyclerViewTop: RecyclerView
 
     // (SG) Database
