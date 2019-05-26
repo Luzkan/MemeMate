@@ -45,6 +45,7 @@ class FriendsFragment : Fragment(), MemeClickListener {
 
     private lateinit var recyclerViewFriends: RecyclerView
     private var friendsList = ArrayList<UserModel>()
+    private var displayList = ArrayList<UserModel>()
     private lateinit var friendsAdapter: FriendsAdapter
 
     private lateinit var recyclerViewFeed: RecyclerView
@@ -76,11 +77,16 @@ class FriendsFragment : Fragment(), MemeClickListener {
             if ((activity as MainActivity).globalFriends == null) {
                 downloadFriends()
                 downloadFeed()
+                //todo
+                displayList.addAll(friendsList)
             } else {
                 friendsList = (activity as MainActivity).globalFriends!!
                 feedList = (activity as MainActivity).globalFeed!!
                 downloadFriends()
                 downloadFeed()
+                //todo
+                displayList.clear()
+                displayList.addAll(friendsList)
             }
             bFeedClick()
         }
@@ -101,8 +107,10 @@ class FriendsFragment : Fragment(), MemeClickListener {
         searchView.setOnClickListener { searchClick() }
         searching(searchView)
 
+        //todo
         recyclerViewFriends = v.findViewById(R.id.recyclerViewFriends) as RecyclerView
-        friendsAdapter = FriendsAdapter(friendsList)
+//        friendsAdapter = FriendsAdapter(friendsList)
+        friendsAdapter = FriendsAdapter(displayList)
         recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
         recyclerViewFriends.adapter = friendsAdapter
 
@@ -124,6 +132,7 @@ class FriendsFragment : Fragment(), MemeClickListener {
         bFriends.setOnClickListener { bFriendsClick() }
         bFeed.setOnClickListener { bFeedClick() }
         bMessages.setOnClickListener { bMessagesClick() }
+
         return v
     }
 
@@ -135,12 +144,40 @@ class FriendsFragment : Fragment(), MemeClickListener {
 
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.i("ZIOMO","Llego al querysubmit")
-                return false
+                if (query!!.isNotEmpty()) {
+                    displayList.clear()
+
+                    val searchVal = query.toLowerCase()
+                    friendsList.forEach {
+                        if (it.userName.toLowerCase().contains(searchVal)) { //todo jak są w bazie z małej to nie trzeba toLowerCase
+                            displayList.add(it)
+                        }
+                    }
+                    friendsAdapter.notifyDataSetChanged()
+                } else {
+                    displayList.clear()
+                    displayList.addAll(friendsList)
+                    friendsAdapter.notifyDataSetChanged()
+                }
+                return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.i("ZIOMO","Llego al querytextchange")
+                if (newText.isNotEmpty()) {
+                    displayList.clear()
+
+                    val searchVal = newText.toLowerCase()
+                    friendsList.forEach {
+                        if (it.userName.toLowerCase().contains(searchVal)) { //todo jak są w bazie z małej to nie trzeba toLowerCase
+                            displayList.add(it)
+                        }
+                    }
+                    friendsAdapter.notifyDataSetChanged()
+                } else {
+                    displayList.clear()
+                    displayList.addAll(friendsList)
+                    friendsAdapter.notifyDataSetChanged()
+                }
                 return true
             }
         })
@@ -231,6 +268,9 @@ class FriendsFragment : Fragment(), MemeClickListener {
             }
         }
         sortFriends(friendsList)
+        //todo
+        displayList.clear()
+        displayList.addAll(friendsList)
         friendsAdapter.notifyDataSetChanged()
     }
 
