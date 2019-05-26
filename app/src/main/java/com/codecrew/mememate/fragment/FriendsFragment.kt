@@ -25,14 +25,14 @@ import com.codecrew.mememate.adapter.FeedAdapter
 import com.codecrew.mememate.adapter.FriendsAdapter
 import com.codecrew.mememate.database.models.MemeModel
 import com.codecrew.mememate.database.models.UserModel
-import com.codecrew.mememate.interfaces.GalleryMemeClickListener
+import com.codecrew.mememate.interfaces.MemeClickListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_friends.*
 
 
 @Suppress("UNCHECKED_CAST")
-class FriendsFragment : Fragment(), GalleryMemeClickListener {
+class FriendsFragment : Fragment(), MemeClickListener {
 
     private lateinit var bFriends: Button
     private lateinit var bFeed: Button
@@ -201,7 +201,7 @@ class FriendsFragment : Fragment(), GalleryMemeClickListener {
     }
 
     // (KS) makes fullscreen meme on click
-    override fun onGalleryMemeClickListener(position: Int, memes: ArrayList<MemeModel>) {
+    override fun onMemeClick(position: Int, memes: ArrayList<MemeModel>) {
         currentPosition = position
 
         val bundle = Bundle()

@@ -34,6 +34,11 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     fun changeEmail(view: View) {
+        // TODO
+    }
+
+    fun changeUserName(view: View) {
+
     }
 
     // (PR) Sends an email with password reset link.

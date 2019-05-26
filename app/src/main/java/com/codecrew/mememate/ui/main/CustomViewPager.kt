@@ -2,9 +2,9 @@ package com.codecrew.mememate.ui.main
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.MotionEvent
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
+import android.view.MotionEvent
 import java.util.concurrent.atomic.AtomicBoolean
 
 // (MJ) Custom ViewPager to create enable and disable touch feature (to not interfere with meme swipe)

@@ -13,7 +13,7 @@ class SquareRelativeLayout : RelativeLayout {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Set a square layout.
+        // Set a square layoutRes.
         super.onMeasure(widthMeasureSpec, widthMeasureSpec)
     }
 

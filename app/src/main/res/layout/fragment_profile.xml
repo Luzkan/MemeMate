@@ -26,41 +26,39 @@
                 android:id="@+id/main_meme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                tools:src="@tools:sample/avatars" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:orientation="horizontal"
                 android:background="@drawable/gradation_black"
-                android:baselineAligned="false">
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:layout_weight="0.7"
                     android:orientation="vertical"
-                    android:padding="16dp"
-                    android:layout_weight="0.7">
+                    android:padding="16dp">
 
                     <TextView
                         android:id="@+id/item_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/profile_name"
+                        android:ellipsize="marquee"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:text="@string/user_name"
                         android:textColor="@android:color/white"
                         android:textSize="26sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/item_city"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/profile_location"
-                        android:textColor="@android:color/white"
-                        android:textSize="20sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -68,33 +66,37 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.3"
                     android:orientation="horizontal"
-                    android:layout_weight="0.3">
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="4dp">
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        tools:ignore="NestedWeights" />
 
                     <ImageButton
                         android:id="@+id/switch_view_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/added_icon"
                         android:layout_gravity="bottom"
-                        android:padding="15dp"
                         android:background="@color/fui_transparent"
-                        android:contentDescription="@string/switch_view_button" />
+                        android:contentDescription="@string/switch_view_button"
+                        android:padding="15dp"
+                        android:src="@drawable/added_icon" />
 
                     <ImageButton
                         android:id="@+id/settings_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:src="@drawable/ic_baseline_settings_20px"
                         android:background="@color/fui_transparent"
+                        android:contentDescription="@string/settings_button"
                         android:padding="15dp"
-                        android:contentDescription="@string/settings_button" />
+                        android:src="@drawable/ic_baseline_settings_20px" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -103,11 +105,17 @@
         </android.support.v7.widget.CardView>
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.5">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@android:layout/simple_list_item_multiple_choice" />
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

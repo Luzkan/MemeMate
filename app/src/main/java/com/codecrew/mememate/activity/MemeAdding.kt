@@ -42,7 +42,7 @@ abstract class MemeAdding : AppCompatActivity() {
     }
 
     // Search for a meme in a gallery
-    fun searchFor() {
+    fun searchFor(view: View) {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
@@ -64,7 +64,7 @@ abstract class MemeAdding : AppCompatActivity() {
     }
 
     // Add meme to storage and to database
-    fun confirm() {
+    fun confirm(view: View) {
         if (name.text.isEmpty()) {
             Toast.makeText(this, "Name Your Meme", Toast.LENGTH_SHORT).show()
             return
