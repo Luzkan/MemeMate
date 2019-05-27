@@ -83,14 +83,12 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
             )
             if ((activity as MainActivity).globalFriends == null) {
                 downloadFriends()
-                downloadFeed()
                 //todo
-                displayList.addAll(friendsList)
+//                displayList.addAll(friendsList)
             } else {
                 friendsList = (activity as MainActivity).globalFriends!!
                 feedList = (activity as MainActivity).globalFeed!!
                 downloadFriends()
-                downloadFeed()
                 //todo
                 displayList.clear()
                 displayList.addAll(friendsList)
@@ -103,7 +101,11 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
         super.onPause()
         (activity as MainActivity).globalFriends = friendsList
         (activity as MainActivity).globalFeed = feedList
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        feedList.clear()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -116,18 +118,19 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
 
         //todo
         recyclerViewFriends = v.findViewById(R.id.recyclerViewFriends) as RecyclerView
-//        friendsAdapter = FriendsAdapter(friendsList)
         friendsAdapter = FriendsAdapter(displayList)
         friendsAdapter.userNameListener = this
         recyclerViewFriends.layoutManager = LinearLayoutManager(this.context)
         recyclerViewFriends.adapter = friendsAdapter
 
         recyclerViewFeed = v.findViewById(R.id.recyclerViewFeed) as RecyclerView
-        if((activity as  MainActivity).globalFeed != null){
-            feedAdapter = FeedAdapter((activity as MainActivity).globalFeed!!)
+
+        feedAdapter = if((activity as  MainActivity).globalFeed != null){
+            FeedAdapter((activity as MainActivity).globalFeed!!)
         } else {
-            feedAdapter = FeedAdapter(feedList)
+            FeedAdapter(feedList)
         }
+
         feedAdapter.listener = this
         feedAdapter.userNameListener = this
         recyclerViewFeed.layoutManager = LinearLayoutManager(this.context)
@@ -201,7 +204,7 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
 
         TransitionManager.beginDelayedTransition(lScreen)
 
-        downloadFriends()
+//        downloadFriends()           //todo dlaczego potrzebujemy download friends tutaj i w onCreate?
 
         (bFriends.layoutParams as LinearLayout.LayoutParams).weight = 1f
         (bFeed.layoutParams as LinearLayout.LayoutParams).weight = 0f
@@ -219,8 +222,6 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
 
     private fun bFeedClick() {
         TransitionManager.beginDelayedTransition(lScreen)
-        downloadFeed()
-
         (bFriends.layoutParams as LinearLayout.LayoutParams).weight = 0f
         (bFeed.layoutParams as LinearLayout.LayoutParams).weight = 1f
         (bMessages.layoutParams as LinearLayout.LayoutParams).weight = 0f
@@ -264,6 +265,7 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
     }
 
     private fun downloadFriends() {
+        feedList.clear()
         user.following!!.forEach { friendID ->
             db.document("Users/$friendID").get().addOnSuccessListener {
                 val friend = UserModel(
@@ -278,15 +280,38 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
                 if (!friendsList.contains(friend)) {
                     friendsList.add(friend)
                 }
+
+                friend.addedMemes!!.forEach { memeID ->
+                    db.document("Memes/$memeID").get().addOnSuccessListener { meme ->
+                        val memeModel = MemeModel(
+                            url = meme["url"].toString(),
+                            location = meme["location"].toString(),
+                            rate = meme["rate"].toString().toInt(),
+                            seenBy = meme["seenBy"] as ArrayList<String>,
+                            dbId = meme.id,
+                            addedBy = meme["addedBy"].toString(),
+                            userID = meme["userId"].toString(),
+                            addDate = meme["addDate"].toString()
+                        )
+                        Log.d("LOLEK","MEME = " + memeModel.toString())
+                        if (!feedList.contains(memeModel)) {
+                            feedList.add(memeModel)
+                        }
+                        sortFeed(feedList)
+                        feedAdapter.notifyDataSetChanged()
+                    }
+                }
+                displayList.clear()
+                sortFriends(friendsList)
+                displayList.addAll(friendsList)
+                friendsAdapter.notifyDataSetChanged()
             }
         }
-        sortFriends(friendsList)
-        displayList.clear()
-        displayList.addAll(friendsList)
-        friendsAdapter.notifyDataSetChanged()
     }
 
     private fun downloadFeed() {
+        feedList.clear()
+
         friendsList.forEach {
             it.addedMemes!!.forEach { memeID ->
                 db.document("Memes/$memeID").get().addOnSuccessListener { meme ->
@@ -300,23 +325,27 @@ class FriendsFragment : Fragment(), MemeClickListener, UsernameClickListener  {
                         userID = meme["userId"].toString(),
                         addDate = meme["addDate"].toString()
                     )
-                    if (!feedList.contains(memeModel))
+                    Log.d("LOLEK","MEME = " + memeModel.toString())
+                    if (!feedList.contains(memeModel)) {
                         feedList.add(memeModel)
+                    }
+                    sortFeed(feedList)
+                    feedAdapter.notifyDataSetChanged()
                 }
             }
         }
-        sortFeed(feedList)
-        feedAdapter.notifyDataSetChanged()
     }
 
     private fun sortFeed(feedList: ArrayList<MemeModel>) {
         val sortedList = feedList.sortedWith(compareByDescending { it.addDate })
         feedList.clear()
         feedList.addAll(sortedList)
+        feedAdapter.notifyDataSetChanged()
     }
 
     private fun sortFriends(friendsList: ArrayList<UserModel>) {
         val sortedList = friendsList.sortedWith(compareBy { it.userName })
+        Log.d("LOLEK","FRIENDS LIST SIZE = " + friendsList.size)
         friendsList.clear()
         friendsList.addAll(sortedList)
     }
