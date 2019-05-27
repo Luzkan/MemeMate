@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ___________________________________
+## [0.8.5a] - 2019-05-27 - Karol Szymończyk, Szymon Głąb
+### Updated
+- Double memes in feed fixed
+- Feed and friends panel speed up
+- Redirect from main pane fixed
+
 
 ## [0.8.5] - 2019-05-27 - Karol Szymończyk, Szymon Głąb
 ### Added
